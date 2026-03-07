@@ -58,11 +58,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1772892959,
-        "narHash": "sha256-xhlgAour9semO7miy/lrv9MHXxSw0u7x2Ct0fyLlXbM=",
+        "lastModified": 1772933533,
+        "narHash": "sha256-ICNqxBEJcDkiqRjRKqLWB/twUPLLMb/MgMqZYFDFwrQ=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "a6f746754a9aa4d9a12a28effb7fd2100468b9ac",
+        "rev": "577c07cd6cca9fca1b382e7fa8887adb499b232e",
         "type": "github"
       },
       "original": {
@@ -74,11 +74,11 @@
     "homebrew-core": {
       "flake": false,
       "locked": {
-        "lastModified": 1772898549,
-        "narHash": "sha256-zolCtbMB/l4vbho1CdLPETErf0JRbAH5ug81FDfAyOo=",
+        "lastModified": 1772932808,
+        "narHash": "sha256-VvPP0+Gm0Q0FI408Ny/yZuPmYPR7gIlUAnp8ZQsdhLY=",
         "owner": "homebrew",
         "repo": "homebrew-core",
-        "rev": "db8bb890c0237928546165824fa9c441637c8593",
+        "rev": "11e4b4228b143b846ac23f3f5d46a4fa161a349d",
         "type": "github"
       },
       "original": {
@@ -158,6 +158,49 @@
         "type": "github"
       }
     },
+    "noctalia": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "noctalia-qs": [
+          "noctalia-qs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772925400,
+        "narHash": "sha256-I0Gb+CO6bXi1U5PYgCqnuvI1B+R9kZtamLwhVvOywSo=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia-shell",
+        "rev": "5f319987a5003c383678f4aae0cf71f78c7ea49e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia-shell",
+        "type": "github"
+      }
+    },
+    "noctalia-qs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1772915558,
+        "narHash": "sha256-7RAZetvmWu9HZv3wOvsDQYLucQAWBH86I6SZMDuGzSg=",
+        "owner": "noctalia-dev",
+        "repo": "noctalia-qs",
+        "rev": "22df5696092ed8c6141e1d6846d1a11f386069f6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "noctalia-dev",
+        "repo": "noctalia-qs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "catppuccin": "catppuccin",
@@ -166,7 +209,9 @@
         "homebrew-core": "homebrew-core",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "noctalia": "noctalia",
+        "noctalia-qs": "noctalia-qs"
       }
     }
   },

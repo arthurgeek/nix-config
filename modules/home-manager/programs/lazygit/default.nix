@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   programs.lazygit = {
@@ -20,7 +20,7 @@
       };
 
       os = {
-        open = "open {{filename}}";
+        open = if pkgs.stdenv.hostPlatform.isDarwin then "open {{filename}}" else "xdg-open {{filename}}";
         editPreset = "nvim-remote";
       };
     };

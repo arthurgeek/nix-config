@@ -1,12 +1,14 @@
 {
   pkgs,
   inputs,
+  username,
   ...
 }:
 {
   imports = [
     inputs.nix-homebrew.darwinModules.nix-homebrew
     inputs.home-manager.darwinModules.home-manager
+    ../common
   ];
 
   # nix-homebrew settings
@@ -18,7 +20,7 @@
     enableRosetta = true;
 
     # User owning the Homebrew prefix
-    user = "arthurzapparoli";
+    user = username;
 
     # Declarative tap management
     taps = {
@@ -34,19 +36,12 @@
   };
   environment.systemPackages = [ ];
 
-  fonts.packages = [ pkgs.fira-code ];
-
   # use TouchID for sudo
   security.pam.services.sudo_local.touchIdAuth = true;
 
-  # Necessary for using flakes on this system.
-  nix.settings.experimental-features = "nix-command flakes";
 
-  # Enable alternative shell support in nix-darwin.
-  programs.fish.enable = true;
-  environment.shells = [ pkgs.fish ];
-  users.users.arthurzapparoli.home = "/Users/arthurzapparoli";
-  users.users.arthurzapparoli.shell = pkgs.fish;
+  users.users.${username}.home = "/Users/${username}";
+  users.users.${username}.shell = pkgs.fish;
 
   # Set Git commit hash for darwin-version.
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
@@ -89,7 +84,7 @@
   };
 
   # System Settings
-  system.primaryUser = "arthurzapparoli";
+  system.primaryUser = username;
   system.defaults = {
     controlcenter = {
       BatteryShowPercentage = true;

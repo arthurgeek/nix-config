@@ -1,10 +1,10 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, inputs, username, ... }:
 
 {
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
   home-manager.backupFileExtension = "backup";
-  home-manager.users.arthurzapparoli = {
+  home-manager.users.${username} = {
     imports = [
       inputs.catppuccin.homeModules.catppuccin
       ../programs/git
@@ -20,8 +20,8 @@
     ];
 
     home = {
-      username = "arthurzapparoli";
-      homeDirectory = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/arthurzapparoli" else "/home/arthurzapparoli";
+      username = username;
+      homeDirectory = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${username}" else "/home/${username}";
       stateVersion = "25.11";
 
       packages = with pkgs; [
