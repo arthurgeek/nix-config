@@ -83,6 +83,9 @@ binds {
     XF86AudioMute allow-when-locked=true { spawn-sh "noctalia-shell ipc call volume muteOutput"; }
     XF86AudioMicMute allow-when-locked=true { spawn-sh "noctalia-shell ipc call volume muteInput"; }
 
+    // Lock screen
+    Ctrl+Alt+L { spawn-sh "noctalia-shell ipc call lockScreen lock"; }
+
     // Screenshots
     Mod+Shift+S { spawn-sh "grim -g \"$(slurp)\" - | wl-copy"; }
 
