@@ -40,8 +40,10 @@
   security.pam.services.sudo_local.touchIdAuth = true;
 
 
-  users.users.${username}.home = "/Users/${username}";
-  users.users.${username}.shell = pkgs.fish;
+  users.users.${username} = {
+    home = "/Users/${username}";
+    shell = pkgs.fish;
+  };
 
   # Set Git commit hash for darwin-version.
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;

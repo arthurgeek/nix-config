@@ -4,6 +4,8 @@
   programs.starship = {
     enable = true;
 
+    enableTransience = true;
+
     settings = {
       line_break.disabled = true;
 
