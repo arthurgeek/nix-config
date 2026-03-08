@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  fonts.packages = [ pkgs.fira-code ];
+  fonts.packages = with pkgs; [ fira-code nerd-fonts.fira-code ];
 
   nix.settings.experimental-features = "nix-command flakes";
 
