@@ -9,7 +9,23 @@
 
     programs.noctalia-shell = {
       enable = true;
-      settings = { };
+      settings = {
+        idle = {
+          enabled = true;
+          lockTimeout = 300;
+          screenOffTimeout = 360;
+          screenOffCommand = "niri msg action power-off-monitors";
+          resumeScreenOffCommand = "niri msg action power-on-monitors";
+          lockCommand = "noctalia-shell ipc call lockScreen lock";
+        };
+        wallpaper = {
+          enabled = true;
+          fillMode = "crop";
+        };
+        general = {
+          lockOnSuspend = true;
+        };
+      };
       plugins = {
         sources = [
           {
