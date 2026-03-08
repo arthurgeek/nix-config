@@ -40,6 +40,15 @@
       { name = "autopair"; src = pkgs.fishPlugins.autopair.src; }
       { name = "puffer"; src = pkgs.fishPlugins.puffer.src; }
       { name = "forgit"; src = pkgs.fishPlugins.forgit.src; }
+      {
+        name = "fish-eza";
+        src = pkgs.fetchFromGitHub {
+          owner = "givensuman";
+          repo = "fish-eza";
+          rev = "main";
+          hash = "sha256-cFUHMSEMxq/XSeKOLCUArgM9ogY6NqrPmhxaHn5bbQs=";
+        };
+      }
     ];
   };
 }
