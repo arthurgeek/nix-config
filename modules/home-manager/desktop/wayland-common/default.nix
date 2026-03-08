@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   catppuccin.cursors = {
@@ -6,4 +6,11 @@
     accent = "lavender";
   };
   gtk.enable = true;
+
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = true;
+  };
+
+  home.packages = [ pkgs.nautilus ];
 }
