@@ -12,6 +12,11 @@
     '';
 
     interactiveShellInit = ''
+      # Initialize fish-eza plugin (home-manager doesn't fire fisher events)
+      if not set -q __FISH_EZA_ALIASES
+          emit fish-eza_install
+      end
+
       # EZA (formerly exa) config
       set EXA_STANDARD_OPTIONS --group --git --header --group-directories-first --icons
       set EXA_L_OPTIONS $EXA_STANDARD_OPTIONS
@@ -43,10 +48,10 @@
       {
         name = "fish-eza";
         src = pkgs.fetchFromGitHub {
-          owner = "givensuman";
+          owner = "plttn";
           repo = "fish-eza";
           rev = "main";
-          hash = "sha256-cFUHMSEMxq/XSeKOLCUArgM9ogY6NqrPmhxaHn5bbQs=";
+          hash = "sha256-f/JmwxOnLHq/FXIxI424AfOavlmv5/Ep5D2JEm0jFPE=";
         };
       }
     ];
