@@ -23,6 +23,7 @@
     ../programs/eza
     ../programs/ripgrep
     ../programs/omniwm
+    ../programs/gh
   ];
 
   # Nicely reload system units when changing configs
@@ -44,7 +45,6 @@
         exiftool
         ast-grep
         claude-code
-        gh
         yq
       ]
 
