@@ -43,6 +43,9 @@
         gnused
         exiftool
         ast-grep
+        claude-code
+        gh
+        yq
       ]
 
       # On non-darwin, install via Nix (on macOS these use Homebrew

@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   inputs,
   outputs,
@@ -17,9 +18,6 @@
     # Install Homebrew under the default prefix
     enable = true;
 
-    # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-    enableRosetta = true;
-
     # User owning the Homebrew prefix
     user = userConfig.name;
 
@@ -27,13 +25,11 @@
     taps = {
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
+      "BarutSRB/homebrew-tap" = inputs.homebrew-barutsrb-tap;
     };
 
     # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
-    # mutableTaps = false;
-
-    # Automatically migrate existing Homebrew installations
-    autoMigrate = true;
+    mutableTaps = false;
   };
 
   users.users.${userConfig.name} = {
@@ -51,6 +47,7 @@
   # Homebrew settings
   homebrew = {
     enable = true;
+    taps = builtins.attrNames config.nix-homebrew.taps;
 
     # Uncomment to install cli packages from Homebrew.
     # brews = [
@@ -66,8 +63,7 @@
     # masApps = {
     # };
 
-    # Uncomment to remove any non-specified homebrew packages.
-    # onActivation.cleanUp = "zap";
+    onActivation.cleanup = "zap";
 
     # Uncomment to automatically update Homebrew and upgrade packages.
     onActivation.autoUpdate = true;

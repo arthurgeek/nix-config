@@ -27,6 +27,10 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+    homebrew-barutsrb-tap = {
+      url = "github:BarutSRB/homebrew-tap";
+      flake = false;
+    };
 
     # NixOS profiles to optimize settings for different hardware
     hardware.url = "github:nixos/nixos-hardware";

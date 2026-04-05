@@ -12,9 +12,8 @@
     "com.apple.spaces"."spans-displays" = 1;
   };
 
-  homebrew.taps = [ "BarutSRB/tap" ];
   homebrew.casks = [
-    "BarutSRB/tap/omniwm"
+    "BarutSRB/homebrew-tap/omniwm"
     # 1Password has hardened runtime location checks that break when installed via Nix
     "1password"
     "nordvpn"
