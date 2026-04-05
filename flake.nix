@@ -1,5 +1,5 @@
 {
-  description = "nix-darwin configuration";
+  description = "NixOS and nix-darwin configurations";
 
   inputs = {
     # nixpkgs
@@ -28,63 +28,92 @@
       flake = false;
     };
 
-    # catpuccin theme
-    catppuccin.url = "github:catppuccin/nix";
+    # NixOS profiles to optimize settings for different hardware
+    hardware.url = "github:nixos/nixos-hardware";
+
+    # catppuccin theme
+    catppuccin = {
+      url = "github:catppuccin/nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # noctalia shell
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.noctalia-qs.follows = "noctalia-qs";
-    };
-    noctalia-qs = {
-      url = "github:noctalia-dev/noctalia-qs";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, nix-homebrew, homebrew-core, homebrew-cask, home-manager, catppuccin, noctalia, noctalia-qs }:
-  let
-    # Nixpkgs configuration
-    nixpkgsConfig = {
-      allowUnfree = true;
-    };
+  outputs =
+    {
+      self,
+      nix-darwin,
+      nixpkgs,
+      noctalia,
+      ...
+    }@inputs:
+    let
+      inherit (self) outputs;
 
-    configuration = {
-      imports = [
-        ./modules/darwin
-      ];
-    };
-  in
-  {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#macbook
-    darwinConfigurations."macbook" = nix-darwin.lib.darwinSystem {
-      specialArgs = {
-        inherit inputs;
-        username = "arthurzapparoli";
+      # Nixpkgs configuration
+      nixpkgsConfig = {
+        allowUnfree = true;
       };
-      modules = [
-        { nixpkgs.config = nixpkgsConfig; }
-        configuration
-        ./modules/home-manager/common
-      ];
-    };
 
-    # Build NixOS using:
-    # $ nixos-rebuild switch --flake .#nixos
-    nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
-      specialArgs = {
-        inherit inputs;
-        username = "arthur";
+      # Define user configurations
+      users = {
+        arthur = {
+          inherit (users.arthurzapparoli)
+            email
+            fullName
+            ;
+          name = "arthur";
+        };
+        arthurzapparoli = {
+          name = "arthurzapparoli";
+          email = "arthurgeek@users.noreply.github.com";
+          fullName = "Arthur Zapparoli";
+        };
       };
-      modules = [
-        { nixpkgs.config = nixpkgsConfig; }
-        ./modules/nixos
-        ./modules/nixos/desktop/niri
-        ./modules/home-manager/common
-        ./modules/home-manager/desktop/niri
-      ];
+
+      # Function for NixOS system configuration
+      mkNixosConfiguration =
+        hostname: username:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs hostname;
+            userConfig = users.${username};
+            nixosModules = "${self}/modules/nixos";
+          };
+          modules = [
+            { nixpkgs.config = nixpkgsConfig; }
+            ./hosts/${hostname}
+          ];
+        };
+
+      # Function for nix-darwin system configuration
+      mkDarwinConfiguration =
+        hostname: username:
+        nix-darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          specialArgs = {
+            inherit inputs outputs hostname;
+            userConfig = users.${username};
+            darwinModules = "${self}/modules/darwin";
+          };
+          modules = [
+            { nixpkgs.config = nixpkgsConfig; }
+            ./hosts/${hostname}
+          ];
+        };
+    in
+    {
+      nixosConfigurations = {
+        rapture = mkNixosConfiguration "rapture" "arthur";
+      };
+
+      darwinConfigurations = {
+        "columbia" = mkDarwinConfiguration "columbia" "arthurzapparoli";
+      };
     };
-  };
 }

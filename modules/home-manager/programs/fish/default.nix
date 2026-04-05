@@ -3,56 +3,49 @@
 {
   programs.fish = {
     enable = true;
+    preferAbbrs = true;
 
-    shellInit = ''
-      set -gx fish_greeting
-      set -gx EDITOR nvim
-      set -gx TERM wezterm
-      set -gx ANSIBLE_FORCE_COLOR true
-    '';
+    functions.fish_greeting = "";
 
     interactiveShellInit = ''
-      # Initialize fish-eza plugin (home-manager doesn't fire fisher events)
-      if not set -q __FISH_EZA_ALIASES
-          emit fish-eza_install
-      end
-
-      # EZA (formerly exa) config
-      set EXA_STANDARD_OPTIONS --group --git --header --group-directories-first --icons
-      set EXA_L_OPTIONS $EXA_STANDARD_OPTIONS
-      set EXA_LT_OPTIONS --long --tree --level
-
       # FZF plugin config
-      set fzf_preview_dir_cmd eza $EXA_STANDARD_OPTIONS --all --oneline --color=always
+      set fzf_preview_dir_cmd eza --group --git --header --group-directories-first --icons --all --oneline --color=always
       set fzf_diff_highlighter delta --features="default decorations" --paging=never
       set fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
-
     '';
 
     shellAbbrs = {
       cat = "bat";
       k = "kubectl";
-      vim = "nvim";
-      vi = "nvim";
-      ls = "eza";
-      vimdiff = "nvim -d";
+      vim = "hx";
+      vi = "hx";
+      nvim = "hx";
     };
 
     plugins = [
-      { name = "fzf-fish"; src = pkgs.fishPlugins.fzf-fish.src; }
-      { name = "colored-man-pages"; src = pkgs.fishPlugins.colored-man-pages.src; }
-      { name = "done"; src = pkgs.fishPlugins.done.src; }
-      { name = "autopair"; src = pkgs.fishPlugins.autopair.src; }
-      { name = "puffer"; src = pkgs.fishPlugins.puffer.src; }
-      { name = "forgit"; src = pkgs.fishPlugins.forgit.src; }
       {
-        name = "fish-eza";
-        src = pkgs.fetchFromGitHub {
-          owner = "plttn";
-          repo = "fish-eza";
-          rev = "main";
-          hash = "sha256-f/JmwxOnLHq/FXIxI424AfOavlmv5/Ep5D2JEm0jFPE=";
-        };
+        name = "fzf-fish";
+        src = pkgs.fishPlugins.fzf-fish.src;
+      }
+      {
+        name = "colored-man-pages";
+        src = pkgs.fishPlugins.colored-man-pages.src;
+      }
+      {
+        name = "done";
+        src = pkgs.fishPlugins.done.src;
+      }
+      {
+        name = "autopair";
+        src = pkgs.fishPlugins.autopair.src;
+      }
+      {
+        name = "puffer";
+        src = pkgs.fishPlugins.puffer.src;
+      }
+      {
+        name = "forgit";
+        src = pkgs.fishPlugins.forgit.src;
       }
     ];
   };

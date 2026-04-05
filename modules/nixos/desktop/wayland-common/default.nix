@@ -1,24 +1,20 @@
-{ pkgs, username, ... }:
-
+{ pkgs, userConfig, ... }:
 {
+  # Enable greetd to automatically login as `userConfig.name`
   services.greetd = {
     enable = true;
     settings.default_session = {
       command = "niri-session";
-      user = username;
+      user = userConfig.name;
     };
   };
 
-  # Security
-  security.polkit.enable = true;
-  services.gnome.gnome-keyring.enable = true;
+  # Enable CPU Power profiles support
+  services.power-profiles-daemon.enable = true;
 
-  # Audio
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    pulse.enable = true;
-  };
+  # Enable security services
+  services.gnome.gnome-keyring.enable = true;
+  security.polkit.enable = true;
 
   # Portal (screen sharing, file dialogs)
   xdg.portal = {
@@ -26,18 +22,24 @@
     extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
   };
 
-  # Hardware
-  hardware.bluetooth.enable = true;
-  services.power-profiles-daemon.enable = true;
-  services.upower.enable = true;
-
-  # Common Wayland packages
+  # Common packages for Wayland compositors
   environment.systemPackages = with pkgs; [
+    # GNOME apps
+    file-roller # archive manager
+    gnome-calculator
+    gnome-text-editor
+    loupe # image viewer
+    nautilus # file manager
+    seahorse # keyring manager
+    showtime # Video player
+
+    # Wayland utilities
+    gpu-screen-recorder
     grim
-    slurp
     libnotify
     pamixer
     pavucontrol
+    slurp
     wl-clipboard
   ];
 }

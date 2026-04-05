@@ -1,16 +1,22 @@
-{ pkgs, ... }:
-
 {
-  catppuccin.cursors = {
-    enable = true;
-    accent = "lavender";
-  };
-  gtk.enable = true;
+  config,
+  hmModules,
+  ...
+}:
+{
+  imports = [
+    "${hmModules}/misc/gtk"
+    "${hmModules}/misc/qt"
+    "${hmModules}/misc/xdg"
+    "${hmModules}/programs/noctalia"
+  ];
 
-  xdg.userDirs = {
-    enable = true;
-    createDirectories = true;
+  # Consistent cursor theme across all applications.
+  home.pointerCursor = {
+    gtk.enable = true;
+    x11.enable = true;
+    package = config.gtk.cursorTheme.package;
+    name = config.gtk.cursorTheme.name;
+    size = config.gtk.cursorTheme.size;
   };
-
-  home.packages = [ pkgs.nautilus ];
 }

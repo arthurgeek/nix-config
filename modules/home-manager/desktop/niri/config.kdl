@@ -20,6 +20,10 @@ input {
     focus-follows-mouse max-scroll-amount="0%"
 }
 
+output "DP-1" {
+    variable-refresh-rate on-demand=true
+}
+
 prefer-no-csd
 
 hotkey-overlay {
@@ -27,7 +31,7 @@ hotkey-overlay {
 }
 
 layout {
-    gaps 6
+    gaps 8
     center-focused-column "never"
 
     preset-column-widths {
@@ -46,11 +50,29 @@ layout {
     border {
         off
     }
+
+    background-color "transparent"
+
+    struts {
+        left 16
+        right 16
+        top 16
+        bottom 16
+    }
+
+    shadow {
+        on
+    }
 }
 
 debug {
     honor-xdg-activation-with-invalid-serial
 }
+
+// Workspaces
+workspace "main"
+workspace "steam"
+workspace "games"
 
 layer-rule {
     match namespace="^noctalia-overview*"
@@ -63,17 +85,49 @@ window-rule {
     clip-to-geometry true
 }
 
+window-rule {
+    match app-id=r#"^steam$"#
+    default-column-width { proportion 1.0; }
+    open-on-workspace "steam"
+}
+
+window-rule {
+    match app-id=r#"^steam_app_\d+$"#
+    exclude title="^$"
+    open-on-workspace "games"
+    open-fullscreen true
+    variable-refresh-rate true
+}
+
+// Floating dialogs
+window-rule {
+    match app-id=r#"^org\.pulseaudio\.pavucontrol$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^(gnome-calculator|org\.gnome\.Calculator)$"#
+    open-floating true
+}
+
 // Bindings
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
 
     // Launch
-    Mod+Return { spawn "wezterm"; }
+    Mod+Return hotkey-overlay-title="Open Terminal" { spawn "ghostty"; }
+    Mod+B hotkey-overlay-title="Open Chrome" { spawn "google-chrome"; }
+    Mod+F hotkey-overlay-title="Open Nautilus" { spawn "nautilus"; }
 
     // Noctalia
-    Mod+Space { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
-    Mod+C { spawn-sh "noctalia-shell ipc call controlCenter toggle"; }
-    Mod+N { spawn-sh "noctalia-shell ipc call notifications toggleHistory"; }
+    Mod+Space hotkey-overlay-title="Toggle launcher" { spawn-sh "noctalia-shell ipc call launcher toggle"; }
+    Mod+C hotkey-overlay-title="Toggle Control Center" { spawn-sh "noctalia-shell ipc call controlCenter toggle"; }
+    Mod+N hotkey-overlay-title="Toggle Notifications" { spawn-sh "noctalia-shell ipc call notifications toggleHistory"; }
+    // Clear all notifications
+    Mod+Shift+Backspace hotkey-overlay-title="Clear Notifications" { spawn-sh "noctalia-shell ipc call notifications clear"; }
+    Alt+Shift+V hotkey-overlay-title="Clipboard History" { spawn-sh "noctalia-shell ipc call launcher clipboard"; }
+    // Pick color from screen and copy to clipboard
+    Mod+Shift+C hotkey-overlay-title="Color Picker" { spawn-sh "niri msg pick-color | grep -o '#.*' | wl-copy"; }
 
     // Media keys
     XF86MonBrightnessUp allow-when-locked=true { spawn-sh "noctalia-shell ipc call brightness increase"; }
@@ -90,9 +144,11 @@ binds {
     Mod+Shift+S { spawn-sh "grim -g \"$(slurp)\" - | wl-copy"; }
 
     // Window management
-    Mod+Q { close-window; }
+    Mod+Q repeat=false { close-window; }
     Mod+F { toggle-window-floating; }
+    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
     Mod+M { maximize-column; }
+    Mod+W { toggle-column-tabbed-display; }
     Mod+Shift+M { fullscreen-window; }
     Mod+O { toggle-overview; }
 
@@ -128,7 +184,27 @@ binds {
     // Column management
     Mod+BracketLeft  { consume-or-expel-window-left; }
     Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+Comma  { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
 
     // Quit
     Mod+Shift+E { quit; }
+
+    // Scroll through workspaces with mouse wheel
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+
+    // Scroll through columns with mouse wheel
+    Mod+WheelScrollRight      { focus-column-right; }
+    Mod+WheelScrollLeft       { focus-column-left; }
+    Mod+Ctrl+WheelScrollRight { move-column-right; }
+    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
+    Mod+Shift+WheelScrollDown { focus-column-right; }
+    Mod+Shift+WheelScrollUp   { focus-column-left; }
+    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+
+    Mod+Shift+P { power-off-monitors; }
 }

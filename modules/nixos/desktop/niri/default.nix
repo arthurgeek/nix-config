@@ -1,16 +1,17 @@
-{ pkgs, inputs, ... }:
-
+{ nixosModules, pkgs, ... }:
 {
   imports = [
-    inputs.noctalia.nixosModules.default
-    ../wayland-common
+    "${nixosModules}/desktop/wayland-common"
   ];
 
+  # Enable Niri
   programs.niri.enable = true;
-  services.noctalia-shell.enable = true;
 
-  environment.systemPackages = [
-    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-    pkgs.xwayland-satellite
+  # Required for noctalia calendar support
+  services.gnome.evolution-data-server.enable = true;
+
+  # Enable Xwayland
+  environment.systemPackages = with pkgs; [
+    xwayland-satellite
   ];
 }
