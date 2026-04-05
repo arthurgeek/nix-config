@@ -12,6 +12,7 @@
   imports = [
     "${inputs.self}/modules/common"
     inputs.home-manager.nixosModules.home-manager
+    inputs.catppuccin.nixosModules.catppuccin
   ];
 
   # Register flake inputs for nix commands
@@ -144,6 +145,13 @@
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
+  };
+
+  catppuccin = {
+    enable = true;
+    flavor = "macchiato";
+    accent = "lavender";
+    cache.enable = true;
   };
 
   programs.nh = {
