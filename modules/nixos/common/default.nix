@@ -40,7 +40,7 @@
     ];
     loader.efi.canTouchEfiVariables = true;
     loader.systemd-boot.enable = true;
-    loader.timeout = 0;
+    loader.timeout = 5;
     plymouth.enable = true;
 
     # v4l (virtual camera) module settings
