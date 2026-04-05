@@ -23,6 +23,7 @@
     ../programs/eza
     ../programs/ripgrep
     ../programs/omniwm
+    ../programs/claude-code
     ../programs/gh
   ];
 
@@ -44,7 +45,6 @@
         gnused
         exiftool
         ast-grep
-        claude-code
         yq
       ]
 
