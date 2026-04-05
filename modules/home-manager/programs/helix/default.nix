@@ -16,6 +16,11 @@
         lsp = {
           display-inlay-hints = true;
         };
+        end-of-line-diagnostics = "warning";
+        inline-diagnostics = {
+          cursor-line = "warning";
+          other-lines = "error";
+        };
         cursor-shape = {
           insert = "bar";
           normal = "block";
