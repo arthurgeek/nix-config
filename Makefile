@@ -1,10 +1,9 @@
 # Variables (override these as needed)
 HOSTNAME ?= $(shell hostname)
 FLAKE ?= .#$(HOSTNAME)
-HOME_TARGET ?= $(FLAKE)
 
 .PHONY: help install-nix install-nix-darwin darwin-rebuild nixos-rebuild \
-	home-manager-switch nix-gc flake-update flake-check bootstrap-mac
+	nix-gc flake-update bootstrap-mac
 
 help:
 	@echo "Available targets:"
@@ -12,10 +11,8 @@ help:
 	@echo "  install-nix-darwin   - Install nix-darwin using flake $(FLAKE)"
 	@echo "  darwin-rebuild       - Rebuild the nix-darwin configuration"
 	@echo "  nixos-rebuild        - Rebuild the NixOS configuration"
-	@echo "  home-manager-switch  - Switch the Home Manager configuration using flake $(HOME_TARGET)"
 	@echo "  nix-gc               - Run Nix garbage collection"
 	@echo "  flake-update         - Update flake inputs"
-	@echo "  flake-check          - Check the flake for issues"
 	@echo "  bootstrap-mac        - Install Nix and nix-darwin sequentially"
 
 install-nix:
@@ -38,11 +35,6 @@ nixos-rebuild:
 	@sudo nixos-rebuild switch --flake $(FLAKE)
 	@echo "NixOS rebuild complete."
 
-home-manager-switch:
-	@echo "Switching Home Manager configuration..."
-	@home-manager switch --flake $(HOME_TARGET)
-	@echo "Home Manager switch complete."
-
 nix-gc:
 	@echo "Collecting Nix garbage..."
 	@nix-collect-garbage -d
@@ -52,10 +44,5 @@ flake-update:
 	@echo "Updating flake inputs..."
 	@nix flake update
 	@echo "Flake update complete."
-
-flake-check:
-	@echo "Checking flake..."
-	@nix flake check
-	@echo "Flake check complete."
 
 bootstrap-mac: install-nix install-nix-darwin
