@@ -9,8 +9,8 @@ help:
 	@echo "Available targets:"
 	@echo "  install-nix          - Install the Nix package manager"
 	@echo "  install-nix-darwin   - Install nix-darwin using flake $(FLAKE)"
-	@echo "  darwin-rebuild       - Rebuild the nix-darwin configuration"
-	@echo "  nixos-rebuild        - Rebuild the NixOS configuration"
+	@echo "  darwin-rebuild       - Rebuild the nix-darwin configuration (via nh)"
+	@echo "  nixos-rebuild        - Rebuild the NixOS configuration (via nh)"
 	@echo "  nix-gc               - Run Nix garbage collection"
 	@echo "  flake-update         - Update flake inputs"
 	@echo "  bootstrap-mac        - Install Nix and nix-darwin sequentially"
@@ -27,17 +27,17 @@ install-nix-darwin:
 
 darwin-rebuild:
 	@echo "Rebuilding darwin configuration..."
-	@sudo darwin-rebuild switch --flake $(FLAKE)
+	@nh darwin switch --ask --hostname $(HOSTNAME)
 	@echo "Darwin rebuild complete."
 
 nixos-rebuild:
 	@echo "Rebuilding NixOS configuration..."
-	@sudo nixos-rebuild switch --flake $(FLAKE)
+	@nh os switch --ask
 	@echo "NixOS rebuild complete."
 
 nix-gc:
 	@echo "Collecting Nix garbage..."
-	@nix-collect-garbage -d
+	@nh clean all
 	@echo "Garbage collection complete."
 
 flake-update:
