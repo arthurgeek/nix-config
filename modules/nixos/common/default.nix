@@ -146,6 +146,13 @@
     enableSSHSupport = true;
   };
 
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 4d --keep 3";
+    flake = "/home/${userConfig.name}/nix-config";
+  };
+
   # Fonts configuration
   fonts.packages = with pkgs; [
     nerd-fonts.fira-code
