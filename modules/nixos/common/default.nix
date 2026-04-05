@@ -152,6 +152,8 @@
     flavor = "macchiato";
     accent = "lavender";
     cache.enable = true;
+    tty.enable = true;
+    cursors.enable = true;
   };
 
   programs.nh = {
