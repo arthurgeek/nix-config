@@ -117,8 +117,6 @@ binds {
     // Launch
     Mod+Return hotkey-overlay-title="Open Terminal" { spawn "ghostty"; }
     Mod+B hotkey-overlay-title="Open Chrome" { spawn "google-chrome"; }
-    Mod+F hotkey-overlay-title="Open Nautilus" { spawn "nautilus"; }
-
     // Noctalia
     Mod+Space hotkey-overlay-title="Toggle launcher" { spawn-sh "noctalia-shell ipc call launcher toggle"; }
     Mod+C hotkey-overlay-title="Toggle Control Center" { spawn-sh "noctalia-shell ipc call controlCenter toggle"; }
