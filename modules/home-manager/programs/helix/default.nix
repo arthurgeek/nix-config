@@ -13,6 +13,7 @@
         line-number = "relative";
         mouse = false;
         bufferline = "multiple";
+        color-modes = true;
         lsp = {
           display-inlay-hints = true;
         };
