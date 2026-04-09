@@ -1,6 +1,8 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
+  home.packages = [ pkgs.difftastic ];
+
   programs.git = {
     enable = true;
 
@@ -28,6 +30,7 @@
         wdiff = "diff --word-diff";
         slog = "log";
         oops = "!git add . && git commit --amend --no-edit && git push --force-with-lease";
+        difi = "!difi";
       };
 
       apply.whitespace = "fix";
@@ -37,24 +40,29 @@
         trustctime = false;
         precomposeunicode = false;
         untrackedCache = true;
-        editor = "nvim";
+        editor = "hx";
       };
 
       format.pretty = "%C(yellow)%h%Creset%Cred%d%Creset %s %Cblue[%an] %Cgreen%ar";
 
       diff = {
         renames = "copies";
-        tool = "nvimdiff";
+        tool = "difftastic";
         colorMoved = "default";
         bin.textconv = "hexdump -v -C";
         exif.textconv = "exiftool";
+      };
+
+      difftool = {
+        prompt = false;
+        difftastic.cmd = ''difft "$LOCAL" "$REMOTE"'';
       };
 
       help.autocorrect = 1;
 
       merge = {
         log = true;
-        tool = "nvimdiff";
+        tool = "vimdiff";
         conflictstyle = "diff3";
       };
 
