@@ -7,6 +7,7 @@
       pkgs.nixd
       pkgs.nixfmt
       pkgs.markdown-oxide
+      pkgs.lldb
     ];
     settings = {
       editor = {
