@@ -38,11 +38,33 @@
       };
     };
     languages = {
+      language-server.rust-analyzer.config = {
+        check.command = "clippy";
+        cargo.features = "all";
+      };
       language = [
         {
           name = "nix";
           formatter = {
             command = "nixfmt";
+          };
+          auto-format = true;
+        }
+        {
+          name = "rust";
+          formatter = {
+            command = "rustfmt";
+          };
+          auto-format = true;
+        }
+        {
+          name = "haskell";
+          formatter = {
+            command = "ormolu";
+            args = [
+              "--stdin-input-file"
+              "Main.hs"
+            ];
           };
           auto-format = true;
         }
