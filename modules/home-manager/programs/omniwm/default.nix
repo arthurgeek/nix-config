@@ -1,200 +1,67 @@
 { lib, pkgs, ... }:
-lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
-  xdg.configFile."omniwm/settings.json" = {
-    force = true;
-    text = builtins.toJSON {
-      borderWidth = 1.5;
-      focusFollowsMouse = true;
-      hotkeyBindings = [
-        {
-          binding = "Option+Command+1";
-          id = "switchWorkspace.0";
-        }
-        {
-          binding = "Option+Shift+Command+1";
-          id = "moveToWorkspace.0";
-        }
-        {
-          binding = "Option+Command+2";
-          id = "switchWorkspace.1";
-        }
-        {
-          binding = "Option+Shift+Command+2";
-          id = "moveToWorkspace.1";
-        }
-        {
-          binding = "Option+Command+3";
-          id = "switchWorkspace.2";
-        }
-        {
-          binding = "Option+Shift+Command+3";
-          id = "moveToWorkspace.2";
-        }
-        {
-          binding = "Option+Command+4";
-          id = "switchWorkspace.3";
-        }
-        {
-          binding = "Option+Shift+Command+4";
-          id = "moveToWorkspace.3";
-        }
-        {
-          binding = "Option+Command+5";
-          id = "switchWorkspace.4";
-        }
-        {
-          binding = "Option+Shift+Command+5";
-          id = "moveToWorkspace.4";
-        }
-        {
-          binding = "Option+Command+6";
-          id = "switchWorkspace.5";
-        }
-        {
-          binding = "Option+Shift+Command+6";
-          id = "moveToWorkspace.5";
-        }
-        {
-          binding = "Option+Command+7";
-          id = "switchWorkspace.6";
-        }
-        {
-          binding = "Option+Shift+Command+7";
-          id = "moveToWorkspace.6";
-        }
-        {
-          binding = "Option+Command+8";
-          id = "switchWorkspace.7";
-        }
-        {
-          binding = "Option+Shift+Command+8";
-          id = "moveToWorkspace.7";
-        }
-        {
-          binding = "Option+Command+9";
-          id = "switchWorkspace.8";
-        }
-        {
-          binding = "Option+Shift+Command+9";
-          id = "moveToWorkspace.8";
-        }
-        {
-          binding = "Option+Command+Tab";
-          id = "workspaceBackAndForth";
-        }
-        {
-          binding = "Option+Command+Left Arrow";
-          id = "focus.left";
-        }
-        {
-          binding = "Option+Command+Down Arrow";
-          id = "focus.down";
-        }
-        {
-          binding = "Option+Command+Up Arrow";
-          id = "focus.up";
-        }
-        {
-          binding = "Option+Command+Right Arrow";
-          id = "focus.right";
-        }
-        {
-          binding = "Option+Shift+Command+Up Arrow";
-          id = "moveWindowToWorkspaceUp";
-        }
-        {
-          binding = "Option+Shift+Command+Down Arrow";
-          id = "moveWindowToWorkspaceDown";
-        }
-        {
-          binding = "Unassigned";
-          id = "moveColumnToWorkspaceUp";
-        }
-        {
-          binding = "Unassigned";
-          id = "moveColumnToWorkspaceDown";
-        }
-        {
-          binding = "Control+Shift+Command+Left Arrow";
-          id = "move.left";
-        }
-        {
-          binding = "Control+Shift+Command+Down Arrow";
-          id = "move.down";
-        }
-        {
-          binding = "Control+Shift+Command+Up Arrow";
-          id = "move.up";
-        }
-        {
-          binding = "Control+Shift+Command+Right Arrow";
-          id = "move.right";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusMonitorLast";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumnFirst";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumnLast";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.0";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.1";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.2";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.3";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.4";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.5";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.6";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.7";
-        }
-        {
-          binding = "Unassigned";
-          id = "focusColumn.8";
-        }
-        {
-          binding = "Option+Command+.";
-          id = "cycleColumnWidthForward";
-        }
-        {
-          binding = "Option+Command+,";
-          id = "cycleColumnWidthBackward";
-        }
-      ];
-      ipcEnabled = true;
-      niriCenterFocusedColumn = "always";
-      niriDefaultColumnWidth = 0.66;
-      niriSingleWindowAspectRatio = "none";
-      statusBarShowAppNames = true;
-      statusBarShowWorkspaceName = true;
-      version = 4;
-      workspaceBarEnabled = false;
+lib.mkIf pkgs.stdenv.hostPlatform.isDarwin (
+  let
+    defaults = builtins.fromTOML (builtins.readFile ./defaults.toml);
+
+    # Override default bindings (id → binding). All other hotkey IDs keep
+    # the upstream defaults from defaults.toml.
+    bindingOverrides = {
+      "switchWorkspace.0" = "Option+Command+1";
+      "switchWorkspace.1" = "Option+Command+2";
+      "switchWorkspace.2" = "Option+Command+3";
+      "switchWorkspace.3" = "Option+Command+4";
+      "switchWorkspace.4" = "Option+Command+5";
+      "switchWorkspace.5" = "Option+Command+6";
+      "switchWorkspace.6" = "Option+Command+7";
+      "switchWorkspace.7" = "Option+Command+8";
+      "switchWorkspace.8" = "Option+Command+9";
+      "moveToWorkspace.0" = "Option+Shift+Command+1";
+      "moveToWorkspace.1" = "Option+Shift+Command+2";
+      "moveToWorkspace.2" = "Option+Shift+Command+3";
+      "moveToWorkspace.3" = "Option+Shift+Command+4";
+      "moveToWorkspace.4" = "Option+Shift+Command+5";
+      "moveToWorkspace.5" = "Option+Shift+Command+6";
+      "moveToWorkspace.6" = "Option+Shift+Command+7";
+      "moveToWorkspace.7" = "Option+Shift+Command+8";
+      "moveToWorkspace.8" = "Option+Shift+Command+9";
+      "workspaceBackAndForth" = "Option+Command+Tab";
+      "focus.left" = "Option+Command+Left Arrow";
+      "focus.down" = "Option+Command+Down Arrow";
+      "focus.up" = "Option+Command+Up Arrow";
+      "focus.right" = "Option+Command+Right Arrow";
+      "moveWindowToWorkspaceUp" = "Option+Shift+Command+Up Arrow";
+      "moveWindowToWorkspaceDown" = "Option+Shift+Command+Down Arrow";
+      "move.left" = "Control+Shift+Command+Left Arrow";
+      "move.down" = "Control+Shift+Command+Down Arrow";
+      "move.up" = "Control+Shift+Command+Up Arrow";
+      "move.right" = "Control+Shift+Command+Right Arrow";
+      "cycleColumnWidthForward" = "Option+Command+.";
+      "cycleColumnWidthBackward" = "Option+Command+,";
     };
-  };
-}
+
+    overrideHotkey =
+      h: if bindingOverrides ? ${h.id} then h // { binding = bindingOverrides.${h.id}; } else h;
+
+    settings = lib.recursiveUpdate defaults {
+      borders.width = 1.5;
+      focus.followsMouse = true;
+      general.ipcEnabled = true;
+      niri = {
+        centerFocusedColumn = "always";
+        singleWindowAspectRatio = "none";
+      };
+      statusBar = {
+        showAppNames = true;
+        showWorkspaceName = true;
+      };
+      workspaceBar.enabled = false;
+      hotkeys = map overrideHotkey defaults.hotkeys;
+    };
+  in
+  {
+    xdg.configFile."omniwm/settings.toml" = {
+      force = true;
+      source = (pkgs.formats.toml { }).generate "omniwm-settings.toml" settings;
+    };
+  }
+)
