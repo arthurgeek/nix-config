@@ -16,6 +16,7 @@
 
     shellAbbrs = {
       cat = "bat";
+      glow = "glow -p";
       k = "kubectl";
       vim = "hx";
       vi = "hx";

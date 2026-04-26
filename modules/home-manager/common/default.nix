@@ -26,6 +26,7 @@
     ../programs/omniwm
     ../programs/claude-code
     ../programs/gh
+    ../programs/glow
     ../programs/vscode
   ];
 
