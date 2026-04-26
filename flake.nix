@@ -120,7 +120,20 @@
             darwinModules = "${self}/modules/darwin";
           };
           modules = [
-            { nixpkgs.config = nixpkgsConfig; }
+            {
+              nixpkgs.config = nixpkgsConfig;
+              nixpkgs.overlays = [
+                # Workaround for macOS codesigning bug (NixOS/nixpkgs#507531, #513019).
+                # Forces fish to rebuild locally so the binary gets a valid ad-hoc signature,
+                # instead of using the broken one from the binary cache.
+                (final: prev: {
+                  fish = prev.fish.overrideAttrs (old: {
+                    NIX_FORCE_LOCAL_REBUILD = "darwin-codesign-fix";
+                  });
+                  direnv = prev.direnv.overrideAttrs (_: { doCheck = false; });
+                })
+              ];
+            }
             ./hosts/${hostname}
           ];
         };
