@@ -92,11 +92,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1777054018,
-        "narHash": "sha256-tTNS7V6xN/LX1KZ0TrdOnj375ZrsUlLoce4qxZwDN9U=",
+        "lastModified": 1777218285,
+        "narHash": "sha256-d2FY71SBVKVbT1PsfXA71jz0vD520NijS4lrcvUMeGk=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "ffbd94a1c9d7d3e1258e51c084ab2109da04f2b1",
+        "rev": "c55c498c9aa205b16cca78b57a7275625726d532",
         "type": "github"
       },
       "original": {
@@ -124,11 +124,11 @@
     "homebrew-cask": {
       "flake": false,
       "locked": {
-        "lastModified": 1777073829,
-        "narHash": "sha256-32KKHx2kM7djj8Os/SVhfeiYWVYKlbe7yUwT1nMFos0=",
+        "lastModified": 1777229714,
+        "narHash": "sha256-UEN/AoQMfhXe7mFgqlwhb1sJdn+3qog6jMDQuUDrFdI=",
         "owner": "homebrew",
         "repo": "homebrew-cask",
-        "rev": "1f28de6ec532535a96ab99b83fb56a19f06b1dfe",
+        "rev": "61137854b96b33e531c488eace4790cbf43563e8",
         "type": "github"
       },
       "original": {
@@ -140,11 +140,11 @@
     "homebrew-core": {
       "flake": false,
       "locked": {
-        "lastModified": 1777074702,
-        "narHash": "sha256-iWdR0MRC/LOTb5PD7alPT/3SGQ8GjvW1cASm9RKNCOY=",
+        "lastModified": 1777229368,
+        "narHash": "sha256-mPtg+l/18UgRNnSB8tThYD90fKj+0t8cJ4aRSnbQd20=",
         "owner": "homebrew",
         "repo": "homebrew-core",
-        "rev": "e9d8b63e8fe2fc7187693394e48171d7166ced98",
+        "rev": "49ec559858a6456a92b6d67d27e7f1d135103cfd",
         "type": "github"
       },
       "original": {
@@ -232,11 +232,11 @@
         "noctalia-qs": "noctalia-qs"
       },
       "locked": {
-        "lastModified": 1776888984,
-        "narHash": "sha256-Up2F/eoMuPUsZnPVYdH5TMHe1TBP2Ue1QuWd0vWZoxY=",
+        "lastModified": 1777079905,
+        "narHash": "sha256-TvYEXwkZnRFQRuFyyqTNSfPnU2tMdhtiBOXSk2AWLJA=",
         "owner": "noctalia-dev",
         "repo": "noctalia-shell",
-        "rev": "2c1808f9f8937fc0b82c54af513f7620fec56d71",
+        "rev": "a50c92167c8d438000270f7eca36f6eea74f388e",
         "type": "github"
       },
       "original": {
@@ -344,11 +344,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1777056163,
-        "narHash": "sha256-LhBfjRmM2R7/JOkJJvyWX/oSngSgpUuZOlDJdilwUxY=",
+        "lastModified": 1777213711,
+        "narHash": "sha256-Y3mAOMfiSY/w//tMm+CJDQUM6wf7VLjB/pKXm6m2l5s=",
         "owner": "oraios",
         "repo": "serena",
-        "rev": "7a8b5fb212eecbd5bd1d52c77a5086aee6650cf3",
+        "rev": "ae7f1065be5bea27ade3d1279abef5d13eba151b",
         "type": "github"
       },
       "original": {
