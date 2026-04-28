@@ -20,6 +20,7 @@
     ../programs/fzf
 
     ../programs/ghostty
+    ../programs/rio
     ../programs/jq
     ../programs/eza
     ../programs/ripgrep

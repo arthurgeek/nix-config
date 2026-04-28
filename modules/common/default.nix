@@ -11,6 +11,7 @@
   fonts.packages = with pkgs; [
     fira-code
     nerd-fonts.fira-code
+    nerd-fonts.jetbrains-mono
   ];
 
   nix.settings.experimental-features = "nix-command flakes";
