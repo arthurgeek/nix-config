@@ -10,7 +10,10 @@
     mcpServers = {
       serena = {
         command = "${inputs.serena.packages.${pkgs.stdenv.hostPlatform.system}.serena}/bin/serena";
-        args = [ "start-mcp-server" ];
+        args = [
+          "start-mcp-server"
+          "--open-web-dashboard=False"
+        ];
       };
     };
     plugins = [
