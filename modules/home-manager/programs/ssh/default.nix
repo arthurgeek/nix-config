@@ -12,22 +12,18 @@ in
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks = {
+    settings = {
       "*" = {
-        addKeysToAgent = "yes";
-        extraOptions = {
-          UseKeychain = "yes";
-          IgnoreUnknown = "UseKeychain";
-          IdentityAgent = identityAgent;
-        };
-        identityFile = "~/.ssh/id_ed25519";
+        AddKeysToAgent = "yes";
+        UseKeychain = "yes";
+        IgnoreUnknown = "UseKeychain";
+        IdentityAgent = identityAgent;
+        IdentityFile = "~/.ssh/id_ed25519";
       };
 
       "192.168.*.*" = {
-        extraOptions = {
-          StrictHostKeyChecking = "no";
-          UserKnownHostsFile = "/dev/null";
-        };
+        StrictHostKeyChecking = "no";
+        UserKnownHostsFile = "/dev/null";
       };
     };
 
