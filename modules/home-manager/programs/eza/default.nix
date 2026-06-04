@@ -9,6 +9,7 @@
       "--group"
       "--header"
       "--group-directories-first"
+      "--hyperlink"
     ];
   };
 }
