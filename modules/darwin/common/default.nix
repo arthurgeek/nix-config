@@ -64,6 +64,9 @@
     # };
 
     onActivation.cleanup = "zap";
+    # Homebrew 4.7+ requires explicit confirmation for `brew bundle --cleanup`;
+    # --force keeps the zap non-interactive during activation.
+    onActivation.extraFlags = [ "--force" ];
 
     # Uncomment to automatically update Homebrew and upgrade packages.
     onActivation.autoUpdate = true;
