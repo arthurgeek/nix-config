@@ -50,6 +50,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # claude-code official binary distribution
+    nix-claude-code = {
+      url = "github:ryoppippi/nix-claude-code";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # claude-code plugins
     claude-plugins-official = {
       url = "github:anthropics/claude-plugins-official";
