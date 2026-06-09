@@ -1,16 +1,35 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":disableRateLimiting"
+  ],
+  "schedule": ["every weekend"],
   "nix": {
-    "enabled": true
+    "enabled": false
   },
-  "lockFileMaintenance": {
-    "enabled": true
+  "customManagers": [
+    {
+      "description": "Pin flake.nix inputs to commit SHAs; track release tag or branch via the trailing comment",
+      "customType": "regex",
+      "managerFilePatterns": ["/flake\\.nix$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?\\s*\\n\\s*.*?\"github:[^\"]+/(?<currentDigest>[0-9a-f]{40})\";\\s*#\\s*(?<currentValue>\\S+)"
+      ]
+    }
+  ],
+  "postUpgradeTasks": {
+    "commands": ["nix flake lock"],
+    "fileFilters": ["flake.lock"],
+    "executionMode": "branch"
   },
   "packageRules": [
     {
-      "matchManagers": ["nix"],
-      "groupName": "flake inputs"
+      "description": "Hold Homebrew below 5.1.14 until nix-homebrew#150 lands (cask-in-tap regression #148); delete this rule and the brew-src pin to resume updates",
+      "matchDepNames": ["Homebrew/brew"],
+      "allowedVersions": "<5.1.14"
     }
   ]
 }
