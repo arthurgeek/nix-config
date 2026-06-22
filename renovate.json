@@ -20,11 +20,6 @@
       ]
     }
   ],
-  "postUpgradeTasks": {
-    "commands": ["nix flake lock"],
-    "fileFilters": ["flake.lock"],
-    "executionMode": "branch"
-  },
   "packageRules": [
     {
       "description": "Hold Homebrew below 5.1.14 until nix-homebrew#150 lands (cask-in-tap regression #148); delete this rule and the brew-src pin to resume updates",
