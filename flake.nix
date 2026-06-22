@@ -84,7 +84,7 @@
     };
     superpowers = {
       # renovate: datasource=github-releases depName=obra/superpowers
-      url = "github:obra/superpowers/f2cbfbefebbfef77321e4c9abc9e949826bea9d7"; # v5.1.0
+      url = "github:obra/superpowers/896224c4b1879920ab573417e68fd51d2ccc9072"; # v6.0.3
       flake = false;
     };
     # renovate: datasource=github-releases depName=oraios/serena
