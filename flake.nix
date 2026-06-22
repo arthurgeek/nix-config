@@ -72,7 +72,7 @@
     # claude-code official binary distribution (tracks main)
     nix-claude-code = {
       # renovate: datasource=git-refs depName=https://github.com/ryoppippi/nix-claude-code
-      url = "github:ryoppippi/nix-claude-code/6b680cfac93a57860ee25e5ea5a70e58c6bb6724"; # main
+      url = "github:ryoppippi/nix-claude-code/3e63dfcebdc85e09c718ce2f0b58c7867bc45636"; # main
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
