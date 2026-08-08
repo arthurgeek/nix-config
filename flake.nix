@@ -47,7 +47,7 @@
     };
     homebrew-barutsrb-tap = {
       # renovate: datasource=git-refs depName=https://github.com/BarutSRB/homebrew-tap
-      url = "github:BarutSRB/homebrew-tap/6bccadc35bdba61c3a4a981301f173e69fbfa73d"; # main
+      url = "github:BarutSRB/homebrew-tap/01ec4312fccc0d8287f15491ace8c9d90dc5b71b"; # main
       flake = false;
     };
 
