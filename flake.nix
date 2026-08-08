@@ -27,7 +27,7 @@
     # nix-homebrew
     nix-homebrew = {
       # renovate: datasource=git-refs depName=https://github.com/zhaofengli/nix-homebrew
-      url = "github:zhaofengli/nix-homebrew/de7953a08ed4bb9245be043e468561c17b89130d"; # main
+      url = "github:zhaofengli/nix-homebrew/937ce52c7d046310571f3a070713804ead496843"; # main
       # Hold Homebrew < 5.1.14: that release added a utils/path.rb check that
       # rejects casks whose realpath resolves into /nix/store, how nix-homebrew
       # serves its read-only taps (zhaofengli/nix-homebrew#148, fix: PR #150).
