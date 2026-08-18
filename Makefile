@@ -15,9 +15,14 @@ help:
 	@echo "  flake-update         - Update flake inputs"
 	@echo "  bootstrap-mac        - Install Nix and nix-darwin sequentially"
 
+# No --enable-flakes flag: it does not exist in nix-installer, which exits 2 on
+# unknown arguments. The installer already writes "extra-experimental-features =
+# nix-command flakes" into nix.conf by default, and flakes only need to work long
+# enough to run install-nix-darwin -- after that nix-darwin owns nix.conf and
+# sets the features itself (modules/common/default.nix).
 install-nix:
 	@echo "Installing Nix..."
-	@curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install --enable-flakes
+	@curl -sSfL https://artifacts.nixos.org/nix-installer | sh -s -- install
 	@echo "Nix installation complete."
 
 install-nix-darwin:
