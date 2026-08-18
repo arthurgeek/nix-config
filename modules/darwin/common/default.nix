@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   outputs,
@@ -63,15 +64,36 @@
     # masApps = {
     # };
 
-    onActivation.cleanup = "zap";
-    # Homebrew 4.7+ requires explicit confirmation for `brew bundle --cleanup`;
-    # --force keeps the zap non-interactive during activation.
-    onActivation.extraFlags = [ "--force" ];
+    # Cleanup is handled by the activation script below, NOT here. nix-darwin
+    # (incl. current master a1fa429) still emits the obsolete
+    # `brew bundle --force-cleanup`, which Homebrew 6.0 removed in favour of the
+    # separate `brew bundle cleanup` subcommand; leaving this as "zap"/"uninstall"
+    # aborts activation with `invalid option: --force-cleanup` (nix-darwin#1807).
+    onActivation.cleanup = "none";
 
     # Uncomment to automatically update Homebrew and upgrade packages.
     onActivation.autoUpdate = true;
     onActivation.upgrade = true;
   };
+
+  # Re-add the "zap" cleanup that `onActivation.cleanup` would normally do, using
+  # Homebrew 6.0's `brew bundle cleanup` subcommand. `mkAfter` appends this after
+  # nix-darwin's own `brew bundle` (install) step in the same activation script.
+  # The Brewfile is regenerated from the same `config.homebrew.brewfile` text
+  # nix-darwin installs from, so cleanup zaps exactly what isn't declared.
+  # Remove this block and restore `onActivation.cleanup = "zap"` once nix-darwin
+  # emits the `brew bundle cleanup` subcommand natively.
+  system.activationScripts.homebrew.text = lib.mkAfter ''
+    if [ -f /opt/homebrew/bin/brew ]; then
+      echo >&2 "Homebrew cleanup (zap)..."
+      PATH="/opt/homebrew/bin:$PATH" sudo --preserve-env=PATH \
+        --user=${userConfig.name} --set-home \
+        env HOMEBREW_NO_AUTO_UPDATE=1 \
+        brew bundle cleanup \
+          --file="${pkgs.writeText "Brewfile" config.homebrew.brewfile}" \
+          --zap --force
+    fi
+  '';
 
   # System settings
   system = {
