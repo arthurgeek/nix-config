@@ -72,5 +72,13 @@
     enable = true;
     flavor = "macchiato";
     accent = "lavender";
+
+    # catppuccin.enable turns on every port module, including ones for programs
+    # we do not use. Its gemini-cli module sets `programs.gemini-cli.settings`,
+    # which home-manager has renamed to `programs.antigravity-cli.settings`, so
+    # it emits a rename warning on every rebuild. The setting is inert (we never
+    # set `programs.gemini-cli.enable`), so just switch the port off. Drop this
+    # once catppuccin/nix renames the module upstream.
+    gemini-cli.enable = false;
   };
 }
