@@ -69,10 +69,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # claude-code official binary distribution (tracks main)
+    # claude-code official binary distribution.
+    # Intentionally NOT pinned to a SHA (unlike every other input above): this
+    # follows `main` live, so `nix flake update nix-claude-code` re-locks it to
+    # the latest commit on the branch. No Renovate annotation — there is no SHA
+    # in the URL for it to bump.
     nix-claude-code = {
-      # renovate: datasource=git-refs depName=https://github.com/ryoppippi/nix-claude-code
-      url = "github:ryoppippi/nix-claude-code/3e63dfcebdc85e09c718ce2f0b58c7867bc45636"; # main
+      url = "github:ryoppippi/nix-claude-code"; # main
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
