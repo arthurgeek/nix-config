@@ -46,16 +46,19 @@ in
         ];
       };
     };
-    plugins = [
-      "${inputs.claude-plugins-official}/plugins/commit-commands"
-      "${inputs.claude-plugins-official}/plugins/explanatory-output-style"
-      "${inputs.claude-plugins-official}/plugins/feature-dev"
-      "${inputs.claude-plugins-official}/plugins/frontend-design"
-      "${inputs.claude-plugins-official}/plugins/code-review"
-      "${inputs.claude-plugins-official}/plugins/security-guidance"
-      "${inputs.claude-plugins-official}/plugins/learning-output-style"
-      "${inputs.claude-plugins-official}/plugins/code-simplifier"
-      superpowers
-    ];
+    # Attribute set, not a list: with a list, home-manager derives each plugin's
+    # directory name from the path's base name. That is stable for the official
+    # plugins but not for `superpowers`, which is a derivation whose base name
+    # (`<hash>-superpowers-patched`) changes on every bump. Naming them keeps the
+    # on-disk plugin directories stable and readable.
+    plugins = {
+      commit-commands = "${inputs.claude-plugins-official}/plugins/commit-commands";
+      feature-dev = "${inputs.claude-plugins-official}/plugins/feature-dev";
+      frontend-design = "${inputs.claude-plugins-official}/plugins/frontend-design";
+      code-review = "${inputs.claude-plugins-official}/plugins/code-review";
+      security-guidance = "${inputs.claude-plugins-official}/plugins/security-guidance";
+      learning-output-style = "${inputs.claude-plugins-official}/plugins/learning-output-style";
+      inherit superpowers;
+    };
   };
 }
