@@ -26,6 +26,12 @@ in
       gitAttribution = false;
       autoMemoryEnabled = true;
       autoDreamEnabled = true;
+      # Auto mode: a safety classifier decides routine permission requests instead
+      # of prompting per action. Falls back to normal prompting with a notice when
+      # unavailable (unsupported model, org policy).
+      permissions = {
+        defaultMode = "auto";
+      };
       hooks = {
         PreToolUse = [
           {
