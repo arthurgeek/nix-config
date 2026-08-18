@@ -25,6 +25,8 @@
       function __osc133_postexec --on-event fish_postexec
           printf '\e]133;D;%s\e\\' $status
       end
+
+      fish_add_path ~/.cargo/bin
     '';
 
     shellAbbrs = {
