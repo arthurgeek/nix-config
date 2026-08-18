@@ -8,26 +8,26 @@
   inputs = {
     # nixpkgs
     # renovate: datasource=git-refs depName=https://github.com/NixOS/nixpkgs
-    nixpkgs.url = "github:NixOS/nixpkgs/3e41b24abd260e8f71dbe2f5737d24122f972158"; # nixpkgs-unstable
+    nixpkgs.url = "github:NixOS/nixpkgs/104240a772428cc2e20d8fd86c9ddbb886bbaff2"; # nixpkgs-unstable
 
     # nix-darwin
     nix-darwin = {
       # renovate: datasource=git-refs depName=https://github.com/nix-darwin/nix-darwin
-      url = "github:nix-darwin/nix-darwin/a1fa429e945becaf60468600daf649be4ba0350c"; # master
+      url = "github:nix-darwin/nix-darwin/15abb8c98f336cd8bd840d71059adebabe60bf04"; # master
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # home-manager
     home-manager = {
       # renovate: datasource=git-refs depName=https://github.com/nix-community/home-manager
-      url = "github:nix-community/home-manager/979bfee6e1a7996fc395270d54c9b59e88762494"; # master
+      url = "github:nix-community/home-manager/a7c70cc290290f373f50cd820403833d250459ac"; # master
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # nix-homebrew
     nix-homebrew = {
       # renovate: datasource=git-refs depName=https://github.com/zhaofengli/nix-homebrew
-      url = "github:zhaofengli/nix-homebrew/de7953a08ed4bb9245be043e468561c17b89130d"; # main
+      url = "github:zhaofengli/nix-homebrew/937ce52c7d046310571f3a070713804ead496843"; # main
       # Hold Homebrew < 5.1.14: that release added a utils/path.rb check that
       # rejects casks whose realpath resolves into /nix/store, how nix-homebrew
       # serves its read-only taps (zhaofengli/nix-homebrew#148, fix: PR #150).
@@ -37,23 +37,23 @@
     };
     homebrew-core = {
       # renovate: datasource=git-refs depName=https://github.com/homebrew/homebrew-core
-      url = "github:homebrew/homebrew-core/d3653ba851f7eacb4daca1b213926d5107b5e9d9"; # main
+      url = "github:homebrew/homebrew-core/6f65e395e8a0b6f76a3f1869fe172eba40d1644c"; # main
       flake = false;
     };
     homebrew-cask = {
       # renovate: datasource=git-refs depName=https://github.com/homebrew/homebrew-cask
-      url = "github:homebrew/homebrew-cask/eb26892fc3a1a7cfb32c15d0f5bb8bcb2ff93109"; # main
+      url = "github:homebrew/homebrew-cask/76b1c40ab8dfc8f0bdbfdaad53c069eda7cc80bb"; # main
       flake = false;
     };
     homebrew-barutsrb-tap = {
       # renovate: datasource=git-refs depName=https://github.com/BarutSRB/homebrew-tap
-      url = "github:BarutSRB/homebrew-tap/6bccadc35bdba61c3a4a981301f173e69fbfa73d"; # main
+      url = "github:BarutSRB/homebrew-tap/01ec4312fccc0d8287f15491ace8c9d90dc5b71b"; # main
       flake = false;
     };
 
     # NixOS profiles to optimize settings for different hardware
     # renovate: datasource=git-refs depName=https://github.com/nixos/nixos-hardware
-    hardware.url = "github:nixos/nixos-hardware/08018c72174a4df5657f8d94178ac69fb9c243e5"; # master
+    hardware.url = "github:nixos/nixos-hardware/2e790b0a6be8ec2b76174ac0931b8ff11919ec98"; # master
 
     # catppuccin theme
     catppuccin = {
@@ -82,16 +82,16 @@
     # claude-code plugins
     claude-plugins-official = {
       # renovate: datasource=git-refs depName=https://github.com/anthropics/claude-plugins-official
-      url = "github:anthropics/claude-plugins-official/5fc2987a44918a455ef7dc583b51f8faf875c3ed"; # main
+      url = "github:anthropics/claude-plugins-official/36b00173da517876f9e574ef98f3564b0e86c25d"; # main
       flake = false;
     };
     superpowers = {
       # renovate: datasource=github-releases depName=obra/superpowers
-      url = "github:obra/superpowers/896224c4b1879920ab573417e68fd51d2ccc9072"; # v6.0.3
+      url = "github:obra/superpowers/3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9"; # v6.2.0
       flake = false;
     };
     # renovate: datasource=github-releases depName=oraios/serena
-    serena.url = "github:oraios/serena/93b9544ea9def8e93cb6a90f8ea67befe3c8fee4"; # v1.6.0
+    serena.url = "github:oraios/serena/bcac0969fb8685783ea6d0f2642468fcc47e6395"; # v1.6.1
   };
 
   outputs =
