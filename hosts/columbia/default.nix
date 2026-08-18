@@ -17,7 +17,6 @@
     # 1Password has hardened runtime location checks that break when installed via Nix
     "1password"
     "nordvpn"
-    "orbstack"
     "steam"
     "whatsapp"
   ];
