@@ -14,6 +14,9 @@ local release   = { release = true }
 -- Tap SUPER alone (SUPER_L is the left Super keysym) and release.
 hl.bind(mod .. " + SUPER_L",   hl.dsp.global("caelestia:launcher"), release)
 hl.bind(mod .. " + N",         hl.dsp.global("caelestia:sidebar"))
+-- The dashboard (clock, calendar, weather, resources) otherwise only opens by
+-- hovering the top screen edge — the bar's clock has no popout of its own.
+hl.bind(mod .. " + D",         hl.dsp.global("caelestia:dashboard"))
 hl.bind(mod .. " + K",         hl.dsp.global("caelestia:showall"))
 hl.bind(mod .. " + L",         hl.dsp.global("caelestia:lock"))
 hl.bind("CTRL + ALT + Delete", hl.dsp.global("caelestia:session"))
