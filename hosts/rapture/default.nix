@@ -13,6 +13,7 @@
     ./hardware-configuration.nix
     "${nixosModules}/common"
     "${nixosModules}/desktop/niri"
+    "${nixosModules}/desktop/hyprland"
     "${nixosModules}/programs/gaming"
   ];
 

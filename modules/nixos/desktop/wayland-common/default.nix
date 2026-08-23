@@ -12,6 +12,10 @@
   # Enable CPU Power profiles support
   services.power-profiles-daemon.enable = true;
 
+  # Required for calendar support in both desktop shells (noctalia on niri,
+  # caelestia on Hyprland).
+  services.gnome.evolution-data-server.enable = true;
+
   # Enable security services
   services.gnome.gnome-keyring.enable = true;
   security.polkit.enable = true;
