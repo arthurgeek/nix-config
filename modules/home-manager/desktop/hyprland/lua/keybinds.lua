@@ -61,6 +61,9 @@ hl.bind(mod .. " + ALT + C", hl.dsp.exec_cmd(vars.editor))
 hl.bind(mod .. " + E",    hl.dsp.exec_cmd(vars.fileExplorer))
 hl.bind("CTRL + ALT + V", hl.dsp.exec_cmd(vars.audioSettings))
 
+-- Searchable cheat sheet of every bind below, read live from the compositor.
+hl.bind(mod .. " + Slash", hl.dsp.exec_cmd("hypr-keys"))
+
 --------------------------------------------------------------------------
 ---- CLIPBOARD (mac-style) -----------------------------------------------
 --------------------------------------------------------------------------

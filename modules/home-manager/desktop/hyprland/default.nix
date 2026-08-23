@@ -1,5 +1,34 @@
-{ hmModules, ... }:
 {
+  hmModules,
+  pkgs,
+  ...
+}:
+let
+  # Keybind cheat sheet: reads the live binds from the compositor, so it can
+  # never drift from the config. Modmask bits: SHIFT=1 CTRL=4 ALT=8 SUPER=64.
+  hypr-keys = pkgs.writeShellApplication {
+    name = "hypr-keys";
+    runtimeInputs = [
+      pkgs.jq
+      pkgs.fuzzel
+    ];
+    text = ''
+      hyprctl binds -j | jq -r '
+        .[] |
+        ([ (if ((.modmask / 64 | floor) % 2) == 1 then "SUPER" else empty end),
+           (if ((.modmask / 4  | floor) % 2) == 1 then "CTRL"  else empty end),
+           (if ((.modmask / 8  | floor) % 2) == 1 then "ALT"   else empty end),
+           (if ( .modmask            % 2) == 1 then "SHIFT" else empty end)
+         ] + [ .key ] | join("+")) as $keys |
+        (if .arg == "" then .dispatcher else .dispatcher + "  " + .arg end) as $what |
+        "\($keys)	\($what)"
+      ' | column -t -s "$(printf "	")" | fuzzel --dmenu --width 90 --lines 30 --prompt "keys  "
+    '';
+  };
+in
+{
+  home.packages = [ hypr-keys ];
+
   imports = [
     "${hmModules}/desktop/wayland-common"
     # caelestia is imported here rather than in wayland-common so it is scoped
