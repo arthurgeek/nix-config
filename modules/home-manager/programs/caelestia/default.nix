@@ -106,6 +106,26 @@ let
     };
   };
   settingsFile = pkgs.writeText "caelestia-shell.json" (builtins.toJSON settings);
+
+  # Settings changed in caelestia's own UI land in shell.json — which the next
+  # rebuild overwrites with the repo's version. Run this BEFORE rebuilding to
+  # see what you changed in the UI, so it can be adopted into the repo first.
+  caelestia-drift = pkgs.writeShellApplication {
+    name = "caelestia-drift";
+    runtimeInputs = [ pkgs.jq ];
+    text = ''
+      repo=${settingsFile}
+      live="$HOME/.config/caelestia/shell.json"
+      if diff -u <(jq -S . "$repo") <(jq -S . "$live"); then
+        echo "no drift: shell.json matches the repo config"
+      else
+        echo
+        echo "^ lines with + are UI edits the next rebuild will DESTROY unless"
+        echo "  they are added to modules/home-manager/programs/caelestia first."
+        exit 1
+      fi
+    '';
+  };
 in
 {
   imports = [
@@ -135,6 +155,8 @@ in
     systemd.target = "hyprland-session.target";
 
   };
+
+  home.packages = [ caelestia-drift ];
 
   home.activation.caelestiaSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run install -Dm644 ${settingsFile} "$HOME/.config/caelestia/shell.json"
