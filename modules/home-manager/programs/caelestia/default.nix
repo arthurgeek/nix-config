@@ -54,36 +54,70 @@ let
       };
     };
 
-    bar.statusIcons = [
-      {
-        id = "lockStatus";
-        enabled = true;
-      }
-      {
-        id = "audio";
-        enabled = false;
-      }
-      {
-        id = "microphone";
-        enabled = false;
-      }
-      {
-        id = "kbLayout";
-        enabled = false;
-      }
-      {
-        id = "network";
-        enabled = true;
-      }
-      {
-        id = "bluetooth";
-        enabled = true;
-      }
-      {
-        id = "battery";
-        enabled = false; # delta: no battery
-      }
-    ];
+    # Delta: transparency on. base/layers restated at their upstream values.
+    appearance.transparency = {
+      enabled = true;
+      base = 0.85;
+      layers = 0.4;
+    };
+
+    bar = {
+      # Delta: inverted title/class order in the bar's active-window readout.
+      activeWindow = {
+        compact = false;
+        inverted = true;
+        showOnHover = true;
+      };
+
+      # Delta: the clock carries a background and shows the date; the calendar
+      # icon is upstream's default.
+      clock = {
+        background = true;
+        showDate = true;
+        showIcon = true;
+      };
+
+      # All upstream defaults — restated because a partial subtree would drop
+      # iconSubs and hiddenIcons.
+      tray = {
+        background = false;
+        recolour = false;
+        compact = false;
+        iconSubs = [ ];
+        hiddenIcons = [ ];
+      };
+
+      statusIcons = [
+        {
+          id = "lockStatus";
+          enabled = true;
+        }
+        {
+          id = "audio";
+          enabled = true; # delta: volume indicator in the bar
+        }
+        {
+          id = "microphone";
+          enabled = false;
+        }
+        {
+          id = "kbLayout";
+          enabled = false;
+        }
+        {
+          id = "network";
+          enabled = true;
+        }
+        {
+          id = "bluetooth";
+          enabled = true;
+        }
+        {
+          id = "battery";
+          enabled = false; # delta: no battery
+        }
+      ];
+    };
 
     dashboard = {
       enabled = true;
