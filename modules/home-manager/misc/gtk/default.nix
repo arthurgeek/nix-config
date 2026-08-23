@@ -19,8 +19,8 @@
       };
     };
     cursorTheme = {
-      name = "Yaru";
-      package = pkgs.yaru-theme;
+      name = "catppuccin-macchiato-lavender-cursors";
+      package = pkgs.catppuccin-cursors.macchiatoLavender;
       size = 24;
     };
     font = {
