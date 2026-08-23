@@ -4,13 +4,51 @@
 -- strings [[...]] are used so backslash escapes reach RE2 verbatim instead of
 -- being eaten (or rejected) by Lua string escaping.
 
--- Steam's main window takes a full-width column on its own workspace.
+-- Steam floats rather than taking a tiled column: its own chrome assumes a
+-- free-floating window, and every Steam child window (downloads, dialogs,
+-- friends) is a separate toplevel that tiling scatters across the tape.
 hl.window_rule({
-    name  = "steam-main",
+    name  = "steam-windows",
     match = { class = [[^steam$]] },
 
-    workspace       = "name:steam",
-    scrolling_width = 1.0,
+    workspace = "name:steam",
+    float     = true,
+
+    -- Steam has no idle inhibitor of its own, so a long cutscene or a video on
+    -- the store page would let the screen lock.
+    idle_inhibit = "fullscreen",
+})
+
+hl.window_rule({
+    name  = "steam-main",
+    match = {
+        class = [[^steam$]],
+        title = [[^Steam$]],
+    },
+
+    center = true,
+    size   = { 1100, 700 },
+})
+
+-- A tall, narrow panel: at the main window's size it is mostly empty space.
+hl.window_rule({
+    name  = "steam-friends",
+    match = {
+        class = [[^steam$]],
+        title = [[^Friends List$]],
+    },
+
+    size = { 460, 800 },
+})
+
+-- Steam draws its own translucency into its artwork; the global 0.95 window
+-- opacity on top of that muddies it. Matches steam_app_* too, so games render
+-- exactly as shipped.
+hl.window_rule({
+    name  = "steam-opaque",
+    match = { class = [[^steam]] },
+
+    opacity = "1 1",
 })
 
 -- Steam games open fullscreen on their own workspace, with tearing and

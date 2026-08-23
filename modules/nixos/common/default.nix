@@ -136,6 +136,8 @@
     gcc # needed for tree-sitter
     gnumake
     killall
+    nvme-cli # nvme: SSD model, firmware, health and SMART logs
+    pciutils # lspci: what is actually on the PCI bus
   ];
 
   # Keyboard
