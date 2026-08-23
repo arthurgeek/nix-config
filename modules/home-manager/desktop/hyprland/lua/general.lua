@@ -21,8 +21,13 @@ hl.config({
 
     -- https://wiki.hypr.land/Configuring/Layouts/Scrolling-Layout/
     scrolling = {
+        -- A lone window sits at 75% rather than filling the screen (see
+        -- fullscreen_on_one_column below). Hyprland has no single-window width
+        -- of its own -- with fullscreen_on_one_column off, one column simply
+        -- takes column_width -- so this value sets both the lone-window width
+        -- and the width new columns open at.
         -- niri: default-column-width { proportion 0.5; }
-        column_width             = 0.5,
+        column_width             = 0.75,
 
         -- niri: preset-column-widths { proportion 0.5; proportion 0.66667; }
         explicit_column_widths   = "0.5, 0.66667, 1.0",
@@ -31,7 +36,9 @@ hl.config({
         focus_fit_method         = 1,
 
         follow_focus             = true,
-        fullscreen_on_one_column = true,
+        -- Off, so a single column keeps column_width (0.75) instead of
+        -- spanning the whole screen.
+        fullscreen_on_one_column = false,
         wrap_focus               = true,
         wrap_swapcol             = true,
         direction                = "right",
