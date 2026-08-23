@@ -35,6 +35,33 @@ in
 {
   home.packages = [ hypr-keys ];
 
+  # cliphist only records while a wl-paste watcher is running, and nothing
+  # starts one under Hyprland: caelestia's clipboard picker (SUPER+CTRL+V)
+  # reads cliphist's database but never writes to it, so without these the
+  # binding opens an empty list forever. niri gets the same watchers from
+  # noctalia's own settings, which is why only this session was affected.
+  # Text and images need separate watchers -- wl-paste --watch takes one mime
+  # class at a time.
+  systemd.user.services =
+    let
+      watcher = type: {
+        Unit = {
+          Description = "Record clipboard ${type} into cliphist";
+          PartOf = [ "hyprland-session.target" ];
+          After = [ "hyprland-session.target" ];
+        };
+        Service = {
+          ExecStart = "${pkgs.wl-clipboard}/bin/wl-paste --type ${type} --watch ${pkgs.cliphist}/bin/cliphist store";
+          Restart = "on-failure";
+        };
+        Install.WantedBy = [ "hyprland-session.target" ];
+      };
+    in
+    {
+      cliphist-text = watcher "text";
+      cliphist-image = watcher "image";
+    };
+
   imports = [
     "${hmModules}/desktop/wayland-common"
     # caelestia is imported here rather than in wayland-common so it is scoped
