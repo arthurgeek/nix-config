@@ -20,6 +20,15 @@ let
         audio = [ "pavucontrol" ];
         playback = [ "mpv" ];
         explorer = [ "nautilus" ]; # delta: thunar upstream
+
+        # Delta: foot upstream. Named rather than given as a store path so the
+        # entry survives a ghostty version bump — caelestia persists this value
+        # into shell.json, and a pinned path would break once that build is
+        # garbage-collected.
+        terminal = [
+          "ghostty"
+          "--gtk-single-instance=true"
+        ];
       };
 
       # Delta: slower spacing than upstream (3/5/10 min), which suspends
