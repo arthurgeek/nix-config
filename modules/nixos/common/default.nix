@@ -105,6 +105,20 @@
     ];
     isNormalUser = true;
     shell = pkgs.fish;
+
+    # Public keys, as published at https://github.com/arthurgeek.keys.
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDxJqH/0NFR9PHgs5BQLfD5t8vcQukblf0DvIzvuf5+Y"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHCNZvPuY0ibJEJdP/dt2IfL0gkJBnd4I9anjmLNtgap"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJjH9KI15oBOFwb/cz2JLyb1fztt4/YQAgftdCWoqvZq"
+    ];
+
+    # Bootstrap password `nixos`, applied only when the account is created, so a
+    # later `passwd` is not overwritten. greetd runs a PAM-authenticating
+    # greeter, so an account with no password cannot log in at all. Change it on
+    # first login: the keys above are the real access path and this hash guards
+    # nothing.
+    initialHashedPassword = "$y$j9T$ktOy8xBTCaHzPS/Bkl9ZR/$rDUyIrQmhhjMe8Ko0nVGBV/sZ1dYmFuNK2CKLbTm2XC";
   };
 
   # Passwordless sudo
