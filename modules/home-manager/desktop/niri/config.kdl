@@ -44,8 +44,8 @@ layout {
 
     focus-ring {
         width 2
-        active-color "#b4befe"
-        inactive-color "#585b70"
+        active-color "#b7bdf8"
+        inactive-color "#5b6078"
     }
 
     border {
