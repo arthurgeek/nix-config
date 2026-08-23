@@ -80,7 +80,13 @@ in
       gpg = {
         format = "ssh";
         ssh = {
-          program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+          # 1Password ships op-ssh-sign inside the app bundle on darwin, and in
+          # the package on Linux where the NixOS module installs it.
+          program =
+            if pkgs.stdenv.hostPlatform.isDarwin then
+              "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+            else
+              lib.getExe' pkgs._1password-gui "op-ssh-sign";
           allowedSignersFile = "~/.ssh/allowed_signers";
         };
       };
