@@ -130,10 +130,16 @@ for i = 1, 10 do
     hl.bind(mod .. " + ALT + " .. key, hl.dsp.window.move({ workspace = i }), d("Send window to workspace " .. i))
 end
 
-hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "m+1" }), d("Next workspace"))
-hl.bind(mod .. " + mouse_up",   hl.dsp.focus({ workspace = "m-1" }), d("Previous workspace"))
-hl.bind("CTRL + " .. mod .. " + Right", hl.dsp.focus({ workspace = "m+1" }), d("Next workspace", repeating))
-hl.bind("CTRL + " .. mod .. " + Left",  hl.dsp.focus({ workspace = "m-1" }), d("Previous workspace", repeating))
+-- "e" steps through workspaces that already exist; "m" (monitor-relative)
+-- creates a new empty one every step, so holding SUPER and nudging the scroll
+-- wheel used to walk off into workspace 20-something in a second, landing on an
+-- empty screen that reads as "every window is gone". Ten workspaces are bound
+-- by number above and that is the whole set; nothing should invent an
+-- eleventh.
+hl.bind(mod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }), d("Next workspace"))
+hl.bind(mod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }), d("Previous workspace"))
+hl.bind("CTRL + " .. mod .. " + Right", hl.dsp.focus({ workspace = "e+1" }), d("Next workspace", repeating))
+hl.bind("CTRL + " .. mod .. " + Left",  hl.dsp.focus({ workspace = "e-1" }), d("Previous workspace", repeating))
 
 --------------------------------------------------------------------------
 ---- SCROLLING LAYOUT ----------------------------------------------------
