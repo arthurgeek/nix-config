@@ -22,6 +22,22 @@
   # Set hostname
   networking.hostName = hostname;
 
+  # Declare the wired connection so ethernet is configured and autoconnects
+  # from first boot, rather than depending on a NetworkManager profile that
+  # only exists as machine state. Wifi stays available; the wire wins by
+  # route metric whenever both are up.
+  networking.networkmanager.ensureProfiles.profiles.wired = {
+    connection = {
+      id = "wired";
+      type = "ethernet";
+      interface-name = "enp4s0";
+      autoconnect = true;
+      autoconnect-priority = 100;
+    };
+    ipv4.method = "auto";
+    ipv6.method = "auto";
+  };
+
   # /boot is the EFI System Partition Windows created, which is small. Cap the
   # generations kept there so it cannot fill up and start failing rebuilds.
   boot.loader.systemd-boot.configurationLimit = 5;
