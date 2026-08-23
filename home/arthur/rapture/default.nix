@@ -3,6 +3,7 @@
   imports = [
     "${hmModules}/common"
     "${hmModules}/desktop/niri"
+    "${hmModules}/desktop/hyprland"
   ];
 
   # Enable home-manager
