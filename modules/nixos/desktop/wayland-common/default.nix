@@ -88,6 +88,12 @@
     extraPortals = [ pkgs.xdg-desktop-portal-gnome ];
   };
 
+  # Cross-device file drops, AirDrop-style.
+  programs.localsend = {
+    enable = true;
+    openFirewall = true;
+  };
+
   # Common packages for Wayland compositors
   environment.systemPackages = with pkgs; [
     # GNOME apps
@@ -97,6 +103,9 @@
     evince # PDF viewer
     imv # image viewer
     nautilus # file manager
+    sushi # nautilus spacebar preview
+    ffmpegthumbnailer # video thumbnails in nautilus
+    gnome-disk-utility
     seahorse # keyring manager
     mpv # video player
 
