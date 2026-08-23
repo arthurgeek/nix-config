@@ -14,6 +14,7 @@
     "${inputs.self}/modules/nixos/programs/1password"
     "${inputs.self}/modules/nixos/programs/chrome"
     "${inputs.self}/modules/nixos/programs/tailscale"
+    "${inputs.self}/modules/nixos/programs/nordvpn"
     inputs.home-manager.nixosModules.home-manager
     inputs.catppuccin.nixosModules.catppuccin
   ];
