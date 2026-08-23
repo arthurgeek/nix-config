@@ -25,6 +25,7 @@ output "DP-1" {
 }
 
 prefer-no-csd
+spawn-at-startup "noctalia-shell"
 
 hotkey-overlay {
     skip-at-startup

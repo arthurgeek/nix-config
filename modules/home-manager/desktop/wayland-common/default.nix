@@ -8,7 +8,6 @@
     "${hmModules}/misc/gtk"
     "${hmModules}/misc/qt"
     "${hmModules}/misc/xdg"
-    "${hmModules}/programs/noctalia"
   ];
 
   # Consistent cursor theme across all applications.

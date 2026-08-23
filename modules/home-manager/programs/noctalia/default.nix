@@ -65,7 +65,11 @@ in
         inactiveColor = "none";
       };
     };
-    systemd.enable = true;
+    # Launched from niri's spawn-at-startup instead of systemd. Its unit is
+    # hardcoded to graphical-session.target with no per-service override, so as
+    # a systemd service it would also start under the Hyprland session. Running
+    # it as a systemd service is deprecated upstream regardless.
+    systemd.enable = false;
     settings = {
       appLauncher = {
         autoPasteClipboard = false;
