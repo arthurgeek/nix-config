@@ -65,6 +65,13 @@ hl.config({
         },
     },
 
+    -- XWayland apps get bitmap-upscaled under fractional scaling, which
+    -- turns their fonts to mush. Render them unscaled instead; apps that can
+    -- scale themselves (Steam, below) are told the factor via environment.
+    xwayland = {
+        force_zero_scaling = true,
+    },
+
     misc = {
         disable_hyprland_logo   = true,
         force_default_wallpaper = 0,

@@ -22,6 +22,11 @@
     remotePlay.openFirewall = true;
   };
 
+  # Steam is an XWayland client, which the compositor renders unscaled
+  # (xwayland.force_zero_scaling) to keep fonts crisp — so Steam must scale
+  # its own UI. Matches the monitor scale set in the Hyprland config.
+  environment.sessionVariables.STEAM_FORCE_DESKTOPUI_SCALING = "1.5";
+
   # Prevent frame drops from split-lock exceptions triggered by EAC/games
   boot.kernelParams = [
     "split_lock_detect=off"
