@@ -41,7 +41,10 @@
     ];
     loader.efi.canTouchEfiVariables = true;
     loader.systemd-boot.enable = true;
-    loader.timeout = 5;
+    # Long enough to survive a slow DP/HDMI handshake — a 5s menu can count
+    # down entirely while the monitor is still syncing, which reads as "no
+    # menu at all". Any key press pauses the countdown.
+    loader.timeout = 15;
     plymouth.enable = true;
 
     # v4l (virtual camera) module settings
