@@ -69,6 +69,29 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # caelestia shell
+    # Follows nixpkgs, unlike hyprland above: there is no public binary cache
+    # for caelestia and it builds quickshell from source either way, so not
+    # following would buy a second full nixpkgs Qt6 closure for no benefit.
+    caelestia-shell = {
+      # renovate: datasource=github-releases depName=caelestia-dots/shell
+      url = "github:caelestia-dots/shell/c99f9755770ee48c5ea613833bc5376b4f4f740e"; # v2.3.0
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.caelestia-cli.follows = "caelestia-cli";
+    };
+
+    # caelestia cli
+    # Pinned here rather than left to caelestia-shell's own lock: upstream
+    # declares it as an unpinned `github:caelestia-dots/cli` following main, so
+    # `nix flake update` would move it and Renovate could not see it. The
+    # `follows` above keeps the standalone CLI and the copy baked into the
+    # shell's `with-cli` wrapper on the same rev.
+    caelestia-cli = {
+      # renovate: datasource=github-releases depName=caelestia-dots/cli
+      url = "github:caelestia-dots/cli/0a3a4bb0f915f596c4e18e4ca3b00a6b2064442b"; # v1.1.2
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # claude-code official binary distribution.
     # Intentionally NOT pinned to a SHA (unlike every other input above): this
     # follows `main` live, so `nix flake update nix-claude-code` re-locks it to
