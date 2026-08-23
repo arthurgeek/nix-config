@@ -35,6 +35,7 @@
       general = ./lua/general.lua;
       input = ./lua/input.lua;
       rules = ./lua/rules.lua;
+      keybinds = ./lua/keybinds.lua;
     };
   };
 }
