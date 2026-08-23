@@ -88,6 +88,15 @@
   # Holding it long still powers off.
   services.logind.settings.Login.HandlePowerKey = "suspend";
 
+  # GTK4 defaults to its wayland IM context, which forwards key events to the
+  # compositor over text-input-v3. No input method is connected there, so dead
+  # keys are swallowed whole: on us-intl, ' and " emit dead_acute and
+  # dead_diaeresis, compose with nothing, and neither the accented letter nor
+  # the bare character ever arrives — verified by synthesising the keystrokes
+  # and reading back " a " where "'á\"" was typed. The simple IM context
+  # composes in-process, which restores both.
+  environment.sessionVariables.GTK_IM_MODULE = "gtk-im-context-simple";
+
   # gnome-keyring's login keyring is encrypted with the password in force
   # when it was created; without this, `passwd` changes the login password but
   # not the keyring's, and auto-unlock silently breaks from then on.
