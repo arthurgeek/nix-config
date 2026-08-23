@@ -9,6 +9,7 @@
   imports = [
     ../programs/git
     ../programs/bat
+    ../programs/btop
     ../programs/fish
     ../programs/starship
     ../programs/lazygit
@@ -23,6 +24,7 @@
     ../programs/rio
     ../programs/jq
     ../programs/eza
+    ../programs/fastfetch
     ../programs/ripgrep
     ../programs/omniwm
     ../programs/claude-code
