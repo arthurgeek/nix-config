@@ -13,6 +13,7 @@
     obsidian
     spotify
     discord
+    pinta # raster image editor
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
