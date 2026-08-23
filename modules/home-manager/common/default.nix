@@ -55,7 +55,8 @@
       # On non-darwin, install via Nix (on macOS these use Homebrew
       # casks due to hardened runtime location checks)
       ++ lib.optionals (!pkgs.stdenv.hostPlatform.isDarwin) [
-        _1password-gui
+        # 1Password is installed by the NixOS module, not here — home.packages
+        # would omit the polkit policy and setgid helper it needs.
         google-chrome
       ];
   };

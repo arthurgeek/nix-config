@@ -11,6 +11,7 @@
 {
   imports = [
     "${inputs.self}/modules/common"
+    "${inputs.self}/modules/nixos/programs/1password"
     inputs.home-manager.nixosModules.home-manager
     inputs.catppuccin.nixosModules.catppuccin
   ];
