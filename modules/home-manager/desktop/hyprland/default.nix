@@ -6,6 +6,12 @@
 let
   # Keybind cheat sheet: reads the live binds from the compositor, so it can
   # never drift from the config. Modmask bits: SHIFT=1 CTRL=4 ALT=8 SUPER=64.
+  #
+  # Every bind is shown by its description, which lua/keybinds.lua sets on all
+  # of them. The dispatcher is useless here: under a lua config Hyprland
+  # reports every bind as dispatcher "__lua" with a callback id for an arg, so
+  # a description-less bind can only be listed by its keys. Those are dropped
+  # rather than printed bare, which also hides the shell's own runtime binds.
   hypr-keys = pkgs.writeShellApplication {
     name = "hypr-keys";
     runtimeInputs = [
@@ -15,14 +21,14 @@ let
     text = ''
       hyprctl binds -j | jq -r '
         .[] |
+        select(.description != "") |
         ([ (if ((.modmask / 64 | floor) % 2) == 1 then "SUPER" else empty end),
            (if ((.modmask / 4  | floor) % 2) == 1 then "CTRL"  else empty end),
            (if ((.modmask / 8  | floor) % 2) == 1 then "ALT"   else empty end),
            (if ( .modmask            % 2) == 1 then "SHIFT" else empty end)
          ] + [ .key ] | join("+")) as $keys |
-        (if .arg == "" then .dispatcher else .dispatcher + "  " + .arg end) as $what |
-        "\($keys)	\($what)"
-      ' | column -t -s "$(printf "	")" | fuzzel --dmenu --width 90 --lines 30 --prompt "keys  "
+        "\($keys)	\(.description)"
+      ' | sort | column -t -s "$(printf "	")" | fuzzel --dmenu --width 90 --lines 30 --prompt "keys  "
     '';
   };
 in
