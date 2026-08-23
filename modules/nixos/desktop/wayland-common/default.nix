@@ -73,10 +73,6 @@
   # Holding it long still powers off.
   services.logind.settings.Login.HandlePowerKey = "suspend";
 
-  # Required for calendar support in both desktop shells (noctalia on niri,
-  # caelestia on Hyprland).
-  services.gnome.evolution-data-server.enable = true;
-
   # gnome-keyring's login keyring is encrypted with the password in force
   # when it was created; without this, `passwd` changes the login password but
   # not the keyring's, and auto-unlock silently breaks from then on.
