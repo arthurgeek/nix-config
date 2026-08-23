@@ -48,6 +48,9 @@
       with pkgs;
       [
         # CLI tools
+        dust # visual du
+        fd # find, but fast
+        tldr # abridged man pages
         gnused
         exiftool
         ast-grep
