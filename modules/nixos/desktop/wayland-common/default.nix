@@ -7,7 +7,7 @@
 {
   # A graphical session picker rather than autologin, so both the Hyprland
   # and niri sessions are selectable. regreet drives greetd's default session
-  # (via cage), lists every wayland session it finds in XDG data dirs, and
+  # (via sway), lists every wayland session it finds in XDG data dirs, and
   # remembers the last user and session on its own.
   services.displayManager.regreet = {
     enable = true;
@@ -22,7 +22,8 @@
     font = {
       package = pkgs.roboto;
       name = "Roboto";
-      # Rendered under GDK_SCALE=2 below, so effectively 22px on the 4K panel.
+      # Rendered on a scale-2 output (see below), so effectively 22px on the
+      # 4K panel.
       size = 11;
     };
     cursorTheme = {
@@ -31,18 +32,32 @@
     };
   };
 
-  # cage runs regreet unscaled, which is unreadably small on a 4K panel. GTK
-  # only scales by integers, so double it via the environment. This restates
-  # the regreet module's own (mkDefault) command with the env prefix added.
-  services.greetd.settings.default_session.command = lib.concatStringsSep " " [
-    "${pkgs.coreutils}/bin/env"
-    "GDK_SCALE=2"
-    "${pkgs.dbus}/bin/dbus-run-session"
-    (lib.getExe pkgs.cage)
-    "-s"
-    "--"
-    (lib.getExe config.services.displayManager.regreet.package)
-  ];
+  # cage renders regreet unreadably small on a 4K panel and has no scale
+  # option — it always hands the client a scale-1 output. GDK_SCALE does not
+  # rescue it: regreet is GTK4, and GTK4's wayland backend ignores that
+  # variable (a GTK4 client under cage renders byte-identically with and
+  # without it). Only the compositor can set the scale, so run the greeter
+  # under sway, which can. This restates the regreet module's own (mkDefault)
+  # command with sway in cage's place.
+  services.greetd.settings.default_session.command =
+    let
+      greeterSway = pkgs.writeText "greetd-sway.conf" ''
+        output * scale 2
+
+        # No Xwayland client can reach the greeter, so skip the server.
+        xwayland disable
+
+        # regreet is the whole session: when it exits, tear sway down so greetd
+        # moves on to the session the user picked.
+        exec "${lib.getExe config.services.displayManager.regreet.package}; ${pkgs.sway}/bin/swaymsg exit"
+      '';
+    in
+    lib.concatStringsSep " " [
+      "${pkgs.dbus}/bin/dbus-run-session"
+      (lib.getExe pkgs.sway)
+      "--config"
+      "${greeterSway}"
+    ];
 
   # The hyprland package ships hyprland-uwsm.desktop alongside its regular
   # session entry; with uwsm not installed that entry is dead on arrival, and
