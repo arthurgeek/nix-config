@@ -16,7 +16,13 @@ hl.config({
         },
 
         allow_tearing    = false,
-        resize_on_border = false,
+
+        -- Drag a window's edge to resize it, no modifier held. A 2px border is
+        -- a hard target, but extend_border_grab_area (15px, upstream default)
+        -- widens the grab zone well past the visible line, and
+        -- hover_icon_on_border (also default) shows the resize cursor there.
+        -- SUPER + right-drag still resizes from anywhere in the window.
+        resize_on_border = true,
     },
 
     -- https://wiki.hypr.land/Configuring/Layouts/Scrolling-Layout/
