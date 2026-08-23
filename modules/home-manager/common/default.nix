@@ -54,6 +54,7 @@
         exiftool
         ast-grep
         yq
+        herdr # terminal agent multiplexer
       ]
 
       # On non-darwin, install via Nix (on macOS these use Homebrew
