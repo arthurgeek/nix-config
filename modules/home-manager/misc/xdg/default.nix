@@ -24,10 +24,12 @@
 
     mimeApps = {
       enable = true;
+      # Media defaults : mpv for video, imv for images, evince for PDFs
       defaultApplicationPackages = [
         pkgs.gnome-text-editor
-        pkgs.loupe
-        pkgs.showtime
+        pkgs.imv
+        pkgs.mpv
+        pkgs.evince
       ];
     };
 
