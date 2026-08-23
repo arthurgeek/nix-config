@@ -68,6 +68,11 @@
   # Enable CPU Power profiles support
   services.power-profiles-daemon.enable = true;
 
+  # A short power-key press suspends instead of powering off — a press aimed
+  # at waking a black screen must not be able to shut the machine down.
+  # Holding it long still powers off.
+  services.logind.settings.Login.HandlePowerKey = "suspend";
+
   # Required for calendar support in both desktop shells (noctalia on niri,
   # caelestia on Hyprland).
   services.gnome.evolution-data-server.enable = true;
