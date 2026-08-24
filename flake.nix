@@ -105,7 +105,7 @@
     # claude-code plugins
     claude-plugins-official = {
       # renovate: datasource=git-refs depName=https://github.com/anthropics/claude-plugins-official
-      url = "github:anthropics/claude-plugins-official/36b00173da517876f9e574ef98f3564b0e86c25d"; # main
+      url = "github:anthropics/claude-plugins-official/340e33aef211d95769d252324854497af871dafe"; # main
       flake = false;
     };
     superpowers = {
