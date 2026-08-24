@@ -8,8 +8,8 @@
       gui.nerdFontsVersion = "3";
 
       git = {
-        pagers = [
-          { pager = "delta --features 'default decorations' --paging=never"; }
+        diffRenderers = [
+          { command = "delta --features 'default decorations' --paging=never"; }
         ];
         branchLogCmd = "git log --color=always {{branchName}} --";
         commit.signOff = true;
