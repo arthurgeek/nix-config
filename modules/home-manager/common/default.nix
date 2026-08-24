@@ -39,6 +39,7 @@ in
     ../programs/ripgrep
     ../programs/omniwm
     ../programs/claude-code
+    ../programs/codex
     ../programs/gh
     ../programs/glow
     ../programs/vscode

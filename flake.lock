@@ -129,9 +129,48 @@
         "type": "github"
       }
     },
+    "codex-cli-nix": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787535200,
+        "narHash": "sha256-qDi3utpYi4LnJvxtJN92EIVXLUfrjjX2kQJ3OKULiwg=",
+        "owner": "sadjow",
+        "repo": "codex-cli-nix",
+        "rev": "05b1b39da135e34526f898600e09e67b55d5436c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sadjow",
+        "repo": "codex-cli-nix",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "inputs": {
-        "systems": "systems_2"
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_3"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -405,7 +444,7 @@
           "noctalia",
           "nixpkgs"
         ],
-        "systems": "systems",
+        "systems": "systems_2",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -419,6 +458,23 @@
       "original": {
         "owner": "noctalia-dev",
         "repo": "noctalia-qs",
+        "type": "github"
+      }
+    },
+    "openai-plugins": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783971520,
+        "narHash": "sha256-MXvyuQzDni5EpUPFfKPW2/HBb7tMaqonZAjC6Obkm8U=",
+        "owner": "openai",
+        "repo": "plugins",
+        "rev": "11c74d6ba24d3a6d48f54a194cd00ef3beea18f9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "openai",
+        "repo": "plugins",
+        "rev": "11c74d6ba24d3a6d48f54a194cd00ef3beea18f9",
         "type": "github"
       }
     },
@@ -521,6 +577,7 @@
         "caelestia-shell": "caelestia-shell_2",
         "catppuccin": "catppuccin",
         "claude-plugins-official": "claude-plugins-official",
+        "codex-cli-nix": "codex-cli-nix",
         "hardware": "hardware",
         "home-manager": "home-manager",
         "homebrew-barutsrb-tap": "homebrew-barutsrb-tap",
@@ -531,13 +588,14 @@
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia",
+        "openai-plugins": "openai-plugins",
         "serena": "serena",
         "superpowers": "superpowers"
       }
     },
     "serena": {
       "inputs": {
-        "flake-utils": "flake-utils",
+        "flake-utils": "flake-utils_2",
         "nixpkgs": "nixpkgs_3",
         "pyproject-build-systems": "pyproject-build-systems",
         "pyproject-nix": "pyproject-nix",
@@ -577,6 +635,21 @@
     },
     "systems": {
       "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_2": {
+      "locked": {
         "lastModified": 1689347949,
         "narHash": "sha256-12tWmuL2zgBgZkdoB6qXZsgJEH9LR3oUgpaQq2RbI80=",
         "owner": "nix-systems",
@@ -590,7 +663,7 @@
         "type": "github"
       }
     },
-    "systems_2": {
+    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

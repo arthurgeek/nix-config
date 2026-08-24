@@ -102,6 +102,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Codex CLI native binary distribution. Like nix-claude-code above, this
+    # follows main live; codex-cli-nix tracks official Codex releases hourly,
+    # while flake.lock keeps each configuration build reproducible.
+    codex-cli-nix = {
+      url = "github:sadjow/codex-cli-nix"; # main
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # claude-code plugins
     claude-plugins-official = {
       # renovate: datasource=git-refs depName=https://github.com/anthropics/claude-plugins-official
@@ -111,6 +119,11 @@
     superpowers = {
       # renovate: datasource=github-releases depName=obra/superpowers
       url = "github:obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797"; # v6.3.0
+      flake = false;
+    };
+    openai-plugins = {
+      # renovate: datasource=git-refs depName=https://github.com/openai/plugins
+      url = "github:openai/plugins/11c74d6ba24d3a6d48f54a194cd00ef3beea18f9"; # main
       flake = false;
     };
     # renovate: datasource=github-releases depName=oraios/serena
