@@ -1,4 +1,5 @@
 {
+  config,
   hmModules,
   pkgs,
   ...
@@ -35,6 +36,20 @@ in
 {
   home.packages = [ hypr-keys ];
 
+  # XWayland advertises no DPI of its own, so an X client that sizes itself
+  # from "monitor settings" — Steam's own UI scale option among them — falls
+  # back to 96dpi and draws at 1x. On a scale-1.5 output under
+  # xwayland.force_zero_scaling that lands it on a 3840x2160 surface at native
+  # pixels, which is why Steam came out unreadably small however its scaling
+  # was configured: STEAM_FORCE_DESKTOPUI_SCALING and -forcedesktopscaling are
+  # both inert on current clients, and Steam's in-app toggle had no monitor
+  # DPI to match. Xft.dpi is the value those toolkits actually read.
+  #
+  # 192 = 96 * 2, giving Steam a 2x UI scale. Keeping
+  # force_zero_scaling on means this fixes the size without giving up the
+  # sharpness that upscaling would cost.
+  xresources.properties."Xft.dpi" = 192;
+
   # cliphist only records while a wl-paste watcher is running, and nothing
   # starts one under Hyprland: caelestia's clipboard picker (SUPER+CTRL+V)
   # reads cliphist's database but never writes to it, so without these the
@@ -58,6 +73,23 @@ in
       };
     in
     {
+      # Nothing loads ~/.Xresources under wayland: there is no X session script
+      # to do it, and home-manager only merges it for xsession. XWayland is up
+      # by the time the session target is reached, so merge it there.
+      xrdb = {
+        Unit = {
+          Description = "Merge ~/.Xresources into XWayland";
+          PartOf = [ "hyprland-session.target" ];
+          After = [ "hyprland-session.target" ];
+        };
+        Service = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${pkgs.xrdb}/bin/xrdb -merge ${config.home.homeDirectory}/.Xresources";
+        };
+        Install.WantedBy = [ "hyprland-session.target" ];
+      };
+
       cliphist-text = watcher "text";
       cliphist-image = watcher "image";
     };
