@@ -1,5 +1,30 @@
-{ inputs, pkgs, config, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 let
+  # nix-claude-code's flake package set still reads the deprecated
+  # `stdenv.isLinux` twice. Instantiate its package recipe directly with a
+  # compatibility attribute so current nixpkgs evaluates without warnings.
+  versionFiles = builtins.readDir "${inputs.nix-claude-code}/versions";
+  versionNames = builtins.map (name: lib.removeSuffix ".json" name) (
+    builtins.filter (name: lib.hasSuffix ".json" name) (builtins.attrNames versionFiles)
+  );
+  latestVersion = builtins.head (builtins.sort (a: b: builtins.compareVersions a b > 0) versionNames);
+  claudeCode = pkgs.callPackage "${inputs.nix-claude-code}/package.nix" {
+    stdenv = pkgs.stdenv // {
+      isLinux = pkgs.stdenv.hostPlatform.isLinux;
+    };
+    sourcesFile = "${inputs.nix-claude-code}/versions/${latestVersion}.json";
+    additionalPaths = [
+      "${pkgs.gh}/bin"
+      "${pkgs.poppler-utils}/bin"
+    ];
+  };
+
   # Superpowers hardcodes its output path as literal text in the skill files
   # (`docs/superpowers/specs/...`, `docs/superpowers/plans/...`); there is no
   # config knob for it. Rewrite that prefix so specs land in `docs/specs/` and
@@ -19,7 +44,7 @@ in
 
   programs.claude-code = {
     enable = true;
-    package = inputs.nix-claude-code.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    package = claudeCode;
     settings = {
       theme = "dark";
       includeCoAuthoredBy = false;

@@ -6,6 +6,16 @@
   ...
 }:
 let
+  # codex-cli-nix's package recipe still reads the deprecated
+  # `stdenv.isLinux`. Supply the equivalent modern platform value until the
+  # upstream package adopts `stdenv.hostPlatform.isLinux`.
+  codex = pkgs.callPackage "${inputs.codex-cli-nix}/package.nix" {
+    runtime = "native";
+    stdenv = pkgs.stdenv // {
+      isLinux = pkgs.stdenv.hostPlatform.isLinux;
+    };
+  };
+
   homeDirectory =
     if pkgs.stdenv.hostPlatform.isDarwin then
       "/Users/${userConfig.name}"
@@ -35,7 +45,7 @@ in
 {
   programs.codex = {
     enable = true;
-    package = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    package = codex;
 
     settings = {
       model = "gpt-5.6-sol";
