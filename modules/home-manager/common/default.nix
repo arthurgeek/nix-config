@@ -1,10 +1,22 @@
 {
   userConfig,
   config,
+  inputs,
   lib,
   pkgs,
   ...
 }:
+let
+  # catppuccin/nix still overrides pnpm's retired `nodejs` argument. Translate
+  # it to `nodejs-slim` until the pinned input adopts the new nixpkgs API.
+  pnpm_10 = pkgs.pnpm_10 // {
+    override = args:
+      pkgs.pnpm_10.override (
+        removeAttrs args [ "nodejs" ]
+        // lib.optionalAttrs (args ? nodejs) { nodejs-slim = args.nodejs; }
+      );
+  };
+in
 {
   imports = [
     ../programs/git
@@ -78,6 +90,9 @@
     enable = true;
     flavor = "macchiato";
     accent = "lavender";
+    sources.vscode =
+      inputs.catppuccin.packages.${pkgs.stdenv.hostPlatform.system}.vscode.override
+        { inherit pnpm_10; };
 
     # catppuccin.enable turns on every port module, including ones for programs
     # we do not use. Its gemini-cli module sets `programs.gemini-cli.settings`,
