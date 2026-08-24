@@ -190,17 +190,17 @@
     "homebrew-barutsrb-tap": {
       "flake": false,
       "locked": {
-        "lastModified": 1785896689,
-        "narHash": "sha256-+l5x3UpMBxSacg97KCym13F1Dx4AnqrBUOAMoSaQuNQ=",
+        "lastModified": 1786733089,
+        "narHash": "sha256-F+aoD1b330ApGu8JKcNDhEw1pt/KRqj9xIBFFnQbQKM=",
         "owner": "BarutSRB",
         "repo": "homebrew-tap",
-        "rev": "01ec4312fccc0d8287f15491ace8c9d90dc5b71b",
+        "rev": "f6735364fa121deedce8617d1c77b0bbce3c2966",
         "type": "github"
       },
       "original": {
         "owner": "BarutSRB",
         "repo": "homebrew-tap",
-        "rev": "01ec4312fccc0d8287f15491ace8c9d90dc5b71b",
+        "rev": "f6735364fa121deedce8617d1c77b0bbce3c2966",
         "type": "github"
       }
     },
