@@ -8,6 +8,10 @@ let
       "~/.1password/agent.sock";
 in
 {
+  home.sessionVariables = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
+    SSH_AUTH_SOCK = "$HOME/.1password/agent.sock";
+  };
+
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
