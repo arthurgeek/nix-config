@@ -40,6 +40,7 @@ in
     ../programs/omniwm
     ../programs/claude-code
     ../programs/codex
+    ../programs/opencode
     ../programs/gh
     ../programs/glow
     ../programs/vscode
