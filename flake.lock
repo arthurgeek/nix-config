@@ -561,17 +561,17 @@
     "superpowers": {
       "flake": false,
       "locked": {
-        "lastModified": 1784852836,
-        "narHash": "sha256-F5LEk0yNWbMpan1vZSFZM76XSpsFGvA7h8q6Idrvenk=",
+        "lastModified": 1786553601,
+        "narHash": "sha256-EsGNO0dULWf5Bx6bGrCv2kI2Z8aKH0kRvGiuN23wChQ=",
         "owner": "obra",
         "repo": "superpowers",
-        "rev": "3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9",
+        "rev": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797",
         "type": "github"
       },
       "original": {
         "owner": "obra",
         "repo": "superpowers",
-        "rev": "3dcbd5c4b48e02263fbf4a3c01e3fe4f81d584d9",
+        "rev": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797",
         "type": "github"
       }
     },
