@@ -1,0 +1,60 @@
+diff --git a/index.ts b/index.ts
+index e58f84d..c3ca63c 100644
+--- a/index.ts
++++ b/index.ts
+@@ -37,6 +37,29 @@ import {
+ 
+ const GUEST_WORKSPACE = "/workspace";
+ const DEFAULT_GREP_LIMIT = 100;
++const RESOURCE_PATHS = ["@superpowers@", "@openaiPlugins@"];
++const SAFE_ENV_VARIABLES = new Set([
++	"COLORTERM",
++	"FORCE_COLOR",
++	"LANG",
++	"LANGUAGE",
++	"LC_ADDRESS",
++	"LC_ALL",
++	"LC_COLLATE",
++	"LC_CTYPE",
++	"LC_IDENTIFICATION",
++	"LC_MEASUREMENT",
++	"LC_MESSAGES",
++	"LC_MONETARY",
++	"LC_NAME",
++	"LC_NUMERIC",
++	"LC_PAPER",
++	"LC_TELEPHONE",
++	"LC_TIME",
++	"NO_COLOR",
++	"TERM",
++	"TZ",
++]);
+ 
+ type TextToolResult<TDetails> = {
+ 	content: Array<{ type: "text"; text: string }>;
+@@ -258,7 +281,9 @@ function sanitizeEnv(env: NodeJS.ProcessEnv | undefined): Record<string, string>
+ 	if (!env) return undefined;
+ 	const result: Record<string, string> = {};
+ 	for (const [key, value] of Object.entries(env)) {
+-		if (typeof value === "string") result[key] = value;
++		if (typeof value === "string" && SAFE_ENV_VARIABLES.has(key)) {
++			result[key] = value;
++		}
+ 	}
+ 	return result;
+ }
+@@ -299,10 +324,14 @@ export default function (pi: ExtensionAPI) {
+ 	async function startVm(ctx?: ExtensionContext): Promise<VM> {
+ 		ctx?.ui.setStatus("gondolin", ctx.ui.theme.fg("accent", `Gondolin: starting ${GUEST_WORKSPACE}`));
+ 		const created = await VM.create({
++			sandbox: { netEnabled: false, allowWebSockets: false },
+ 			sessionLabel: `pi ${path.basename(localCwd)}`,
+ 			vfs: {
+ 				mounts: {
+ 					[GUEST_WORKSPACE]: new RealFSProvider(localCwd),
++					...Object.fromEntries(
++						RESOURCE_PATHS.map((resourcePath) => [resourcePath, new RealFSProvider(resourcePath)]),
++					),
+ 				},
+ 			},
+ 		});

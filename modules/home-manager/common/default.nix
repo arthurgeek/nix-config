@@ -41,6 +41,7 @@ in
     ../programs/claude-code
     ../programs/codex
     ../programs/opencode
+    ../programs/pi
     ../programs/gh
     ../programs/glow
     ../programs/vscode

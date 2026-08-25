@@ -107,6 +107,7 @@
     description = userConfig.fullName;
     extraGroups = [
       "networkmanager"
+      "kvm"
       "video"
       "wheel"
     ];
