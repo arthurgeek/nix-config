@@ -75,7 +75,7 @@
     # following would buy a second full nixpkgs Qt6 closure for no benefit.
     caelestia-shell = {
       # renovate: datasource=github-releases depName=caelestia-dots/shell
-      url = "github:caelestia-dots/shell/94d5eb9e6fe9c6b1f69e663d9ed410a441e2d67f"; # v2.3.0
+      url = "github:caelestia-dots/shell/24aa15eefdb146350d2548c0a015b04eddbd1008"; # v2.4.0
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.caelestia-cli.follows = "caelestia-cli";
     };
