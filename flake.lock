@@ -129,6 +129,23 @@
         "type": "github"
       }
     },
+    "cli-proxy-api": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787779819,
+        "narHash": "sha256-DQHWTpuzKaWU7/EHuHafljEY4LXhqJ/gdRTIe+WxLYY=",
+        "owner": "router-for-me",
+        "repo": "CLIProxyAPI",
+        "rev": "4b5f1eab25fca4b3815369a826e958e7c070a69e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "router-for-me",
+        "repo": "CLIProxyAPI",
+        "rev": "4b5f1eab25fca4b3815369a826e958e7c070a69e",
+        "type": "github"
+      }
+    },
     "codex-cli-nix": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -137,11 +154,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787535200,
-        "narHash": "sha256-qDi3utpYi4LnJvxtJN92EIVXLUfrjjX2kQJ3OKULiwg=",
+        "lastModified": 1787798436,
+        "narHash": "sha256-sgQx7yUo2I1c4McylOW1vRklIxDL3Kwzq35ilr7firc=",
         "owner": "sadjow",
         "repo": "codex-cli-nix",
-        "rev": "05b1b39da135e34526f898600e09e67b55d5436c",
+        "rev": "18eb1cac4e17c8cbc40f3a2a83940d8f38ddace5",
         "type": "github"
       },
       "original": {
@@ -202,6 +219,108 @@
         "owner": "nixos",
         "repo": "nixos-hardware",
         "rev": "9ebcb7766700d7e006d9505247bd7ce0426f4232",
+        "type": "github"
+      }
+    },
+    "helix-assist": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1772614478,
+        "narHash": "sha256-pAbWGKV0Xu1wFSven4n32eq88fLeIbyA5imnlAFt+0c=",
+        "owner": "leona",
+        "repo": "helix-assist",
+        "rev": "a4796433ae6d3c3b5da9484967fb209a9caea159",
+        "type": "github"
+      },
+      "original": {
+        "owner": "leona",
+        "repo": "helix-assist",
+        "rev": "a4796433ae6d3c3b5da9484967fb209a9caea159",
+        "type": "github"
+      }
+    },
+    "herdr-agent-quota": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788229680,
+        "narHash": "sha256-kVSUs2tNAVRKN4MN1Ywo/2hMB5UtIfkEPz3nqhY/piQ=",
+        "owner": "levi-qiao",
+        "repo": "herdr-agent-quota",
+        "rev": "3b63f83762bc85521a68851b3432914fb6df3de0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "levi-qiao",
+        "repo": "herdr-agent-quota",
+        "rev": "3b63f83762bc85521a68851b3432914fb6df3de0",
+        "type": "github"
+      }
+    },
+    "herdr-automatic-rename": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788203315,
+        "narHash": "sha256-nKi/ePLCNcRF0LkCeyN/A97zo/cppCy7B318FyxxJsw=",
+        "owner": "qu8n",
+        "repo": "herdr-automatic-rename",
+        "rev": "e241443d9bc29d717c0a9edec281f2b92692a279",
+        "type": "github"
+      },
+      "original": {
+        "owner": "qu8n",
+        "repo": "herdr-automatic-rename",
+        "rev": "e241443d9bc29d717c0a9edec281f2b92692a279",
+        "type": "github"
+      }
+    },
+    "herdr-bar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788203155,
+        "narHash": "sha256-qCdSLQ89yaQ/leRYmSHq3OwwSOlvN9RWxmqy4EPlNv4=",
+        "owner": "jeffarese",
+        "repo": "herdr-bar",
+        "rev": "b57aa342f88f9db78f3deb20629ccebf162a6f57",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jeffarese",
+        "repo": "herdr-bar",
+        "rev": "b57aa342f88f9db78f3deb20629ccebf162a6f57",
+        "type": "github"
+      }
+    },
+    "herdr-command-palette": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782738461,
+        "narHash": "sha256-A43Dl365S/5w2wrttV1RnQ1g7YRJmsD3tb5EUUZcQQY=",
+        "owner": "JanTvrdik",
+        "repo": "herdr-command-palette",
+        "rev": "eab940018c2135ac23718efa11e23e9dddcd2a75",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JanTvrdik",
+        "repo": "herdr-command-palette",
+        "rev": "eab940018c2135ac23718efa11e23e9dddcd2a75",
+        "type": "github"
+      }
+    },
+    "herdr-file-viewer": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786828789,
+        "narHash": "sha256-2vI98QRm6vXDe8IkJBPAqFsQH86zX1oJVwCaoOVYrQs=",
+        "owner": "smarzban",
+        "repo": "herdr-file-viewer",
+        "rev": "647f03236d9aa20de0b07c9de0a951e13a1e59bf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "smarzban",
+        "repo": "herdr-file-viewer",
+        "rev": "647f03236d9aa20de0b07c9de0a951e13a1e59bf",
         "type": "github"
       }
     },
@@ -277,6 +396,23 @@
         "type": "github"
       }
     },
+    "lazyjj-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1769474464,
+        "narHash": "sha256-R1XXX3bAOba0tzsJblSbZjekL52izPAH8RAWLFf3EVI=",
+        "owner": "LazyJJ-dev",
+        "repo": "LazyJJ",
+        "rev": "0acb115dbb66821995ba04bc1b3854aa52d00dde",
+        "type": "github"
+      },
+      "original": {
+        "owner": "LazyJJ-dev",
+        "repo": "LazyJJ",
+        "rev": "0acb115dbb66821995ba04bc1b3854aa52d00dde",
+        "type": "github"
+      }
+    },
     "m3shapes": {
       "inputs": {
         "nixpkgs": [
@@ -329,11 +465,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787000722,
-        "narHash": "sha256-HpGirVHmSa7lspKvkzGIqX5rKOd9mE9ushkel0IaVRU=",
+        "lastModified": 1787884209,
+        "narHash": "sha256-UKQeTmXspdQJoONAmwrGwpl6TXsnEv/GbLbeN0H1WDI=",
         "owner": "ryoppippi",
         "repo": "nix-claude-code",
-        "rev": "3ac526c2197991892599d2e4316a08b80a7a3cab",
+        "rev": "3d85b174edf73176815671b9b4bfc82c2512a329",
         "type": "github"
       },
       "original": {
@@ -564,12 +700,20 @@
         "caelestia-shell": "caelestia-shell_2",
         "catppuccin": "catppuccin",
         "claude-plugins-official": "claude-plugins-official",
+        "cli-proxy-api": "cli-proxy-api",
         "codex-cli-nix": "codex-cli-nix",
         "hardware": "hardware",
+        "helix-assist": "helix-assist",
+        "herdr-agent-quota": "herdr-agent-quota",
+        "herdr-automatic-rename": "herdr-automatic-rename",
+        "herdr-bar": "herdr-bar",
+        "herdr-command-palette": "herdr-command-palette",
+        "herdr-file-viewer": "herdr-file-viewer",
         "home-manager": "home-manager",
         "homebrew-barutsrb-tap": "homebrew-barutsrb-tap",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
+        "lazyjj-config": "lazyjj-config",
         "nix-claude-code": "nix-claude-code",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
