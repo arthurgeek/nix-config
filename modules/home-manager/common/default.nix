@@ -21,6 +21,7 @@ in
   imports = [
     ../programs/git
     ../programs/jujutsu
+    ../programs/herdr
     ../programs/bat
     ../programs/btop
     ../programs/fish
@@ -70,7 +71,6 @@ in
         exiftool
         ast-grep
         yq
-        herdr # terminal agent multiplexer
       ]
 
       # On non-darwin, install via Nix (on macOS these use Homebrew
