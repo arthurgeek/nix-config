@@ -10,6 +10,10 @@
       git = {
         diffRenderers = [
           { command = "delta --features 'default decorations' --paging=never"; }
+          {
+            type = "extDiff";
+            command = "difft --color=always --context={{diffContext}}";
+          }
         ];
         branchLogCmd = "git log --color=always {{branchName}} --";
         commit.signOff = true;

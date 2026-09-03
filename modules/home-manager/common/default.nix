@@ -20,6 +20,7 @@ in
 {
   imports = [
     ../programs/git
+    ../programs/jujutsu
     ../programs/bat
     ../programs/btop
     ../programs/fish

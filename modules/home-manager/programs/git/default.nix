@@ -1,6 +1,8 @@
 { pkgs, lib, ... }:
 
 let
+  lessPager = "${lib.getExe pkgs.less} -FRX";
+
   # core.hooksPath makes git ignore per-repo .git/hooks entirely, so every
   # global hook must fall through to the repo's own hook of the same name.
   passthroughHooks = [
@@ -96,6 +98,9 @@ in
         st = "status -s -b";
         wdiff = "diff --word-diff";
         slog = "log";
+        dft = "-c pager.diff='${lessPager}' -c diff.external=difft diff";
+        ds = "-c pager.show='${lessPager}' -c diff.external=difft show --ext-diff";
+        dl = "-c pager.log='${lessPager}' -c diff.external=difft log -p --ext-diff";
         oops = "!git add . && git commit --amend --no-edit && git push --force-with-lease";
         difi = "!difi";
       };

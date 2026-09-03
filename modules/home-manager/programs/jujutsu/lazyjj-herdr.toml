@@ -1,0 +1,75 @@
+[aliases]
+
+claude-start = ["util", "exec", "--", "bash", "-c", """
+  set -euo pipefail
+  if [ "$#" -ne 1 ]; then
+    echo "Error: You must name the workspace."
+    exit 1
+  fi
+
+  workspace="${1//[^a-zA-Z0-9]/-}"
+  source="$(jj workspace root | sed -e 's/-workspaces\\/.*//')"
+  target="$source-workspaces/$workspace"
+  label="$(basename "$source")-$workspace"
+  agent_name="$(printf '%s' "$label" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9_-]+/-/g; s/^[^a-z]+/w-/' | cut -c1-32)"
+
+  mkdir -p "$source-workspaces"
+  if [ ! -d "$target" ]; then
+    echo "Creating Jujutsu workspace '$target'"
+    jj workspace add "$target"
+    if [ -f "$source/.jj-workspace-setup.sh" ]; then
+      "$source/.jj-workspace-setup.sh" "$target"
+    fi
+  fi
+
+  if ! herdr status server >/dev/null 2>&1; then
+    nohup herdr server >/dev/null 2>&1 &
+    for _ in $(seq 1 50); do
+      herdr status server >/dev/null 2>&1 && break
+      sleep 0.1
+    done
+    herdr status server >/dev/null
+  fi
+
+  workspace_id="$(herdr workspace list | jq -r --arg label "$label" '[.result.workspaces[] | select(.label == $label)][0].workspace_id // empty')"
+  if [ -z "$workspace_id" ]; then
+    response="$(herdr workspace create --cwd "$target" --label "$label" --focus)"
+    workspace_id="$(printf '%s' "$response" | jq -r '.result.workspace.workspace_id')"
+    pane_id="$(printf '%s' "$response" | jq -r '.result.root_pane.pane_id')"
+  else
+    herdr workspace focus "$workspace_id" >/dev/null
+    pane_id="$(herdr pane list --workspace "$workspace_id" | jq -r '.result.panes[0].pane_id')"
+  fi
+
+  if ! herdr agent get "$agent_name" >/dev/null 2>&1; then
+    herdr agent start "$agent_name" --kind claude --pane "$pane_id" >/dev/null
+  fi
+
+  if [ -n "${HERDR_ENV:-}" ]; then
+    herdr agent focus "$agent_name" >/dev/null
+  else
+    exec herdr agent attach "$agent_name"
+  fi
+""", ""]
+
+claude-stop = ["util", "exec", "--", "bash", "-c", """
+  set -euo pipefail
+  if [ "$#" -ne 1 ]; then
+    echo "Error: You must name the workspace."
+    exit 1
+  fi
+
+  workspace="${1//[^a-zA-Z0-9]/-}"
+  source="$(jj workspace root | sed -e 's/-workspaces\\/.*//')"
+  label="$(basename "$source")-$workspace"
+
+  if response="$(herdr workspace list 2>/dev/null)"; then
+    workspace_id="$(printf '%s' "$response" | jq -r --arg label "$label" '[.result.workspaces[] | select(.label == $label)][0].workspace_id // empty')"
+    if [ -n "$workspace_id" ]; then
+      herdr workspace close "$workspace_id" >/dev/null
+    fi
+  fi
+
+  jj workspace forget "$workspace" || true
+  rm -rf -- "$source-workspaces/$workspace"
+""", ""]
