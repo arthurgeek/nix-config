@@ -95,6 +95,26 @@
     fi
   '';
 
+  # nix-darwin stops Dock after applying defaults, but launchd does not always
+  # bring it back. Recover it when this user's GUI launch domain is available.
+  system.activationScripts.postActivation.text = lib.mkAfter ''
+    dock_uid="$(id -u -- ${lib.escapeShellArg userConfig.name} 2>/dev/null || true)"
+    if [ -z "$dock_uid" ]; then
+      echo >&2 "WARNING: Could not resolve the Dock user's uid; skipping Dock recovery."
+    elif ! launchctl print "gui/$dock_uid" >/dev/null 2>&1; then
+      echo >&2 "WARNING: No GUI session for ${userConfig.name}; skipping Dock recovery."
+    else
+      dock_service="gui/$dock_uid/com.apple.Dock.agent"
+      if launchctl print "$dock_service" >/dev/null 2>&1; then
+        if ! launchctl kickstart -k "$dock_service" >/dev/null 2>&1; then
+          echo >&2 "WARNING: Failed to kickstart Dock in $dock_service."
+        elif ! launchctl print "$dock_service" 2>/dev/null | grep -q 'state = running'; then
+          echo >&2 "WARNING: Dock is not running after kickstart in $dock_service."
+        fi
+      fi
+    fi
+  '';
+
   # System settings
   system = {
     # Set Git commit hash for darwin-version.
