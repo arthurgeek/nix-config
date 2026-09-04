@@ -47,6 +47,7 @@ in
     package = claudeCode;
     settings = {
       theme = "dark";
+      editorMode = "vim";
       includeCoAuthoredBy = false;
       gitAttribution = false;
       autoMemoryEnabled = true;

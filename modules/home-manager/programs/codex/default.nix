@@ -45,12 +45,24 @@ in
 {
   programs.codex = {
     enable = true;
-    package = codex;
+    package =
+      assert codex.version == "0.150.1";
+      codex;
 
     settings = {
       model = "gpt-5.6-sol";
       model_reasoning_effort = "high";
       personality = "pragmatic";
+      tui = {
+        status_line = [
+          "model"
+          "context-used"
+          "five-hour-limit"
+          "weekly-limit"
+        ];
+        status_line_use_colors = true;
+        vim_mode_default = true;
+      };
 
       # Closest Codex equivalent to Claude's automatic permission mode: the
       # reviewer handles routine escalation prompts, while commands stay inside
@@ -64,17 +76,16 @@ in
         use_memories = true;
       };
 
-      projects =
-        {
-          "${homeDirectory}/nix-config".trust_level = "trusted";
-        }
-        // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
-          "${homeDirectory}/Development/zig/kova".trust_level = "trusted";
-          "${homeDirectory}/Development/rust/hive".trust_level = "trusted";
-          "${homeDirectory}/Development/c/nilo".trust_level = "trusted";
-          "${homeDirectory}/Development/ocaml/hale".trust_level = "trusted";
-          "${homeDirectory}/Development/zig/linea".trust_level = "trusted";
-        };
+      projects = {
+        "${homeDirectory}/nix-config".trust_level = "trusted";
+      }
+      // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+        "${homeDirectory}/Development/zig/kova".trust_level = "trusted";
+        "${homeDirectory}/Development/rust/hive".trust_level = "trusted";
+        "${homeDirectory}/Development/c/nilo".trust_level = "trusted";
+        "${homeDirectory}/Development/ocaml/hale".trust_level = "trusted";
+        "${homeDirectory}/Development/zig/linea".trust_level = "trusted";
+      };
     };
 
     # Native Codex counterparts for the Claude development, frontend, review,
