@@ -216,7 +216,7 @@ let
 
   settings = json.generate "pi-settings.json" {
     defaultProvider = "openai-codex";
-    defaultModel = "gpt-5.6-sol";
+    defaultModel = "gpt-6-astra";
     defaultThinkingLevel = "high";
     defaultProjectTrust = "ask";
     theme = "catppuccin-macchiato-lavender";
@@ -679,7 +679,6 @@ in
     ".pi/agent/extensions/pi-permission-system/config.json".source = permissionConfig;
     ".pi/agent/hermes-memory-config.json".source = memoryConfig;
     ".pi/agent/mcp.json".source = mcpConfig;
-    ".pi/agent/pi-plan-mode.json".source = planConfig;
     ".pi/web-search.json".source = webConfig;
     ".pi-lens/config.json".source = lensConfig;
 
@@ -715,4 +714,11 @@ in
       '';
     };
   };
+
+  # pi-plan-mode opens its settings with O_NOFOLLOW, so Home Manager's normal
+  # store symlink is rejected. Materialize the generated JSON as a regular file.
+  home.activation.piPlanModeConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${pkgs.coreutils}/bin/rm -f "$HOME/.pi/agent/pi-plan-mode.json"
+    run ${pkgs.coreutils}/bin/install -Dm600 ${planConfig} "$HOME/.pi/agent/pi-plan-mode.json"
+  '';
 }
