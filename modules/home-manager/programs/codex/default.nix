@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -41,16 +42,57 @@ let
     substituteInPlace $out/.mcp.json \
       --replace-fail '"command": "node"' '"command": "${lib.getExe pkgs.nodejs}"'
   '';
+
+  githubPlugin = pkgs.runCommand "github" { } ''
+    cp -r ${inputs.openai-plugins}/plugins/github $out
+    chmod -R +w $out
+    rm -rf $out/skills/gh-address-comments $out/skills/gh-fix-ci
+  '';
+
+  openaiDocs = pkgs.runCommand "openai-docs" { } ''
+    cp -r ${inputs.openai-skills}/skills/.curated/openai-docs $out
+    chmod -R +w $out
+    substituteInPlace $out/SKILL.md \
+      --replace-fail 'node <skill-dir>/scripts/' '${lib.getExe pkgs.nodejs} <skill-dir>/scripts/' \
+      --replace-fail 'node scripts/resolve-latest-model-info.js' '${lib.getExe pkgs.nodejs} scripts/resolve-latest-model-info.js'
+  '';
+
+  ghAddressComments = pkgs.runCommand "gh-address-comments" { } ''
+    cp -r ${inputs.openai-skills}/skills/.curated/gh-address-comments $out
+    chmod -R +w $out
+    substituteInPlace $out/scripts/fetch_comments.py \
+      --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe pkgs.python3}'
+    substituteInPlace $out/SKILL.md \
+      --replace-fail 'Run scripts/fetch_comments.py' 'Run ${lib.getExe pkgs.python3} <path-to-skill>/scripts/fetch_comments.py'
+  '';
+
+  ghFixCi = pkgs.runCommand "gh-fix-ci" { } ''
+    cp -r ${inputs.openai-skills}/skills/.curated/gh-fix-ci $out
+    chmod -R +w $out
+    substituteInPlace $out/scripts/inspect_pr_checks.py \
+      --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe pkgs.python3}'
+    substituteInPlace $out/SKILL.md \
+      --replace-fail 'python "' '${lib.getExe pkgs.python3} "'
+  '';
+
+  curatedSkills = {
+    openai-docs = openaiDocs;
+    define-goal = "${inputs.openai-skills}/skills/.curated/define-goal";
+    gh-address-comments = ghAddressComments;
+    gh-fix-ci = ghFixCi;
+  };
+
+  codexConfig = config.home.file.".codex/config.toml".source;
 in
 {
   programs.codex = {
     enable = true;
     package =
-      assert codex.version == "0.150.1";
+      assert lib.versionAtLeast codex.version "0.150.1";
       codex;
 
     settings = {
-      model = "gpt-5.6-sol";
+      model = "gpt-6-astra";
       model_reasoning_effort = "high";
       personality = "pragmatic";
       tui = {
@@ -68,7 +110,7 @@ in
       # reviewer handles routine escalation prompts, while commands stay inside
       # a workspace-write sandbox unless an escalation is explicitly approved.
       approval_policy = "on-request";
-      approvals_reviewer = "auto_review";
+      approvals_reviewer = "guardian_subagent";
       sandbox_mode = "workspace-write";
 
       memories = {
@@ -95,12 +137,47 @@ in
       superpowers
       "${inputs.openai-plugins}/plugins/build-web-apps"
       codexSecurity
-      "${inputs.openai-plugins}/plugins/github"
+      githubPlugin
     ];
+
+    skills = curatedSkills;
   };
 
-  # Adopt the existing hand-written config on the first activation. Its durable
-  # model and project-trust settings are represented above; transient notices
-  # remain Codex-owned state and do not belong in the Nix configuration.
-  home.file.".codex/config.toml".force = true;
+  # Codex persists hook trust through config/batchWrite, so its config cannot be
+  # a read-only store symlink. Keep declarative settings authoritative while
+  # carrying Codex-owned hook hashes across activations.
+  home.file.".codex/config.toml" = {
+    enable = false;
+    force = true;
+  };
+
+  home.activation.codexMutableConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    config="$HOME/.codex/config.toml"
+    workdir="$(${pkgs.coreutils}/bin/mktemp -d)"
+    trap '${pkgs.coreutils}/bin/rm -rf "$workdir"' EXIT
+
+    ${pkgs.coreutils}/bin/cp ${codexConfig} "$workdir/config.toml"
+    ${pkgs.coreutils}/bin/chmod u+w "$workdir/config.toml"
+    if [ -f "$config" ] && [ ! -L "$config" ]; then
+      in_hook_state=0
+      while IFS= read -r line || [ -n "$line" ]; do
+        case "$line" in
+          '[hooks.state]'|'[hooks.state.'*) in_hook_state=1 ;;
+          '['*) in_hook_state=0 ;;
+        esac
+        if [ "$in_hook_state" -eq 1 ]; then
+          printf '%s\n' "$line" >> "$workdir/hook-state.toml"
+        fi
+      done < "$config"
+
+      if [ -s "$workdir/hook-state.toml" ]; then
+        printf '\n' >> "$workdir/config.toml"
+        ${pkgs.coreutils}/bin/cat "$workdir/hook-state.toml" >> "$workdir/config.toml"
+      fi
+    fi
+
+    run ${pkgs.coreutils}/bin/mkdir -p "$HOME/.codex"
+    run ${pkgs.coreutils}/bin/rm -f "$config"
+    run ${pkgs.coreutils}/bin/install -m600 "$workdir/config.toml" "$config"
+  '';
 }
