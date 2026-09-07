@@ -154,11 +154,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787798436,
-        "narHash": "sha256-sgQx7yUo2I1c4McylOW1vRklIxDL3Kwzq35ilr7firc=",
+        "lastModified": 1788568734,
+        "narHash": "sha256-SzZaOg5XWeTzPTPYpLsSIb47FjC1jXzmfJVjzl8Xd8Q=",
         "owner": "sadjow",
         "repo": "codex-cli-nix",
-        "rev": "18eb1cac4e17c8cbc40f3a2a83940d8f38ddace5",
+        "rev": "3a0dca3725f6d8b74cfe635a85724d2313731fb4",
         "type": "github"
       },
       "original": {
@@ -465,11 +465,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787884209,
-        "narHash": "sha256-UKQeTmXspdQJoONAmwrGwpl6TXsnEv/GbLbeN0H1WDI=",
+        "lastModified": 1788663712,
+        "narHash": "sha256-wK+yP5oKMJPa4TOwwPl3vPeMgk1FruPvN0TA0lKpGVg=",
         "owner": "ryoppippi",
         "repo": "nix-claude-code",
-        "rev": "3d85b174edf73176815671b9b4bfc82c2512a329",
+        "rev": "5ea16210008a108b89166801d86f1b90e2a79b44",
         "type": "github"
       },
       "original": {
@@ -601,6 +601,23 @@
         "type": "github"
       }
     },
+    "openai-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1782268572,
+        "narHash": "sha256-t4oGnFg0YpxJaQiFpgTiwYhaFoZK6wPDiqvHoG0bXiU=",
+        "owner": "openai",
+        "repo": "skills",
+        "rev": "49f948faa9258a0c61caceaf225e179651397431",
+        "type": "github"
+      },
+      "original": {
+        "owner": "openai",
+        "repo": "skills",
+        "rev": "49f948faa9258a0c61caceaf225e179651397431",
+        "type": "github"
+      }
+    },
     "pyproject-build-systems": {
       "inputs": {
         "nixpkgs": [
@@ -720,6 +737,7 @@
         "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia",
         "openai-plugins": "openai-plugins",
+        "openai-skills": "openai-skills",
         "serena": "serena",
         "superpowers": "superpowers"
       }

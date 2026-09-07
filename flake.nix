@@ -159,6 +159,11 @@
       url = "github:openai/plugins/1dc195897af4161d039b80d8471ec0a10c9bbc89"; # main
       flake = false;
     };
+    openai-skills = {
+      # renovate: datasource=git-refs depName=https://github.com/openai/skills
+      url = "github:openai/skills/49f948faa9258a0c61caceaf225e179651397431"; # main
+      flake = false;
+    };
     # renovate: datasource=github-releases depName=oraios/serena
     serena.url = "github:oraios/serena/949a27ef1e5fda1a6e7b561e777bcece345c6ffd"; # v1.7.0
   };
@@ -231,7 +236,9 @@
                   fish = prev.fish.overrideAttrs (old: {
                     NIX_FORCE_LOCAL_REBUILD = "darwin-codesign-fix";
                   });
-                  direnv = prev.direnv.overrideAttrs (_: { doCheck = false; });
+                  direnv = prev.direnv.overrideAttrs (_: {
+                    doCheck = false;
+                  });
                 })
               ];
             }
