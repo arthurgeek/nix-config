@@ -24,11 +24,11 @@ in
     enable = true;
 
     settings = {
-      model = "openai/gpt-5.6-sol";
+      model = "openai/gpt-6-astra";
       autoupdate = false;
       share = "disabled";
 
-      provider.openai.models."gpt-5.6-sol".options = {
+      provider.openai.models."gpt-6-astra".options = {
         reasoningEffort = "high";
         reasoningSummary = "auto";
         textVerbosity = "low";
