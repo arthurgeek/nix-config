@@ -33,20 +33,14 @@ let
       | xargs -r sed -i 's#docs/superpowers/#docs/#g'
   '';
 
-  # The native Codex package intentionally has no Node dependency, while the
-  # Codex Security plugin starts its local MCP server with a bare `node`.
-  # Point it at Nix's exact executable without exposing Node in the user PATH.
-  codexSecurity = pkgs.runCommand "codex-security" { } ''
+  # The native Codex package intentionally has no Node dependency. Wrap the
+  # Codex Security launcher with Nix's exact executable without exposing Node
+  # in the user PATH.
+  codexSecurity = pkgs.runCommand "codex-security" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
     cp -r ${inputs.openai-plugins}/plugins/codex-security $out
     chmod -R +w $out
-    substituteInPlace $out/.mcp.json \
-      --replace-fail '"command": "node"' '"command": "${lib.getExe pkgs.nodejs}"'
-  '';
-
-  githubPlugin = pkgs.runCommand "github" { } ''
-    cp -r ${inputs.openai-plugins}/plugins/github $out
-    chmod -R +w $out
-    rm -rf $out/skills/gh-address-comments $out/skills/gh-fix-ci
+    wrapProgram $out/scripts/launch_codex_security_mcp \
+      --set CODEX_MCP_NODE_PATH ${lib.getExe pkgs.nodejs}
   '';
 
   openaiDocs = pkgs.runCommand "openai-docs" { } ''
@@ -80,6 +74,7 @@ let
     define-goal = "${inputs.openai-skills}/skills/.curated/define-goal";
     gh-address-comments = ghAddressComments;
     gh-fix-ci = ghFixCi;
+    yeet = "${inputs.openai-skills}/skills/.curated/yeet";
   };
 
   codexConfig = config.home.file.".codex/config.toml".source;
@@ -137,7 +132,6 @@ in
       superpowers
       "${inputs.openai-plugins}/plugins/build-web-apps"
       codexSecurity
-      githubPlugin
     ];
 
     skills = curatedSkills;

@@ -18,6 +18,30 @@ let
   pluginSkills =
     plugin: names:
     lib.genAttrs names (name: "${inputs.openai-plugins}/plugins/${plugin}/skills/${name}");
+
+  ghAddressComments = pkgs.runCommand "gh-address-comments" { } ''
+    cp -r ${inputs.openai-skills}/skills/.curated/gh-address-comments $out
+    chmod -R +w $out
+    substituteInPlace $out/scripts/fetch_comments.py \
+      --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe pkgs.python3}'
+    substituteInPlace $out/SKILL.md \
+      --replace-fail 'Run scripts/fetch_comments.py' 'Run ${lib.getExe pkgs.python3} <path-to-skill>/scripts/fetch_comments.py'
+  '';
+
+  ghFixCi = pkgs.runCommand "gh-fix-ci" { } ''
+    cp -r ${inputs.openai-skills}/skills/.curated/gh-fix-ci $out
+    chmod -R +w $out
+    substituteInPlace $out/scripts/inspect_pr_checks.py \
+      --replace-fail '#!/usr/bin/env python3' '#!${lib.getExe pkgs.python3}'
+    substituteInPlace $out/SKILL.md \
+      --replace-fail 'python "' '${lib.getExe pkgs.python3} "'
+  '';
+
+  githubSkills = {
+    gh-address-comments = ghAddressComments;
+    gh-fix-ci = ghFixCi;
+    yeet = "${inputs.openai-skills}/skills/.curated/yeet";
+  };
 in
 {
   programs.opencode = {
@@ -92,12 +116,7 @@ in
         "validation"
         "vulnerability-writeup"
       ]
-      // pluginSkills "github" [
-        "gh-address-comments"
-        "gh-fix-ci"
-        "github"
-        "yeet"
-      ];
+      // githubSkills;
 
     context = ''
       # OpenCode-specific integrations
