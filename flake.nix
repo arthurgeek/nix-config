@@ -123,7 +123,7 @@
     };
     openai-plugins = {
       # renovate: datasource=git-refs depName=https://github.com/openai/plugins
-      url = "github:openai/plugins/11c74d6ba24d3a6d48f54a194cd00ef3beea18f9"; # main
+      url = "github:openai/plugins/1e285826e604f66f7208f7ac4dba0fe8341d1f57"; # main
       flake = false;
     };
     # renovate: datasource=github-releases depName=oraios/serena
