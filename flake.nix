@@ -88,7 +88,7 @@
     # shell's `with-cli` wrapper on the same rev.
     caelestia-cli = {
       # renovate: datasource=github-releases depName=caelestia-dots/cli
-      url = "github:caelestia-dots/cli/0a3a4bb0f915f596c4e18e4ca3b00a6b2064442b"; # v1.1.2
+      url = "github:caelestia-dots/cli/82265df3665b40184e8bdc2165541e072c5a4971"; # v1.1.3
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
