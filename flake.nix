@@ -53,7 +53,7 @@
 
     # NixOS profiles to optimize settings for different hardware
     # renovate: datasource=git-refs depName=https://github.com/nixos/nixos-hardware
-    hardware.url = "github:nixos/nixos-hardware/d40fd26f323c898b0c195d41aa5efadd85f57832"; # master
+    hardware.url = "github:nixos/nixos-hardware/9ebcb7766700d7e006d9505247bd7ce0426f4232"; # master
 
     # catppuccin theme
     catppuccin = {
