@@ -58,6 +58,10 @@
     casks = [
       # Chrome has hardened runtime location checks that break when installed via Nix
       "google-chrome"
+      # macOS App Management (TCC) forbids deleting a signed .app bundle, so a
+      # store-installed VS Code becomes undeletable once launched and wedges
+      # `nix store gc`. home-manager still manages its settings and extensions.
+      "visual-studio-code"
     ];
 
     # Uncomment to install app store apps using mas-cli.
