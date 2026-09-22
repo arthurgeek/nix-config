@@ -28,12 +28,6 @@
     nix-homebrew = {
       # renovate: datasource=git-refs depName=https://github.com/zhaofengli/nix-homebrew
       url = "github:zhaofengli/nix-homebrew/c11cccfdd36dd69b5323d70d354b2853379c2426"; # main
-      # Hold Homebrew < 5.1.14: that release added a utils/path.rb check that
-      # rejects casks whose realpath resolves into /nix/store, how nix-homebrew
-      # serves its read-only taps (zhaofengli/nix-homebrew#148, fix: PR #150).
-      # The `<5.1.14` guard in renovate.json keeps Renovate from bumping past it.
-      # renovate: datasource=github-releases depName=Homebrew/brew
-      inputs.brew-src.url = "github:Homebrew/brew/d8deaca5574faf79a27f110caedc9e153709e628"; # 5.1.13
     };
     homebrew-core = {
       # renovate: datasource=git-refs depName=https://github.com/homebrew/homebrew-core

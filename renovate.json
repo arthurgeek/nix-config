@@ -22,12 +22,5 @@
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)(?: versioning=(?<versioning>\\S+))?\\s*\\n\\s*.*?\"github:[^\"]+/(?<currentDigest>[0-9a-f]{40})\";\\s*#\\s*(?<currentValue>\\S+)"
       ]
     }
-  ],
-  "packageRules": [
-    {
-      "description": "Hold Homebrew below 5.1.14 until nix-homebrew#150 lands (cask-in-tap regression #148); delete this rule and the brew-src pin to resume updates",
-      "matchDepNames": ["Homebrew/brew"],
-      "allowedVersions": "<5.1.14"
-    }
   ]
 }
