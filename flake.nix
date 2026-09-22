@@ -37,7 +37,7 @@
     };
     homebrew-core = {
       # renovate: datasource=git-refs depName=https://github.com/homebrew/homebrew-core
-      url = "github:homebrew/homebrew-core/2ef6d64f1a7487c0862b96aed7677e1ab9daad14"; # main
+      url = "github:homebrew/homebrew-core/897cf5bc7ad88de665973df7bbb1d0b1e7c37a05"; # main
       flake = false;
     };
     homebrew-cask = {
