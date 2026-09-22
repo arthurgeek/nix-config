@@ -16,11 +16,14 @@ let
       | xargs -r sed -i 's#docs/superpowers/#docs/#g'
   '';
 
-  gondolinExtension = pkgs.buildNpmPackage {
+  gondolinExtension = pkgs.buildNpmPackage rec {
     pname = "pi-extension-gondolin";
     inherit (pi) version;
     src = "${pi.src}/packages/coding-agent/examples/extensions/gondolin";
-    npmDepsHash = "sha256-iOXDL298/OAWRNTO9fy4FjRFbUejakq7sB4JhIyLejM=";
+    # Fetch each dependency from package-lock.json integrity hashes, so the
+    # build follows upstream lockfile changes without a pinned npmDepsHash.
+    npmDeps = pkgs.importNpmLock { npmRoot = src; };
+    inherit (pkgs.importNpmLock) npmConfigHook;
     npmInstallFlags = [
       "--ignore-scripts"
       "--omit=optional"
@@ -85,7 +88,8 @@ let
     pname = "pi-extension-bundle";
     version = "1.0.0";
     src = piExtensionSource;
-    npmDepsHash = "sha256-E9kYDqKnspAFmuYZvN1LqMKDz8YBIfzyXNtB613at5k=";
+    npmDeps = pkgs.importNpmLock { npmRoot = piExtensionSource; };
+    inherit (pkgs.importNpmLock) npmConfigHook;
     npmFlags = [ "--legacy-peer-deps" ];
     dontNpmBuild = true;
     makeCacheWritable = true;
