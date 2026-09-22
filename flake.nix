@@ -118,7 +118,7 @@
     };
     superpowers = {
       # renovate: datasource=github-releases depName=obra/superpowers
-      url = "github:obra/superpowers/b36e0829c6d0140e93cfef2ca599b1b07d4a7797"; # v6.3.0
+      url = "github:obra/superpowers/5bf4e78011075bcfc0dc295f0724994cd123ee71"; # v6.4.1
       flake = false;
     };
     openai-plugins = {
