@@ -215,10 +215,11 @@ sudo btrfs subvolume create /mnt/@home
 sudo btrfs subvolume create /mnt/@nix
 sudo btrfs subvolume create /mnt/@snapshots
 sudo btrfs subvolume create /mnt/@games
+sudo btrfs subvolume create /mnt/@swap
 sudo umount /mnt
 ```
 
-The five names are the contract — `hardware-configuration.nix` mounts each by
+The six names are the contract — `hardware-configuration.nix` mounts each by
 `subvol=`, so a typo here surfaces as a boot failure rather than an error now.
 
 ## Step 6: Label the ESP
@@ -254,6 +255,9 @@ sudo mount -o subvol=@snapshots,compress=zstd,noatime /dev/mapper/cryptroot /mnt
 
 sudo mkdir -p /mnt/home/arthur/Games
 sudo mount -o subvol=@games,nodatacow,noatime /dev/mapper/cryptroot /mnt/home/arthur/Games
+
+sudo mkdir -p /mnt/swap
+sudo mount -o subvol=@swap,noatime /dev/mapper/cryptroot /mnt/swap
 
 sudo mount -o umask=0077 /dev/disk/by-label/NIXBOOT /mnt/boot
 ```
@@ -465,5 +469,16 @@ window management.
   `cryptroot` (LUKS mapping name) and `NIXBOOT` (FAT volume label) are what let
   this repo stay machine-independent. Reuse them on any future reinstall and
   nothing here needs editing.
+- **Swap and hibernation.** A 32 GiB swapfile lives in `@swap`, fronted by
+  zswap. NixOS creates the file itself on first boot. If `@swap` is missing
+  (a system installed before it existed), create it from the running system
+  before switching, or the `/swap` mount fails the boot:
+  ```bash
+  sudo mount /dev/mapper/cryptroot /mnt
+  sudo btrfs subvolume create /mnt/@swap
+  sudo umount /mnt
+  ```
+  Test with `systemctl hibernate`: it should power off, ask for the LUKS
+  passphrase on boot and resume the session.
 - **Recovery.** Ctrl+Alt+F2 for a getty, `ssh arthur@rapture` with any declared
   key, or boot the previous generation from the systemd-boot menu.

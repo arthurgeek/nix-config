@@ -26,6 +26,23 @@
 
   # Add inputs to legacy channels
   nix.nixPath = [ "/etc/nix/path" ];
+
+  # Flakes only: drop nix-channel so a stale root channel can never shadow the
+  # pinned nixpkgs above. The switch warns about any leftover channel dirs.
+  nix.channel.enable = false;
+
+  # Its database comes from the (now disabled) root channel. nix-index, set up
+  # in home-manager, replaces it.
+  programs.command-not-found.enable = false;
+
+  # Builds yield to anything interactive, so a rebuild in the background does
+  # not stutter the desktop or a game.
+  nix.daemonCPUSchedPolicy = "idle";
+  nix.daemonIOSchedClass = "idle";
+
+  # Store hardlinking is enabled in modules/common; NixOS defaults it to daily,
+  # match nix-darwin's weekly run and the nh cleanup below.
+  nix.optimise.dates = [ "weekly" ];
   environment.etc = lib.mapAttrs' (name: value: {
     name = "nix/path/${name}";
     value.source = value.flake;
@@ -87,6 +104,9 @@
 
   # Disable CUPS printing
   services.printing.enable = false;
+
+  # Firmware updates from LVFS: `fwupdmgr refresh && fwupdmgr update`
+  services.fwupd.enable = true;
 
   # Enable devmon for device management
   services.devmon.enable = true;
@@ -183,7 +203,10 @@
   programs.nh = {
     enable = true;
     clean.enable = true;
-    clean.extraArgs = "--keep-since 4d --keep 3";
+    clean.dates = "weekly";
+    # --keep-one leaves one gcroot per direnv project, so dev shells survive
+    # the sweep instead of rebuilding on next entry.
+    clean.extraArgs = "--keep-since 14d --keep 3 --keep-one";
     flake = "/home/${userConfig.name}/nix-config";
   };
 

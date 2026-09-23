@@ -92,9 +92,23 @@
     compsize # actual compression ratios
   ];
 
+  # Compressed RAM cache in front of the disk swapfile. Unlike zram it keeps a
+  # real swap device behind it, which hibernation needs. With zswap absorbing
+  # most swap-out, a high swappiness lets the kernel reclaim cold anonymous
+  # pages instead of dropping page cache first.
+  boot.zswap.enable = true;
+  boot.kernel.sysctl."vm.swappiness" = 100;
+
+  # Resume needs no resume= or resume_offset: systemd stores the swapfile's
+  # location in the HibernateLocation EFI variable when hibernating, and the
+  # systemd initrd reads it back after unlocking cryptroot.
+
   # NVIDIA
   hardware.nvidia = {
     modesetting.enable = true;
+    # Saves VRAM to disk across suspend and hibernate. Without it the desktop
+    # comes back with corrupted or blank surfaces.
+    powerManagement.enable = true;
   };
 
   # This value determines the NixOS release from which the default

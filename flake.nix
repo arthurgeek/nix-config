@@ -49,6 +49,13 @@
     # renovate: datasource=git-refs depName=https://github.com/nixos/nixos-hardware
     hardware.url = "github:nixos/nixos-hardware/9ebcb7766700d7e006d9505247bd7ce0426f4232"; # master
 
+    # Prebuilt nix-index database, for command-not-found hints and comma
+    nix-index-database = {
+      # renovate: datasource=git-refs depName=https://github.com/nix-community/nix-index-database
+      url = "github:nix-community/nix-index-database/9ad722673ab3b3f91f02135e53775825b240b869"; # main
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # catppuccin theme
     catppuccin = {
       # renovate: datasource=github-releases depName=catppuccin/nix
