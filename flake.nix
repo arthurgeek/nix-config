@@ -49,6 +49,13 @@
     # renovate: datasource=git-refs depName=https://github.com/nixos/nixos-hardware
     hardware.url = "github:nixos/nixos-hardware/9ebcb7766700d7e006d9505247bd7ce0426f4232"; # master
 
+    # Secure Boot for NixOS: signs the boot chain with keys enrolled in firmware
+    lanzaboote = {
+      # renovate: datasource=github-releases depName=nix-community/lanzaboote
+      url = "github:nix-community/lanzaboote/7c9a54a7f87b4539ddbd8bda09a8a5f5f9361aa9"; # v1.1.0
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Prebuilt nix-index database, for command-not-found hints and comma
     nix-index-database = {
       # renovate: datasource=git-refs depName=https://github.com/nix-community/nix-index-database

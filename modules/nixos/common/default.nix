@@ -61,6 +61,8 @@
     ];
     loader.efi.canTouchEfiVariables = true;
     loader.systemd-boot.enable = true;
+    # The menu editor lets anyone at the keyboard append init=/bin/sh.
+    loader.systemd-boot.editor = false;
     # Long enough to survive a slow DP/HDMI handshake — a 5s menu can count
     # down entirely while the monitor is still syncing, which reads as "no
     # menu at all". Any key press pauses the countdown.
@@ -185,7 +187,27 @@
   };
 
   # Services
-  services.openssh.enable = true;
+  # Keys only. The bootstrap password above is public and sudo needs none, so
+  # password auth here would be root for anyone who can reach port 22.
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+    };
+  };
+
+  # Let systemd-oomd watch the user session too, so a runaway build or browser
+  # is killed under memory pressure before the desktop grinds through swap.
+  systemd.oomd.enableUserSlices = true;
+
+  # A loader at the standard FHS path, so prebuilt dynamic binaries (VS Code
+  # remote servers, npm/pip wheels, downloaded CLIs) run unpatched.
+  programs.nix-ld.enable = true;
+
+  # The default cap is 10% of the filesystem, up to 4 GiB.
+  services.journald.settings.Journal.SystemMaxUse = "1G";
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;

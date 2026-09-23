@@ -65,8 +65,10 @@ Do all three of these **from inside Windows**, before booting the installer.
 
 Then shut down **fully** (Shift + click Restart, or `shutdown /s /t 0`).
 
-You may also need to **disable Secure Boot** in firmware. NixOS does not support
-it out of the box; enabling it would leave the machine booting only Windows.
+**Disable Secure Boot** in firmware for the install: the installer ISO and the
+first boot are not signed with anything the firmware trusts. It is turned back
+on afterwards with this system's own keys — see
+[Secure Boot and TPM unlock](#secure-boot-and-tpm-unlock).
 
 ### If the partition was already resized from Linux
 
@@ -311,7 +313,8 @@ After first boot, `make nixos-rebuild` is all future rebuilds need.
 ### 1. Both operating systems are offered
 
 systemd-boot should list NixOS **and** Windows Boot Manager — it scans the ESP
-and picks up `\EFI\Microsoft\Boot\bootmgfw.efi` on its own.
+and picks up `\EFI\Microsoft\Boot\bootmgfw.efi` on its own. Windows is listed
+last but is the default, so an untouched countdown boots Windows.
 
 If Windows is missing, `/boot` is probably not the ESP Windows uses. Check that
 `/boot/EFI/Microsoft` exists.
@@ -422,6 +425,75 @@ window management.
 
 ---
 
+## Secure Boot and TPM unlock
+
+Do this once the first-boot checks pass. lanzaboote signs systemd-boot, the
+kernels and the initrds with keys that live only on this machine. The order
+matters. BitLocker must be suspended before the firmware keys change. The TPM
+slot can only be sealed once Secure Boot is on, because it is bound to the
+Secure Boot state (PCR 7).
+
+1. **In Windows, suspend BitLocker** again if you resumed it:
+   `Suspend-BitLocker -MountPoint "C:" -RebootCount 0`.
+2. **In NixOS, check the keys exist.** The first switch generates them into
+   `/var/lib/sbctl` and stages them on the ESP for enrollment:
+   ```bash
+   sudo sbctl status               # "Installed: sbctl is installed"
+   ls /boot/loader/keys/auto       # PK.auth  KEK.auth  db.auth
+   sudo sbctl verify               # NixOS files signed; Microsoft's are not ours
+   ```
+3. **Put the firmware in Setup Mode.** `systemctl reboot --firmware-setup`, then
+   in the Secure Boot settings clear or delete the platform keys (the wording
+   varies: *Clear Secure Boot keys*, *Reset to Setup Mode*, *Delete all keys*).
+   Set Secure Boot to *Enabled* and save.
+4. **Let systemd-boot enroll.** On the next boot it sees Setup Mode and enrolls
+   the staged keys, Microsoft's included, then reboots. Microsoft's keys are
+   what keep Windows and the NVIDIA card's option ROM loading.
+5. **Confirm**, back in NixOS:
+   ```bash
+   bootctl status | grep "Secure Boot"   # enabled (user)
+   sudo sbctl status                     # Setup Mode: Disabled, Secure Boot: Enabled
+   ```
+6. **Boot Windows**, confirm it starts without a recovery-key prompt, then
+   `Resume-BitLocker -MountPoint "C:"` so it re-seals to the new keys.
+7. **Enroll the TPM with a PIN** for the LUKS volume. The passphrase slot stays
+   as the fallback:
+   ```bash
+   sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 --tpm2-with-pin=yes \
+     /dev/disk/by-partlabel/nixos-luks
+   ```
+   The next boot asks for the PIN instead of the passphrase.
+
+**Back up `/var/lib/sbctl`** somewhere off the machine, such as a 1Password
+document. Without it, a reinstall means generating and enrolling new keys.
+
+**When the PIN stops working**, a firmware update or a Secure Boot revocation
+list (dbx) update has changed PCR 7. The boot falls back to the passphrase.
+Re-seal from the running system:
+
+```bash
+sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 \
+  --tpm2-with-pin=yes /dev/disk/by-partlabel/nixos-luks
+```
+
+**If NixOS stops booting under Secure Boot**, disable Secure Boot in firmware.
+Everything still boots unverified, and `sudo sbctl verify` shows what is
+unsigned.
+
+### Migrating an install that predates lanzaboote
+
+The old config wrote its own `windows.conf` entry and pinned the default
+through the `LoaderEntryDefault` EFI variable. Both survive the switch. The
+entry duplicates the auto-detected Windows, and the variable overrides
+`loader.conf`'s default. Remove both after the first lanzaboote switch:
+
+```bash
+sudo rm /boot/loader/entries/windows.conf
+sudo bootctl set-default ""
+```
+
+---
+
 ## Restoring what the repo does not carry
 
 - **Caelestia's colour scheme** lives in `~/.local/state/caelestia/scheme.json`,
@@ -480,5 +552,9 @@ window management.
   ```
   Test with `systemctl hibernate`: it should power off, ask for the LUKS
   passphrase on boot and resume the session.
+- **Firmware updates under Secure Boot.** fwupd flashes UEFI firmware
+  through its own EFI binary, which is not signed with this machine's keys.
+  Peripheral and NVMe updates are unaffected. For a motherboard BIOS update,
+  use the vendor's flashing tool, or disable Secure Boot for that one reboot.
 - **Recovery.** Ctrl+Alt+F2 for a getty, `ssh arthur@rapture` with any declared
   key, or boot the previous generation from the systemd-boot menu.

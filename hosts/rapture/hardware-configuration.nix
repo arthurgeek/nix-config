@@ -43,7 +43,17 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.luks.devices.cryptroot.device = "/dev/disk/by-partlabel/nixos-luks";
+  boot.initrd.luks.devices.cryptroot = {
+    device = "/dev/disk/by-partlabel/nixos-luks";
+    # Pass TRIM through dm-crypt, or fstrim and btrfs discard never reach the
+    # SSD. Reveals which blocks are free, not what is in them.
+    allowDiscards = true;
+    # Skip dm-crypt's internal queues, which only add latency on NVMe.
+    bypassWorkqueues = true;
+    # Try a TPM2 key slot (sealed to Secure Boot state, PCR 7, and a PIN)
+    # before the passphrase. Enrolled by hand; see docs/rapture-install.md.
+    crypttabExtraOpts = [ "tpm2-device=auto" ];
+  };
 
   fileSystems."/" = {
     device = "/dev/mapper/cryptroot";
