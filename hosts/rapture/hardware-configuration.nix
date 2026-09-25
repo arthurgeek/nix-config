@@ -8,7 +8,12 @@
 #   /dev/mapper/cryptroot               the LUKS mapping, named at unlock time
 #   /dev/disk/by-label/NIXBOOT          FAT volume label on the shared ESP
 #
-# Root is btrfs; every mount below is a subvolume of the same device.
+# Root is btrfs; every mount below is a subvolume of the same device. @swap was
+# added after the install; create it once with:
+#
+#   sudo mount /dev/mapper/cryptroot /mnt
+#   sudo btrfs subvolume create /mnt/@swap
+#   sudo umount /mnt
 #
 # This disk is shared with Windows: /boot is Windows' own EFI System Partition,
 # so systemd-boot finds its bootloader and offers it in the menu. Do not
@@ -38,7 +43,17 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  boot.initrd.luks.devices.cryptroot.device = "/dev/disk/by-partlabel/nixos-luks";
+  boot.initrd.luks.devices.cryptroot = {
+    device = "/dev/disk/by-partlabel/nixos-luks";
+    # Pass TRIM through dm-crypt, or fstrim and btrfs discard never reach the
+    # SSD. Reveals which blocks are free, not what is in them.
+    allowDiscards = true;
+    # Skip dm-crypt's internal queues, which only add latency on NVMe.
+    bypassWorkqueues = true;
+    # Try a TPM2 key slot (sealed to Secure Boot state, PCR 7, and a PIN)
+    # before the passphrase. Enrolled by hand; see docs/rapture-install.md.
+    crypttabExtraOpts = [ "tpm2-device=auto" ];
+  };
 
   fileSystems."/" = {
     device = "/dev/mapper/cryptroot";
@@ -96,6 +111,17 @@
     ];
   };
 
+  # Holds only the swapfile. A swapfile must be NOCOW and uncompressed and its
+  # subvolume cannot be snapshotted, so it gets one of its own.
+  fileSystems."/swap" = {
+    device = "/dev/mapper/cryptroot";
+    fsType = "btrfs";
+    options = [
+      "subvol=@swap"
+      "noatime"
+    ];
+  };
+
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/NIXBOOT";
     fsType = "vfat";
@@ -105,7 +131,18 @@
     ];
   };
 
-  swapDevices = [ ];
+  # Inside LUKS, so swapped-out memory and the hibernation image are encrypted.
+  # NixOS creates it on first boot with `btrfs filesystem mkswapfile`.
+  #
+  # Half of the 64 GiB of RAM rather than all of it: the kernel shrinks the
+  # hibernation image to 2/5 of RAM (/sys/power/image_size) and compresses it,
+  # so 32 GiB is enough unless nearly all memory is in use when hibernating.
+  swapDevices = [
+    {
+      device = "/swap/swapfile";
+      size = 32 * 1024;
+    }
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

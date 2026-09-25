@@ -26,6 +26,23 @@
 
   # Add inputs to legacy channels
   nix.nixPath = [ "/etc/nix/path" ];
+
+  # Flakes only: drop nix-channel so a stale root channel can never shadow the
+  # pinned nixpkgs above. The switch warns about any leftover channel dirs.
+  nix.channel.enable = false;
+
+  # Its database comes from the (now disabled) root channel. nix-index, set up
+  # in home-manager, replaces it.
+  programs.command-not-found.enable = false;
+
+  # Builds yield to anything interactive, so a rebuild in the background does
+  # not stutter the desktop or a game.
+  nix.daemonCPUSchedPolicy = "idle";
+  nix.daemonIOSchedClass = "idle";
+
+  # Store hardlinking is enabled in modules/common; NixOS defaults it to daily,
+  # match nix-darwin's weekly run and the nh cleanup below.
+  nix.optimise.dates = [ "weekly" ];
   environment.etc = lib.mapAttrs' (name: value: {
     name = "nix/path/${name}";
     value.source = value.flake;
@@ -44,6 +61,8 @@
     ];
     loader.efi.canTouchEfiVariables = true;
     loader.systemd-boot.enable = true;
+    # The menu editor lets anyone at the keyboard append init=/bin/sh.
+    loader.systemd-boot.editor = false;
     # Long enough to survive a slow DP/HDMI handshake — a 5s menu can count
     # down entirely while the monitor is still syncing, which reads as "no
     # menu at all". Any key press pauses the countdown.
@@ -87,6 +106,9 @@
 
   # Disable CUPS printing
   services.printing.enable = false;
+
+  # Firmware updates from LVFS: `fwupdmgr refresh && fwupdmgr update`
+  services.fwupd.enable = true;
 
   # Enable devmon for device management
   services.devmon.enable = true;
@@ -165,7 +187,27 @@
   };
 
   # Services
-  services.openssh.enable = true;
+  # Keys only. The bootstrap password above is public and sudo needs none, so
+  # password auth here would be root for anyone who can reach port 22.
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
+    };
+  };
+
+  # Let systemd-oomd watch the user session too, so a runaway build or browser
+  # is killed under memory pressure before the desktop grinds through swap.
+  systemd.oomd.enableUserSlices = true;
+
+  # A loader at the standard FHS path, so prebuilt dynamic binaries (VS Code
+  # remote servers, npm/pip wheels, downloaded CLIs) run unpatched.
+  programs.nix-ld.enable = true;
+
+  # The default cap is 10% of the filesystem, up to 4 GiB.
+  services.journald.settings.Journal.SystemMaxUse = "1G";
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;
@@ -183,7 +225,10 @@
   programs.nh = {
     enable = true;
     clean.enable = true;
-    clean.extraArgs = "--keep-since 4d --keep 3";
+    clean.dates = "weekly";
+    # --keep-one leaves one gcroot per direnv project, so dev shells survive
+    # the sweep instead of rebuilding on next entry.
+    clean.extraArgs = "--keep-since 14d --keep 3 --keep-one";
     flake = "/home/${userConfig.name}/nix-config";
   };
 

@@ -1,6 +1,7 @@
 {
   inputs,
   hostname,
+  lib,
   nixosModules,
   pkgs,
   userConfig,
@@ -11,6 +12,7 @@
     "${inputs.hardware}/common/cpu/intel/cpu-only.nix"
     "${inputs.hardware}/common/gpu/nvidia/blackwell"
     inputs.hardware.nixosModules.common-pc-ssd
+    inputs.lanzaboote.nixosModules.lanzaboote
 
     ./hardware-configuration.nix
     "${nixosModules}/common"
@@ -38,29 +40,28 @@
     ipv6.method = "auto";
   };
 
+  # Secure Boot via lanzaboote, which takes over installing systemd-boot and
+  # signs it, the kernels and the initrds. Keys are generated into pkiBundle
+  # on the first switch and enrolled by systemd-boot on the next boot while
+  # the firmware is in Setup Mode (docs/rapture-install.md walks through it).
+  # Microsoft's keys are enrolled alongside, or Windows and the NVIDIA card's
+  # option ROM would stop loading.
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+    autoGenerateKeys.enable = true;
+    autoEnrollKeys.enable = true;
+
+    # systemd-boot's auto-detected Windows Boot Manager entry. It lists last,
+    # but boots by default.
+    settings.default = "auto-windows";
+  };
+
   # /boot is the EFI System Partition Windows created, which is small. Cap the
   # generations kept there so it cannot fill up and start failing rebuilds.
+  # lanzaboote reads this as its own limit.
   boot.loader.systemd-boot.configurationLimit = 5;
-
-  # Windows first in the menu and booted by default; NixOS generations below.
-  # An explicit entry is needed for the ordering: auto-detected entries carry
-  # no sort-key and always sort last, so the auto-detection is switched off
-  # and this entry (sort-key "a-windows" < the generations' "nixos") replaces
-  # it at the top.
-  boot.loader.systemd-boot.extraEntries."windows.conf" = ''
-    title Windows 11
-    sort-key a-windows
-    efi /EFI/Microsoft/Boot/bootmgfw.efi
-  '';
-
-  # NixOS rewrites loader.conf's `default` to its own entry on every rebuild
-  # and offers no option to change that, so assert the default through the
-  # LoaderEntryDefault EFI variable, which takes precedence. auto-entries only
-  # hides detected OS entries; the reboot-to-firmware entry is unaffected.
-  boot.loader.systemd-boot.extraInstallCommands = ''
-    echo "auto-entries no" >> /boot/loader/loader.conf
-    ${pkgs.systemd}/bin/bootctl set-default windows.conf
-  '';
 
   # Monthly read-verify of every block against its checksum. btrfs can only
   # repair what it knows is wrong.
@@ -90,11 +91,26 @@
   environment.systemPackages = with pkgs; [
     btdu # sampling disk-usage profiler
     compsize # actual compression ratios
+    sbctl # inspect Secure Boot keys and signatures: `sbctl status`, `sbctl verify`
   ];
+
+  # Compressed RAM cache in front of the disk swapfile. Unlike zram it keeps a
+  # real swap device behind it, which hibernation needs. With zswap absorbing
+  # most swap-out, a high swappiness lets the kernel reclaim cold anonymous
+  # pages instead of dropping page cache first.
+  boot.zswap.enable = true;
+  boot.kernel.sysctl."vm.swappiness" = 100;
+
+  # Resume needs no resume= or resume_offset: systemd stores the swapfile's
+  # location in the HibernateLocation EFI variable when hibernating, and the
+  # systemd initrd reads it back after unlocking cryptroot.
 
   # NVIDIA
   hardware.nvidia = {
     modesetting.enable = true;
+    # Saves VRAM to disk across suspend and hibernate. Without it the desktop
+    # comes back with corrupted or blank surfaces.
+    powerManagement.enable = true;
   };
 
   # This value determines the NixOS release from which the default

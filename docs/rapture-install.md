@@ -7,6 +7,11 @@ Filesystems are pinned by label, so this repo needs **no edits** — provided yo
 label the partitions exactly as [Step 4](#step-4-create-the-nixos-partition) and
 [Step 6](#step-6-label-the-esp) describe.
 
+**Already running NixOS on rapture?** Skip the install and follow
+[Upgrading an existing install](#upgrading-an-existing-install) instead. It
+covers everything added since the original install: the swap subvolume, the
+move to lanzaboote, and Secure Boot with TPM unlock.
+
 ## Before you start
 
 - A NixOS installer ISO. Any recent release; the flake pins its own nixpkgs.
@@ -65,8 +70,10 @@ Do all three of these **from inside Windows**, before booting the installer.
 
 Then shut down **fully** (Shift + click Restart, or `shutdown /s /t 0`).
 
-You may also need to **disable Secure Boot** in firmware. NixOS does not support
-it out of the box; enabling it would leave the machine booting only Windows.
+**Disable Secure Boot** in firmware for the install: the installer ISO and the
+first boot are not signed with anything the firmware trusts. It is turned back
+on afterwards with this system's own keys — see
+[Secure Boot and TPM unlock](#secure-boot-and-tpm-unlock).
 
 ### If the partition was already resized from Linux
 
@@ -215,10 +222,11 @@ sudo btrfs subvolume create /mnt/@home
 sudo btrfs subvolume create /mnt/@nix
 sudo btrfs subvolume create /mnt/@snapshots
 sudo btrfs subvolume create /mnt/@games
+sudo btrfs subvolume create /mnt/@swap
 sudo umount /mnt
 ```
 
-The five names are the contract — `hardware-configuration.nix` mounts each by
+The six names are the contract — `hardware-configuration.nix` mounts each by
 `subvol=`, so a typo here surfaces as a boot failure rather than an error now.
 
 ## Step 6: Label the ESP
@@ -254,6 +262,9 @@ sudo mount -o subvol=@snapshots,compress=zstd,noatime /dev/mapper/cryptroot /mnt
 
 sudo mkdir -p /mnt/home/arthur/Games
 sudo mount -o subvol=@games,nodatacow,noatime /dev/mapper/cryptroot /mnt/home/arthur/Games
+
+sudo mkdir -p /mnt/swap
+sudo mount -o subvol=@swap,noatime /dev/mapper/cryptroot /mnt/swap
 
 sudo mount -o umask=0077 /dev/disk/by-label/NIXBOOT /mnt/boot
 ```
@@ -307,7 +318,8 @@ After first boot, `make nixos-rebuild` is all future rebuilds need.
 ### 1. Both operating systems are offered
 
 systemd-boot should list NixOS **and** Windows Boot Manager — it scans the ESP
-and picks up `\EFI\Microsoft\Boot\bootmgfw.efi` on its own.
+and picks up `\EFI\Microsoft\Boot\bootmgfw.efi` on its own. Windows is listed
+last but is the default, so an untouched countdown boots Windows.
 
 If Windows is missing, `/boot` is probably not the ESP Windows uses. Check that
 `/boot/EFI/Microsoft` exists.
@@ -418,6 +430,120 @@ window management.
 
 ---
 
+## Secure Boot and TPM unlock
+
+Do this once the first-boot checks pass. lanzaboote signs systemd-boot, the
+kernels and the initrds with keys that live only on this machine. The order
+matters. BitLocker must be suspended before the firmware keys change. The TPM
+slot can only be sealed once Secure Boot is on, because it is bound to the
+Secure Boot state (PCR 7).
+
+1. **In Windows, suspend BitLocker** again if you resumed it:
+   `Suspend-BitLocker -MountPoint "C:" -RebootCount 0`.
+2. **In NixOS, check the keys exist.** The first switch generates them into
+   `/var/lib/sbctl` and stages them on the ESP for enrollment:
+   ```bash
+   sudo sbctl status               # "Installed: sbctl is installed"
+   ls /boot/loader/keys/auto       # PK.auth  KEK.auth  db.auth
+   sudo sbctl verify               # NixOS files signed; Microsoft's are not ours
+   ```
+3. **Put the firmware in Setup Mode.** `systemctl reboot --firmware-setup`, then
+   in the Secure Boot settings clear or delete the platform keys (the wording
+   varies: *Clear Secure Boot keys*, *Reset to Setup Mode*, *Delete all keys*).
+   Set Secure Boot to *Enabled* and save.
+4. **Let systemd-boot enroll.** On the next boot it sees Setup Mode and enrolls
+   the staged keys, Microsoft's included, then reboots. Microsoft's keys are
+   what keep Windows and the NVIDIA card's option ROM loading.
+5. **Confirm**, back in NixOS:
+   ```bash
+   bootctl status | grep "Secure Boot"   # enabled (user)
+   sudo sbctl status                     # Setup Mode: Disabled, Secure Boot: Enabled
+   ```
+6. **Boot Windows**, confirm it starts without a recovery-key prompt, then
+   `Resume-BitLocker -MountPoint "C:"` so it re-seals to the new keys.
+7. **Enroll the TPM with a PIN** for the LUKS volume. The passphrase slot stays
+   as the fallback:
+   ```bash
+   sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 --tpm2-with-pin=yes \
+     /dev/disk/by-partlabel/nixos-luks
+   ```
+   The next boot asks for the PIN instead of the passphrase.
+
+**Back up `/var/lib/sbctl`** somewhere off the machine, such as a 1Password
+document. Without it, a reinstall means generating and enrolling new keys.
+
+**When the PIN stops working**, a firmware update or a Secure Boot revocation
+list (dbx) update has changed PCR 7. The boot falls back to the passphrase.
+Re-seal from the running system:
+
+```bash
+sudo systemd-cryptenroll --wipe-slot=tpm2 --tpm2-device=auto --tpm2-pcrs=7 \
+  --tpm2-with-pin=yes /dev/disk/by-partlabel/nixos-luks
+```
+
+**If NixOS stops booting under Secure Boot**, disable Secure Boot in firmware.
+Everything still boots unverified, and `sudo sbctl verify` shows what is
+unsigned.
+
+---
+
+## Upgrading an existing install
+
+For a rapture that was installed before swap and lanzaboote existed in this
+repo. Do the steps in order: the first two must happen **before** the switch.
+
+1. **Suspend BitLocker in Windows**:
+   `Suspend-BitLocker -MountPoint "C:" -RebootCount 0`. Windows is started
+   through systemd-boot, and this upgrade replaces systemd-boot with
+   lanzaboote's signed copy and later changes the firmware keys. Either change
+   can send Windows to a recovery-key prompt while BitLocker is sealed.
+2. **Create the swap subvolume.** The config mounts `@swap` at `/swap`. If the
+   subvolume is missing, that mount fails and the next boot drops to emergency
+   mode:
+   ```bash
+   sudo mount /dev/mapper/cryptroot /mnt
+   sudo btrfs subvolume create /mnt/@swap
+   sudo umount /mnt
+   ```
+3. **Pull and switch**:
+   ```bash
+   cd ~/nix-config && git pull
+   make nixos-rebuild
+   ```
+   lanzaboote is built from source the first time, which takes a few minutes.
+   The switch creates the 32 GiB swapfile, generates the Secure Boot keys into
+   `/var/lib/sbctl` and installs the new boot loader. It may warn that channel
+   directories exist while channels are disabled. Remove them:
+   ```bash
+   sudo rm -rf /root/.nix-defexpr/channels /nix/var/nix/profiles/per-user/root/channels
+   rm -rf ~/.nix-defexpr/channels
+   ```
+4. **Clean up the old Windows entry.** The previous config wrote its own
+   `windows.conf` and pinned the default through the `LoaderEntryDefault` EFI
+   variable, and both survive the switch. The entry duplicates the
+   auto-detected Windows, and the variable overrides `loader.conf`'s default:
+   ```bash
+   sudo rm /boot/loader/entries/windows.conf
+   sudo bootctl set-default ""
+   ```
+5. **Reboot and check** (Secure Boot still off at this point). The menu should
+   list NixOS and a single Windows entry, with Windows as the default. Then:
+   ```bash
+   swapon --show                               # /swap/swapfile  file  32G
+   cat /sys/module/zswap/parameters/enabled    # Y
+   lsblk --discard /dev/mapper/cryptroot       # DISC-GRAN non-zero: TRIM passes LUKS
+   sudo fstrim -v /                            # reports bytes trimmed
+   systemctl hibernate                         # powers off; the passphrase on boot resumes the session
+   ```
+   The initrd changes (discards, TPM) only take effect from this reboot on.
+6. **Check SSH still lets you in** from another machine: `ssh arthur@rapture`.
+   Password logins are now refused, so only the declared keys work.
+7. **Turn on Secure Boot and enroll the TPM**: follow
+   [Secure Boot and TPM unlock](#secure-boot-and-tpm-unlock) from step 2.
+   BitLocker is already suspended.
+
+---
+
 ## Restoring what the repo does not carry
 
 - **Caelestia's colour scheme** lives in `~/.local/state/caelestia/scheme.json`,
@@ -465,5 +591,15 @@ window management.
   `cryptroot` (LUKS mapping name) and `NIXBOOT` (FAT volume label) are what let
   this repo stay machine-independent. Reuse them on any future reinstall and
   nothing here needs editing.
+- **Swap and hibernation.** A 32 GiB swapfile lives in `@swap`, fronted by
+  zswap. NixOS creates the file itself on first boot; an existing install needs
+  the subvolume created first (see
+  [Upgrading an existing install](#upgrading-an-existing-install)). Test with
+  `systemctl hibernate`: it should power off, ask for the PIN (or passphrase)
+  on boot and resume the session.
+- **Firmware updates under Secure Boot.** fwupd flashes UEFI firmware
+  through its own EFI binary, which is not signed with this machine's keys.
+  Peripheral and NVMe updates are unaffected. For a motherboard BIOS update,
+  use the vendor's flashing tool, or disable Secure Boot for that one reboot.
 - **Recovery.** Ctrl+Alt+F2 for a getty, `ssh arthur@rapture` with any declared
   key, or boot the previous generation from the systemd-boot menu.

@@ -33,6 +33,7 @@ in
     ../programs/zoxide
     ../programs/helix
     ../programs/fzf
+    ../programs/nix-index
 
     ../programs/ghostty
     ../programs/jq
