@@ -138,7 +138,7 @@
     herdr-file-viewer.url = "github:smarzban/herdr-file-viewer/c237626260478d5f2d788149fc741ddf3c3588ba"; # v1.17.0
     herdr-file-viewer.flake = false;
     # renovate: datasource=github-releases depName=levi-qiao/herdr-agent-quota
-    herdr-agent-quota.url = "github:levi-qiao/herdr-agent-quota/3b63f83762bc85521a68851b3432914fb6df3de0"; # v1.3.0
+    herdr-agent-quota.url = "github:levi-qiao/herdr-agent-quota/a3ceca48281b73d6e118c11cbcfbdf4c613fcb28"; # v1.6.2
     herdr-agent-quota.flake = false;
 
     # Helix AI completion language server
