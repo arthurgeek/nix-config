@@ -135,7 +135,7 @@
     herdr-automatic-rename.url = "github:qu8n/herdr-automatic-rename/e241443d9bc29d717c0a9edec281f2b92692a279"; # v0.8.0
     herdr-automatic-rename.flake = false;
     # renovate: datasource=github-releases depName=smarzban/herdr-file-viewer
-    herdr-file-viewer.url = "github:smarzban/herdr-file-viewer/647f03236d9aa20de0b07c9de0a951e13a1e59bf"; # v1.16.0
+    herdr-file-viewer.url = "github:smarzban/herdr-file-viewer/c237626260478d5f2d788149fc741ddf3c3588ba"; # v1.17.0
     herdr-file-viewer.flake = false;
     # renovate: datasource=github-releases depName=levi-qiao/herdr-agent-quota
     herdr-agent-quota.url = "github:levi-qiao/herdr-agent-quota/3b63f83762bc85521a68851b3432914fb6df3de0"; # v1.3.0
