@@ -48,6 +48,7 @@ in
     ../programs/gh
     ../programs/glow
     ../programs/vscode
+    ../programs/spotify-player
   ];
 
   # Nicely reload system units when changing configs
