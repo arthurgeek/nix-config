@@ -52,7 +52,7 @@
     # Secure Boot for NixOS: signs the boot chain with keys enrolled in firmware
     lanzaboote = {
       # renovate: datasource=github-releases depName=nix-community/lanzaboote
-      url = "github:nix-community/lanzaboote/7c9a54a7f87b4539ddbd8bda09a8a5f5f9361aa9"; # v1.1.0
+      url = "github:nix-community/lanzaboote/c1c5edd31802d181c8aa2c71588995d93425d650"; # v1.2.0
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
