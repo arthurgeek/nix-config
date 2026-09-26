@@ -11,7 +11,7 @@ help:
 	@echo "  install-nix-darwin   - Install nix-darwin using flake $(FLAKE)"
 	@echo "  darwin-rebuild       - Rebuild the nix-darwin configuration (via nh)"
 	@echo "  nixos-rebuild        - Rebuild the NixOS configuration (via nh)"
-	@echo "  nix-gc               - Run Nix garbage collection"
+	@echo "  nix-gc               - Run Nix garbage collection and store dedup"
 	@echo "  flake-update         - Update flake inputs"
 	@echo "  bootstrap-mac        - Install Nix and nix-darwin sequentially"
 
@@ -43,6 +43,8 @@ nixos-rebuild:
 nix-gc:
 	@echo "Collecting Nix garbage..."
 	@nh clean all
+	@echo "Hard-linking identical store files..."
+	@nix store optimise
 	@echo "Garbage collection complete."
 
 flake-update:
