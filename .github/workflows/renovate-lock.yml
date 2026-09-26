@@ -4,7 +4,8 @@ name: Renovate flake.lock
 # Mend-hosted app can't run `nix flake lock` to refresh flake.lock (no nix
 # binary, and postUpgradeTasks commands aren't allowlisted on the hosted app).
 # This workflow does that step instead: whenever Renovate pushes a branch, it
-# re-locks and commits flake.lock back onto the same branch. Commits made with
+# re-locks and commits flake.lock back onto the same branch, along with any
+# vendorHash a source bump invalidated. Commits made with
 # GITHUB_TOKEN don't retrigger workflows, so there's no loop.
 
 on:
@@ -34,16 +35,34 @@ jobs:
       - name: Re-lock flake inputs
         run: nix flake lock
 
-      - name: Commit flake.lock if it changed
+      # Packages built from a source input (pkgs/*.nix) pin a vendorHash that
+      # Renovate can't compute. Build each one's fetched dependencies; on a hash
+      # mismatch, write the hash Nix reports back into the package file.
+      - name: Refresh vendor hashes
+        run: |
+          for pkg in cli-proxy-api; do
+            if out=$(nix build --no-link ".#packages.x86_64-linux.$pkg.goModules" 2>&1); then
+              continue
+            fi
+            got=$(printf '%s\n' "$out" | sed -n 's/^ *got: *//p' | head -n 1)
+            if [ -z "$got" ]; then
+              printf '%s\n' "$out" >&2
+              exit 1
+            fi
+            sed -i "s|vendorHash = \"sha256-[^\"]*\"|vendorHash = \"$got\"|" "pkgs/$pkg.nix"
+            echo "$pkg: vendorHash -> $got"
+          done
+
+      - name: Commit flake.lock and vendor hashes if they changed
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
-          if git diff --quiet -- flake.lock; then
-            echo "flake.lock already in sync with flake.nix; nothing to commit."
+          if git diff --quiet -- flake.lock pkgs; then
+            echo "flake.lock and vendor hashes already in sync; nothing to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add flake.lock
-          git commit -m "build(flake): sync flake.lock"
+          git add flake.lock pkgs
+          git commit -m "build(flake): sync flake.lock and vendor hashes"
           git push origin "HEAD:$BRANCH"

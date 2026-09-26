@@ -253,8 +253,36 @@
             ./hosts/${hostname}
           ];
         };
+
+      # Release tag Renovate keeps in the trailing comment of an input's url
+      # line (`foo.url = "github:…/<sha>"; # v1.2.3`). Packages built from a
+      # source input read their version here, so a bump can't leave a stale
+      # second copy behind.
+      inputVersion =
+        name:
+        let
+          lines = nixpkgs.lib.splitString "\n" (builtins.readFile ./flake.nix);
+          matches = builtins.filter (m: m != null) (
+            map (builtins.match "[[:space:]]*${name}\\.url = \"[^\"]+\"; # v?([^[:space:]]+)") lines
+          );
+        in
+        builtins.head (builtins.head matches);
+
+      forAllSystems = nixpkgs.lib.genAttrs [
+        "aarch64-darwin"
+        "x86_64-linux"
+      ];
     in
     {
+      # Built from source inputs. Exposed here so the renovate-lock workflow can
+      # build them on a Renovate branch and refresh their vendorHash.
+      packages = forAllSystems (system: {
+        cli-proxy-api = nixpkgs.legacyPackages.${system}.callPackage ./pkgs/cli-proxy-api.nix {
+          src = inputs.cli-proxy-api;
+          version = inputVersion "cli-proxy-api";
+        };
+      });
+
       nixosConfigurations = {
         rapture = mkNixosConfiguration "rapture" "arthur";
       };

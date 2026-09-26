@@ -1,6 +1,7 @@
 {
   config,
   inputs,
+  outputs,
   lib,
   pkgs,
   ...
@@ -26,24 +27,7 @@ let
     meta.mainProgram = "helix-assist";
   };
 
-  cliProxyAPIVersion = "7.2.143";
-  cliProxyAPI = pkgs.buildGoModule {
-    pname = "cli-proxy-api";
-    version = cliProxyAPIVersion;
-    src = inputs.cli-proxy-api;
-    vendorHash = "sha256-CrDp7MOr+AwJUhTovklXx3F1yaktQlvD7VYhYSY6VvY=";
-    subPackages = [ "cmd/server" ];
-    ldflags = [
-      "-s"
-      "-w"
-      "-X=main.Version=v${cliProxyAPIVersion}"
-      "-X=main.Commit=4b5f1eab25fca4b3815369a826e958e7c070a69e"
-    ];
-    postInstall = ''
-      mv "$out/bin/server" "$out/bin/cli-proxy-api"
-    '';
-    meta.mainProgram = "cli-proxy-api";
-  };
+  cliProxyAPI = outputs.packages.${pkgs.stdenv.hostPlatform.system}.cli-proxy-api;
 
   localAPIKey = "helix-assist-local";
   proxyConfigPath = "${config.xdg.configHome}/cli-proxy-api/config.yaml";
