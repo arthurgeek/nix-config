@@ -295,17 +295,17 @@
     "herdr-agent-quota": {
       "flake": false,
       "locked": {
-        "lastModified": 1788229680,
-        "narHash": "sha256-kVSUs2tNAVRKN4MN1Ywo/2hMB5UtIfkEPz3nqhY/piQ=",
+        "lastModified": 1789875987,
+        "narHash": "sha256-RvbfJIVcxGCpsQMUqRkHKbUGyGu8VXanBmY5LyHnbjU=",
         "owner": "levi-qiao",
         "repo": "herdr-agent-quota",
-        "rev": "3b63f83762bc85521a68851b3432914fb6df3de0",
+        "rev": "a3ceca48281b73d6e118c11cbcfbdf4c613fcb28",
         "type": "github"
       },
       "original": {
         "owner": "levi-qiao",
         "repo": "herdr-agent-quota",
-        "rev": "3b63f83762bc85521a68851b3432914fb6df3de0",
+        "rev": "a3ceca48281b73d6e118c11cbcfbdf4c613fcb28",
         "type": "github"
       }
     },
