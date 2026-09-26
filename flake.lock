@@ -307,17 +307,17 @@
     "herdr-bar": {
       "flake": false,
       "locked": {
-        "lastModified": 1788203155,
-        "narHash": "sha256-qCdSLQ89yaQ/leRYmSHq3OwwSOlvN9RWxmqy4EPlNv4=",
+        "lastModified": 1789993922,
+        "narHash": "sha256-XySXPs5mqx+9nCQbR1GmAPFsUyQBIktIOEiuSKKfb48=",
         "owner": "jeffarese",
         "repo": "herdr-bar",
-        "rev": "b57aa342f88f9db78f3deb20629ccebf162a6f57",
+        "rev": "473105bed95e2e739e6bfb7442155a304dbe3c24",
         "type": "github"
       },
       "original": {
         "owner": "jeffarese",
         "repo": "herdr-bar",
-        "rev": "b57aa342f88f9db78f3deb20629ccebf162a6f57",
+        "rev": "473105bed95e2e739e6bfb7442155a304dbe3c24",
         "type": "github"
       }
     },
