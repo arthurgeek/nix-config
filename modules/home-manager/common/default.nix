@@ -86,7 +86,14 @@ in
   programs.nh = {
     enable = true;
     clean.enable = true;
-    clean.extraArgs = "--keep-since 4d --keep 3";
+    # A list, not a string: on darwin the launchd agent passes a string as a
+    # single argv entry, which nh rejects (exit 2) so the clean never ran.
+    clean.extraArgs = [
+      "--keep-since"
+      "4d"
+      "--keep"
+      "3"
+    ];
     flake = "${config.home.homeDirectory}/nix-config";
   };
 
