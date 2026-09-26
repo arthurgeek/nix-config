@@ -12,7 +12,7 @@
     "pi-mcp-adapter": "2.32.1",
     "pi-simplify": "0.2.3",
     "pi-subagents": "0.64.0",
-    "pi-vim": "0.14.1",
+    "pi-vim": "0.14.2",
     "pi-web-access": "0.31.0"
   }
 }
