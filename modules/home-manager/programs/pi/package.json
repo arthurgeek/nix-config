@@ -7,7 +7,7 @@
     "@gotgenes/pi-permission-system": "34.0.1",
     "@juicesharp/rpiv-ask-user-question": "2.9.0",
     "@narumitw/pi-plan-mode": "0.56.0",
-    "pi-hermes-memory": "0.9.7",
+    "pi-hermes-memory": "0.9.9",
     "pi-lens": "4.1.3",
     "pi-mcp-adapter": "2.32.1",
     "pi-simplify": "0.2.3",
