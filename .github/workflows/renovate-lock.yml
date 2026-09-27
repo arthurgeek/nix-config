@@ -5,8 +5,9 @@ name: Renovate flake.lock
 # binary, and postUpgradeTasks commands aren't allowlisted on the hosted app).
 # This workflow does that step instead: whenever Renovate pushes a branch, it
 # re-locks and commits flake.lock back onto the same branch, along with any
-# vendorHash a source bump invalidated. Commits made with
-# GITHUB_TOKEN don't retrigger workflows, so there's no loop.
+# vendorHash a source bump invalidated, then builds every flake package and
+# reports the result as a status on the PR. Commits made with GITHUB_TOKEN
+# don't retrigger workflows, so there's no loop.
 
 on:
   push:
@@ -15,6 +16,8 @@ on:
 
 permissions:
   contents: write
+  # For the "build packages" commit status below.
+  statuses: write
 
 # A Renovate rebase force-pushes the branch; supersede any in-flight run so we
 # only ever lock against the latest tree.
@@ -66,3 +69,75 @@ jobs:
           git add flake.lock pkgs
           git commit -m "build(flake): sync flake.lock and vendor hashes"
           git push origin "HEAD:$BRANCH"
+
+      # Build every flake package (pkgs/: patched or source-built on top of
+      # nixpkgs) against the bumped inputs, so a patch that no longer applies
+      # or a source that no longer compiles shows up on the PR, not on the next
+      # rebuild. The job's own check is attached to the commit Renovate
+      # pushed, which the lock commit above may have superseded, so report the
+      # result as a commit status on the branch's actual head.
+      - name: Build flake packages
+        id: build
+        run: |
+          nix eval --json .#packages.x86_64-linux --apply builtins.attrNames \
+            | jq -r '.[] | ".#packages.x86_64-linux.\(.)"' \
+            | xargs nix build --no-link --print-build-logs
+
+      - name: Report build status on the branch head
+        if: always() && steps.build.outcome != 'skipped'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATE: ${{ steps.build.outcome == 'success' && 'success' || 'failure' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/$(git rev-parse HEAD)" \
+            -f state="$STATE" \
+            -f context="renovate-lock / build packages" \
+            -f description="flake packages build: $STATE" \
+            -f target_url="$RUN_URL"
+
+  # Evaluate every host on every Renovate branch, whatever it bumped: a renamed
+  # option, a package dropped from nixpkgs or a module error surfaces here
+  # instead of on the next rebuild. Evaluation builds nothing, but some of it
+  # builds small files for the host's own platform along the way, so each host
+  # evaluates on a runner of its own OS.
+  eval:
+    needs: lock
+    if: always() && needs.lock.result != 'cancelled'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: rapture
+            os: ubuntu-latest
+            attr: nixosConfigurations.rapture.config.system.build.toplevel
+          - host: columbia
+            os: macos-latest
+            attr: darwinConfigurations.columbia.system
+    runs-on: ${{ matrix.os }}
+    steps:
+      # The branch, not the pushed commit: the lock job may have added one.
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Evaluate ${{ matrix.host }}
+        id: eval
+        run: nix eval --raw ".#${{ matrix.attr }}.drvPath"
+
+      - name: Report eval status on the branch head
+        if: always() && steps.eval.outcome != 'skipped'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATE: ${{ steps.eval.outcome == 'success' && 'success' || 'failure' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh api "repos/${{ github.repository }}/statuses/$(git rev-parse HEAD)" \
+            -f state="$STATE" \
+            -f context="renovate-lock / eval ${{ matrix.host }}" \
+            -f description="${{ matrix.host }} evaluation: $STATE" \
+            -f target_url="$RUN_URL"
