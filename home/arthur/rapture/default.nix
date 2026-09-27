@@ -14,6 +14,7 @@
     spotify
     discord
     pinta # raster image editor
+    lens # Kubernetes IDE
   ];
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
