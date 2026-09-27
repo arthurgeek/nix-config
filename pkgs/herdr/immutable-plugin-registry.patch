@@ -1,8 +1,9 @@
 diff --git a/src/persist/plugin_registry.rs b/src/persist/plugin_registry.rs
-index 56ad766..857793f 100644
 --- a/src/persist/plugin_registry.rs
 +++ b/src/persist/plugin_registry.rs
-@@ -34,6 +34,15 @@ fn save_json_to_path<T: serde::Serialize + ?Sized>(path: &Path, value: &T) -> std::io::Result<()> {
+@@ -56,6 +56,15 @@
+ }
+ 
  fn save_json_to_path<T: serde::Serialize + ?Sized>(path: &Path, value: &T) -> std::io::Result<()> {
 +    if std::fs::symlink_metadata(path)
 +        .map(|metadata| metadata.file_type().is_symlink())
@@ -13,8 +14,6 @@ index 56ad766..857793f 100644
 +            "refusing to replace a declaratively managed plugin registry symlink",
 +        ));
 +    }
+     let target = resolve_write_target(path)?;
+     let path = target.as_path();
      if let Some(parent) = path.parent() {
-         std::fs::create_dir_all(parent)?;
-     }
-     let json = serde_json::to_string_pretty(value)?;
-     let tmp_path = path.with_extension("json.tmp");

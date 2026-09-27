@@ -257,7 +257,8 @@
       # Release tag Renovate keeps in the trailing comment of an input's url
       # line (`foo.url = "github:…/<sha>"; # v1.2.3`). Packages built from a
       # source input read their version here, so a bump can't leave a stale
-      # second copy behind.
+      # second copy behind. An input that follows a branch (`# main`) has no
+      # release, so it gets nixpkgs' `0-unstable-<commit date>` instead.
       inputVersion =
         name:
         let
@@ -265,8 +266,13 @@
           matches = builtins.filter (m: m != null) (
             map (builtins.match "[[:space:]]*${name}\\.url = \"[^\"]+\"; # v?([^[:space:]]+)") lines
           );
+          tag = builtins.head (builtins.head matches);
+          date = inputs.${name}.lastModifiedDate;
         in
-        builtins.head (builtins.head matches);
+        if builtins.match "[0-9].*" tag != null then
+          tag
+        else
+          "0-unstable-${builtins.substring 0 4 date}-${builtins.substring 4 2 date}-${builtins.substring 6 2 date}";
 
       forAllSystems = nixpkgs.lib.genAttrs [
         "aarch64-darwin"
@@ -274,13 +280,19 @@
       ];
     in
     {
-      # Built from source inputs. Exposed here so the renovate-lock workflow can
-      # build them on a Renovate branch and refresh their vendorHash.
+      # For modules that build a source input themselves (e.g. herdr plugins).
+      lib = { inherit inputVersion; };
+
+      # Packages we build from a source input or patch on top of nixpkgs.
+      # Exposed so the renovate-lock workflow can build every one of them on a
+      # Renovate branch, refreshing vendor hashes and catching broken patches
+      # before the bump is merged.
       packages = forAllSystems (system: {
         cli-proxy-api = nixpkgs.legacyPackages.${system}.callPackage ./pkgs/cli-proxy-api.nix {
           src = inputs.cli-proxy-api;
           version = inputVersion "cli-proxy-api";
         };
+        herdr = nixpkgs.legacyPackages.${system}.callPackage ./pkgs/herdr { };
       });
 
       nixosConfigurations = {

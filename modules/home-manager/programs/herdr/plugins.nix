@@ -1,6 +1,7 @@
 {
   herdr,
   inputs,
+  inputVersion,
   lib,
   pkgs,
 }:
@@ -11,7 +12,7 @@ let
   herdrBarManifest = manifest "herdr-bar" {
     id = "herdr-bar";
     name = "Bar";
-    version = "0.3.0";
+    version = inputVersion "herdr-bar";
     min_herdr_version = "0.7.4";
     description = "Cmd+K command bar: fuzzy-jump to any tab, pane, or agent";
     platforms = [
@@ -53,7 +54,7 @@ let
 
   herdrBar = pkgs.stdenvNoCC.mkDerivation {
     pname = "herdr-bar";
-    version = "0.3.0";
+    version = inputVersion "herdr-bar";
     src = inputs.herdr-bar;
     nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
@@ -80,7 +81,7 @@ let
   commandPaletteManifest = manifest "herdr-command-palette" {
     id = "jt.command-palette";
     name = "Command Palette (fzf)";
-    version = "0.1.0";
+    version = inputVersion "herdr-command-palette";
     min_herdr_version = "0.7.0";
     description = "An fzf command palette for every registered Herdr plugin action.";
     platforms = [
@@ -111,7 +112,7 @@ let
 
   commandPalette = pkgs.stdenvNoCC.mkDerivation {
     pname = "herdr-command-palette";
-    version = "0.1.0";
+    version = inputVersion "herdr-command-palette";
     src = inputs.herdr-command-palette;
     nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
@@ -170,7 +171,7 @@ let
   automaticRenameManifest = manifest "herdr-automatic-rename" {
     id = "herdr-automatic-rename";
     name = "Herdr Automatic Rename";
-    version = "0.8.0";
+    version = inputVersion "herdr-automatic-rename";
     min_herdr_version = "0.7.1";
     description = "Automatically name Herdr tabs from their context and foreground process.";
     platforms = [
@@ -207,7 +208,7 @@ let
 
   automaticRename = pkgs.stdenvNoCC.mkDerivation {
     pname = "herdr-automatic-rename";
-    version = "0.8.0";
+    version = inputVersion "herdr-automatic-rename";
     src = inputs.herdr-automatic-rename;
     nativeBuildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
@@ -240,7 +241,7 @@ let
   fileViewerManifest = manifest "herdr-file-viewer" {
     id = "herdr-file-viewer";
     name = "herdr-file-viewer";
-    version = "1.16.0";
+    version = inputVersion "herdr-file-viewer";
     min_herdr_version = "0.7.0";
     description = "A git-aware, read-only file viewer in a Herdr pane.";
     platforms = [
@@ -281,7 +282,7 @@ let
 
   fileViewer = pkgs.rustPlatform.buildRustPackage {
     pname = "herdr-file-viewer";
-    version = "1.16.0";
+    version = inputVersion "herdr-file-viewer";
     src = inputs.herdr-file-viewer;
     cargoLock.lockFile = "${inputs.herdr-file-viewer}/Cargo.lock";
     cargoBuildFlags = [
@@ -340,7 +341,7 @@ let
   agentQuotaManifest = manifest "herdr-agent-quota" {
     id = "herdr-agent-quota";
     name = "Herdr Agent Quota";
-    version = "1.3.0";
+    version = inputVersion "herdr-agent-quota";
     min_herdr_version = "0.8.0";
     description = "Credential-scoped AI quota and context for supported agent CLIs.";
     platforms = [
@@ -411,7 +412,7 @@ let
 
   agentQuota = pkgs.rustPlatform.buildRustPackage {
     pname = "herdr-agent-quota";
-    version = "1.3.0";
+    version = inputVersion "herdr-agent-quota";
     src = inputs.herdr-agent-quota;
     cargoLock.lockFile = "${inputs.herdr-agent-quota}/Cargo.lock";
     nativeBuildInputs = [ pkgs.makeWrapper ];

@@ -1,17 +1,17 @@
 {
   config,
   inputs,
+  outputs,
   lib,
   pkgs,
   ...
 }:
 let
-  herdr = pkgs.herdr.overrideAttrs (old: {
-    patches = (old.patches or [ ]) ++ [ ./immutable-plugin-registry.patch ];
-  });
+  herdr = outputs.packages.${pkgs.stdenv.hostPlatform.system}.herdr;
   plugins = import ./plugins.nix {
     inherit inputs lib pkgs;
     inherit herdr;
+    inherit (outputs.lib) inputVersion;
   };
   toml = pkgs.formats.toml { };
   automaticRenameConfig = pkgs.writeText "herdr-automatic-rename-config.sh" ''
