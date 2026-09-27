@@ -4,29 +4,11 @@
   ...
 }:
 {
-  # GTK theme configuration
+  # Theme, cursor and font come from stylix (modules/common/theme.nix).
   gtk = {
     enable = true;
     colorScheme = "dark";
     gtk2.force = true;
-    gtk4.theme = config.gtk.theme;
-    theme = {
-      name = "catppuccin-${config.catppuccin.flavor}-${config.catppuccin.accent}-compact";
-      package = pkgs.catppuccin-gtk.override {
-        accents = [ config.catppuccin.accent ];
-        variant = config.catppuccin.flavor;
-        size = "compact";
-      };
-    };
-    cursorTheme = {
-      name = "catppuccin-macchiato-lavender-cursors";
-      package = pkgs.catppuccin-cursors.macchiatoLavender;
-      size = 24;
-    };
-    font = {
-      name = "Roboto";
-      size = 12;
-    };
     gtk3 = {
       bookmarks = [
         "file://${config.home.homeDirectory}/Documents"

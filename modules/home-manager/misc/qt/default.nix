@@ -10,6 +10,7 @@
       name = "qtct";
       package = pkgs.kdePackages.qt6ct;
     };
+    # stylix generates the Kvantum theme from the system palette.
     style.name = "kvantum";
 
     qt6ctSettings = {
@@ -18,6 +19,4 @@
       };
     };
   };
-
-  catppuccin.kvantum.enable = true;
 }

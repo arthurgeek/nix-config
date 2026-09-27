@@ -74,7 +74,7 @@ hl.config({
             enabled      = true,
             range        = 15,
             render_power = 4,
-            color        = "rgba(18192610)", -- macchiato crust, faint
+            color        = vars.shadowColor,
         },
     },
 

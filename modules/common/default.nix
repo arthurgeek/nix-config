@@ -8,6 +8,10 @@
 }:
 
 {
+  imports = [ ./theme.nix ];
+
+  theme.name = "nord";
+
   fonts.packages = with pkgs; [
     fira-code
     nerd-fonts.fira-code
@@ -33,7 +37,6 @@
       userConfig = userConfig;
       hmModules = "${inputs.self}/modules/home-manager";
     };
-    sharedModules = [ inputs.catppuccin.homeModules.catppuccin ];
     users.${userConfig.name} = import "${inputs.self}/home/${userConfig.name}/${hostname}";
   };
 }

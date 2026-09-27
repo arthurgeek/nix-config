@@ -16,7 +16,7 @@
     "${inputs.self}/modules/nixos/programs/tailscale"
     "${inputs.self}/modules/nixos/programs/nordvpn"
     inputs.home-manager.nixosModules.home-manager
-    inputs.catppuccin.nixosModules.catppuccin
+    inputs.stylix.nixosModules.stylix
   ];
 
   # Register flake inputs for nix commands
@@ -213,13 +213,17 @@
     enableSSHSupport = true;
   };
 
-  catppuccin = {
-    enable = true;
-    flavor = "macchiato";
-    accent = "lavender";
-    cache.enable = true;
-    tty.enable = true;
-    cursors.enable = true;
+  # Colours and fonts come from modules/common/theme.nix; these only exist on
+  # NixOS.
+  stylix = {
+    cursor = config.theme.apps.cursor // {
+      size = 24;
+    };
+    icons = config.theme.apps.icons // {
+      enable = true;
+    };
+    # Rendered on a scale-2 output, so effectively 22px on the 4K panel.
+    fonts.sizes.applications = 11;
   };
 
   programs.nh = {

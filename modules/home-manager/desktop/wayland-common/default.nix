@@ -1,5 +1,4 @@
 {
-  config,
   hmModules,
   ...
 }:
@@ -10,13 +9,11 @@
     "${hmModules}/misc/xdg"
   ];
 
-  # Consistent cursor theme across all applications.
+  # Consistent cursor theme across all applications. The cursor itself comes
+  # from stylix (modules/nixos/common, per theme in modules/common/theme.nix).
   home.pointerCursor = {
     enable = true;
     gtk.enable = true;
     x11.enable = true;
-    package = config.gtk.cursorTheme.package;
-    name = config.gtk.cursorTheme.name;
-    size = config.gtk.cursorTheme.size;
   };
 }

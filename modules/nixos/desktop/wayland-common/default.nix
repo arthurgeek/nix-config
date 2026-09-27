@@ -9,28 +9,10 @@
   # and niri sessions are selectable. regreet drives greetd's default session
   # (via sway), lists every wayland session it finds in XDG data dirs, and
   # remembers the last user and session on its own.
-  services.displayManager.regreet = {
-    enable = true;
-    theme = {
-      package = pkgs.catppuccin-gtk.override {
-        accents = [ "lavender" ];
-        variant = "macchiato";
-        size = "compact";
-      };
-      name = "catppuccin-macchiato-lavender-compact";
-    };
-    font = {
-      package = pkgs.roboto;
-      name = "Roboto";
-      # Rendered on a scale-2 output (see below), so effectively 22px on the
-      # 4K panel.
-      size = 11;
-    };
-    cursorTheme = {
-      package = pkgs.catppuccin-cursors.macchiatoLavender;
-      name = "catppuccin-macchiato-lavender-cursors";
-    };
-  };
+  # Theme, font and cursor come from stylix (modules/common/theme.nix); the
+  # font is rendered on a scale-2 output (see below), so its 11pt is
+  # effectively 22px on the 4K panel.
+  services.displayManager.regreet.enable = true;
 
   # cage renders regreet unreadably small on a 4K panel and has no scale
   # option — it always hands the client a scale-1 output. GDK_SCALE does not
@@ -39,6 +21,10 @@
   # without it). Only the compositor can set the scale, so run the greeter
   # under sway, which can. This restates the regreet module's own (mkDefault)
   # command with sway in cage's place.
+  #
+  # stylix warns on any command other than the cage default ("custom ... value
+  # may not work"). Expected: it themes regreet through regreet's own settings
+  # and CSS, which don't depend on the compositor.
   services.greetd.settings.default_session.command =
     let
       greeterSway = pkgs.writeText "greetd-sway.conf" ''

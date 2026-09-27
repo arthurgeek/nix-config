@@ -14,4 +14,8 @@ in
       macos-option-as-alt = true;
     };
   };
+
+  # stylix themes the colours only: it scales the font size by 4/3 on macOS
+  # (18 -> 24), so the font settings above stay ours on both hosts.
+  stylix.targets.ghostty.fonts.enable = false;
 }

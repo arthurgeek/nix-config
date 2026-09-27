@@ -1,6 +1,7 @@
 {
   config,
   inputs,
+  osConfig,
   outputs,
   lib,
   pkgs,
@@ -137,12 +138,17 @@ in
     settings = {
       onboarding = false;
 
-      theme = {
-        name = "catppuccin";
-        auto_switch = true;
-        dark_name = "catppuccin";
-        light_name = "catppuccin-latte";
-      };
+      # herdr's built-in theme matching the system one (modules/common/theme.nix).
+      theme =
+        let
+          inherit (osConfig.theme.apps) herdr;
+        in
+        {
+          inherit (herdr) name;
+          auto_switch = herdr.light != null;
+          dark_name = herdr.name;
+        }
+        // lib.optionalAttrs (herdr.light != null) { light_name = herdr.light; };
 
       terminal = {
         default_shell = lib.getExe pkgs.fish;

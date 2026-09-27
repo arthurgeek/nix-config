@@ -3,7 +3,7 @@
   programs.btop = {
     enable = true;
     # Preferences from caelestia's dotfiles; the colour theme itself comes
-    # from the global catppuccin module.
+    # from stylix.
     settings = {
       theme_background = false;
       update_ms = 2000;

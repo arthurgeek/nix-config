@@ -63,12 +63,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # catppuccin theme
-    catppuccin = {
-      # renovate: datasource=github-releases depName=catppuccin/nix
-      url = "github:catppuccin/nix/096f4670cf078d810a931fae59b57db4cc3fb4d3"; # v26.05
+    # stylix: one base16/base24 palette themes every supported program
+    stylix = {
+      # renovate: datasource=git-refs depName=https://github.com/nix-community/stylix
+      url = "github:nix-community/stylix/fb28acd59e2ac1984ec84fa496599d6b4bf3e690"; # master
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Colour schemes for stylix, in base16 and base24 (modules/common/theme.nix)
+    # renovate: datasource=git-refs depName=https://github.com/tinted-theming/schemes
+    tinted-schemes.url = "github:tinted-theming/schemes/50f6e3b93a8f62db9d839f8b79a709c1bbdaac53"; # spec-0.11
+    tinted-schemes.flake = false;
 
     # noctalia shell
     noctalia = {

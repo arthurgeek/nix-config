@@ -4,41 +4,15 @@
   pkgs,
   ...
 }:
-let
-  paletteFile = "${
-    inputs.catppuccin.packages.${pkgs.stdenv.hostPlatform.system}.palette
-  }/palette.json";
-  palette = builtins.fromJSON (builtins.readFile paletteFile);
-  flavorPalette = palette.${config.catppuccin.flavor}.colors;
-  color = name: flavorPalette.${name}.hex;
-  accentColor = color config.catppuccin.accent;
-in
 {
   imports = [
     inputs.noctalia.homeModules.default
   ];
 
+  # Colours come from stylix's noctalia-shell target (modules/common/theme.nix).
   programs.noctalia-shell = {
     enable = true;
     package = pkgs.noctalia-shell.override { calendarSupport = true; };
-    colors = {
-      mPrimary = accentColor;
-      mOnPrimary = color "crust";
-      mSecondary = color "pink";
-      mOnSecondary = color "crust";
-      mTertiary = color "mauve";
-      mOnTertiary = color "crust";
-      mError = color "red";
-      mOnError = color "crust";
-      mSurface = color "base";
-      mOnSurface = color "text";
-      mSurfaceVariant = color "surface0";
-      mOnSurfaceVariant = color "subtext0";
-      mOutline = color "overlay0";
-      mShadow = color "crust";
-      mHover = accentColor;
-      mOnHover = color "crust";
-    };
     plugins = {
       sources = [
         {

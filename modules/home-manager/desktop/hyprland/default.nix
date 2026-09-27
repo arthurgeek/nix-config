@@ -121,7 +121,11 @@ in
       # Required by the sibling files, so it must not be auto-loaded: an
       # auto-loaded entry is require()d at top level as well, executing twice.
       variables = {
-        content = ./lua/variables.lua;
+        content = pkgs.replaceVars ./lua/variables.lua {
+          activeBorder = config.lib.stylix.colors.base07;
+          inactiveBorder = config.lib.stylix.colors.base03;
+          shadowColor = config.lib.stylix.colors.base11;
+        };
         autoLoad = false;
       };
 
@@ -132,4 +136,8 @@ in
       keybinds = ./lua/keybinds.lua;
     };
   };
+
+  # stylix's hyprland target writes hyprlang `settings`, which the Lua config
+  # above never reads; the border colours are templated into variables.lua.
+  stylix.targets.hyprland.enable = false;
 }

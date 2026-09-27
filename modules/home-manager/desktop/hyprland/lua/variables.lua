@@ -12,8 +12,10 @@ return {
     -- Modifier
     mod = "SUPER",
 
-    -- Border colours: catppuccin macchiato, matching the system flavour and
-    -- the lavender accent.
-    activeBorder   = "rgba(b7bdf8ff)", -- macchiato lavender #b7bdf8
-    inactiveBorder = "rgba(5b6078ff)", -- macchiato surface2 #5b6078
+    -- Colours from the system palette, filled in by default.nix: base07
+    -- (catppuccin lavender, nord7), base03, and a faint base11 (catppuccin
+    -- crust; base16 schemes fall back to base00).
+    activeBorder   = "rgba(@activeBorder@ff)",
+    inactiveBorder = "rgba(@inactiveBorder@ff)",
+    shadowColor    = "rgba(@shadowColor@10)",
 }

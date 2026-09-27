@@ -6,17 +6,6 @@
   pkgs,
   ...
 }:
-let
-  # catppuccin/nix still overrides pnpm's retired `nodejs` argument. Translate
-  # it to `nodejs-slim` until the pinned input adopts the new nixpkgs API.
-  pnpm_10 = pkgs.pnpm_10 // {
-    override = args:
-      pkgs.pnpm_10.override (
-        removeAttrs args [ "nodejs" ]
-        // lib.optionalAttrs (args ? nodejs) { nodejs-slim = args.nodejs; }
-      );
-  };
-in
 {
   imports = [
     ../programs/git
@@ -95,23 +84,5 @@ in
       "3"
     ];
     flake = "${config.home.homeDirectory}/nix-config";
-  };
-
-  # Catppuccin
-  catppuccin = {
-    enable = true;
-    flavor = "macchiato";
-    accent = "lavender";
-    sources.vscode =
-      inputs.catppuccin.packages.${pkgs.stdenv.hostPlatform.system}.vscode.override
-        { inherit pnpm_10; };
-
-    # catppuccin.enable turns on every port module, including ones for programs
-    # we do not use. Its gemini-cli module sets `programs.gemini-cli.settings`,
-    # which home-manager has renamed to `programs.antigravity-cli.settings`, so
-    # it emits a rename warning on every rebuild. The setting is inert (we never
-    # set `programs.gemini-cli.enable`), so just switch the port off. Drop this
-    # once catppuccin/nix renames the module upstream.
-    gemini-cli.enable = false;
   };
 }

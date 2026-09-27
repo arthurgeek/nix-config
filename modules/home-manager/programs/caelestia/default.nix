@@ -1,5 +1,6 @@
 {
   inputs,
+  osConfig,
   config,
   lib,
   pkgs,
@@ -185,7 +186,7 @@ in
 
     # `caelestia scheme set` applies colour templates to everything it knows,
     # including ~/.config/gtk-4.0/gtk.css — a file home-manager owns for the
-    # catppuccin theme. That collision breaks every later activation. GTK and
+    # stylix theme. That collision breaks every later activation. GTK and
     # Qt theming stay declarative; caelestia themes only its own surfaces.
     cli.settings.theme = {
       enableGtk = false;
@@ -216,7 +217,7 @@ in
   # the default, the runtime owns changes.
   home.activation.caelestiaSchemeSeed = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ ! -e "''${XDG_STATE_HOME:-$HOME/.local/state}/caelestia/scheme.json" ]; then
-      run ${config.programs.caelestia.cli.package}/bin/caelestia scheme set -n catppuccin -f macchiato || true
+      run ${config.programs.caelestia.cli.package}/bin/caelestia scheme set -n ${osConfig.theme.apps.caelestia.scheme} -f ${osConfig.theme.apps.caelestia.flavour} || true
     fi
   '';
 }

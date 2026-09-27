@@ -12,6 +12,7 @@
     "${inputs.self}/modules/common"
     inputs.nix-homebrew.darwinModules.nix-homebrew
     inputs.home-manager.darwinModules.home-manager
+    inputs.stylix.darwinModules.stylix
   ];
 
   # nix-homebrew settings

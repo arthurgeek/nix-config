@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -148,73 +149,65 @@ let
     exit 1
   '';
 
-  catppuccinSources = builtins.fromJSON (builtins.readFile "${inputs.catppuccin}/pkgs/sources.json");
-  paletteSource =
-    (builtins.fetchTree {
-      type = "github";
-      owner = "catppuccin";
-      repo = "palette";
-      inherit (catppuccinSources.palette) rev;
-      narHash = catppuccinSources.palette.hash;
-    }).outPath;
-  palette = builtins.fromJSON (builtins.readFile "${paletteSource}/palette.json");
-  macchiato = palette.macchiato.colors;
-  color = name: macchiato.${name}.hex;
-  piTheme = json.generate "catppuccin-macchiato-lavender.json" {
-    name = "catppuccin-macchiato-lavender";
+  # The system palette (modules/common/theme.nix), by base16/base24 slot.
+  # Dim text uses base03, base16's comment colour: base04 is a dim grey in
+  # catppuccin but a near-white foreground in nord.
+  c = config.lib.stylix.colors.withHashtag;
+  piTheme = json.generate "stylix.json" {
+    name = "stylix";
     colors = {
-      accent = color "lavender";
-      border = color "overlay0";
-      borderAccent = color "lavender";
-      borderMuted = color "surface0";
-      success = color "green";
-      error = color "red";
-      warning = color "yellow";
-      muted = color "subtext0";
-      dim = color "overlay1";
-      text = color "text";
-      thinkingText = color "subtext0";
-      selectedBg = color "surface1";
-      userMessageBg = color "surface0";
-      userMessageText = color "text";
-      customMessageBg = color "base";
-      customMessageText = color "text";
-      customMessageLabel = color "lavender";
-      toolPendingBg = color "base";
-      toolSuccessBg = color "base";
-      toolErrorBg = color "base";
-      toolTitle = color "blue";
-      toolOutput = color "text";
-      mdHeading = color "blue";
-      mdLink = color "blue";
-      mdLinkUrl = color "rosewater";
-      mdCode = color "peach";
-      mdCodeBlock = color "text";
-      mdCodeBlockBorder = color "surface1";
-      mdQuote = color "subtext0";
-      mdQuoteBorder = color "overlay0";
-      mdHr = color "surface1";
-      mdListBullet = color "teal";
-      toolDiffAdded = color "green";
-      toolDiffRemoved = color "red";
-      toolDiffContext = color "overlay0";
-      syntaxComment = color "overlay2";
-      syntaxKeyword = color "mauve";
-      syntaxFunction = color "blue";
-      syntaxVariable = color "text";
-      syntaxString = color "green";
-      syntaxNumber = color "peach";
-      syntaxType = color "yellow";
-      syntaxOperator = color "sky";
-      syntaxPunctuation = color "overlay2";
-      thinkingOff = color "surface0";
-      thinkingMinimal = color "surface1";
-      thinkingLow = color "blue";
-      thinkingMedium = color "mauve";
-      thinkingHigh = color "peach";
-      thinkingXhigh = color "red";
-      thinkingMax = color "maroon";
-      bashMode = color "peach";
+      accent = c.base07;
+      border = c.base03;
+      borderAccent = c.base07;
+      borderMuted = c.base02;
+      success = c.base0B;
+      error = c.base08;
+      warning = c.base0A;
+      muted = c.base03;
+      dim = c.base03;
+      text = c.base05;
+      thinkingText = c.base03;
+      selectedBg = c.base03;
+      userMessageBg = c.base02;
+      userMessageText = c.base05;
+      customMessageBg = c.base00;
+      customMessageText = c.base05;
+      customMessageLabel = c.base07;
+      toolPendingBg = c.base00;
+      toolSuccessBg = c.base00;
+      toolErrorBg = c.base00;
+      toolTitle = c.base0D;
+      toolOutput = c.base05;
+      mdHeading = c.base0D;
+      mdLink = c.base0D;
+      mdLinkUrl = c.base06;
+      mdCode = c.base09;
+      mdCodeBlock = c.base05;
+      mdCodeBlockBorder = c.base03;
+      mdQuote = c.base03;
+      mdQuoteBorder = c.base03;
+      mdHr = c.base03;
+      mdListBullet = c.base0C;
+      toolDiffAdded = c.base0B;
+      toolDiffRemoved = c.base08;
+      toolDiffContext = c.base03;
+      syntaxComment = c.base03;
+      syntaxKeyword = c.base0E;
+      syntaxFunction = c.base0D;
+      syntaxVariable = c.base05;
+      syntaxString = c.base0B;
+      syntaxNumber = c.base09;
+      syntaxType = c.base0A;
+      syntaxOperator = c.base15;
+      syntaxPunctuation = c.base05;
+      thinkingOff = c.base02;
+      thinkingMinimal = c.base03;
+      thinkingLow = c.base0D;
+      thinkingMedium = c.base0E;
+      thinkingHigh = c.base09;
+      thinkingXhigh = c.base08;
+      thinkingMax = c.base12;
+      bashMode = c.base09;
     };
   };
 
@@ -223,7 +216,7 @@ let
     defaultModel = "gpt-6-astra";
     defaultThinkingLevel = "high";
     defaultProjectTrust = "ask";
-    theme = "catppuccin-macchiato-lavender";
+    theme = "stylix";
     enableInstallTelemetry = false;
     enableAnalytics = false;
     enableSkillCommands = true;
@@ -679,7 +672,7 @@ in
       force = true;
       source = settings;
     };
-    ".pi/agent/themes/catppuccin-macchiato-lavender.json".source = piTheme;
+    ".pi/agent/themes/stylix.json".source = piTheme;
     ".pi/agent/extensions/pi-permission-system/config.json".source = permissionConfig;
     ".pi/agent/hermes-memory-config.json".source = memoryConfig;
     ".pi/agent/mcp.json".source = mcpConfig;
