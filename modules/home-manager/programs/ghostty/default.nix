@@ -12,6 +12,10 @@ in
       font-family = "FiraCode Nerd Font Mono";
       font-size = 18;
       macos-option-as-alt = true;
+      # For ssh sessions: ssh-env forwards COLORTERM and TERM_PROGRAM (falling
+      # back to TERM=xterm-256color), and ssh-terminfo installs Ghostty's
+      # terminfo on a remote host that lacks it, on first connect.
+      shell-integration-features = "ssh-env,ssh-terminfo";
     };
   };
 
