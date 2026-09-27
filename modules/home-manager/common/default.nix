@@ -47,7 +47,6 @@ in
     ../programs/pi
     ../programs/gh
     ../programs/glow
-    ../programs/vscode
     ../programs/spotify-player
   ];
 

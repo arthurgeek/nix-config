@@ -5,7 +5,7 @@ return {
     -- Apps
     terminal      = "ghostty",
     browser       = "google-chrome-stable",
-    editor        = "code",
+    editor        = "ghostty -e hx",
     fileExplorer  = "nautilus",
     audioSettings = "pavucontrol",
 
