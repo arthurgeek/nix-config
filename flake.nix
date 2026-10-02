@@ -8,7 +8,7 @@
   inputs = {
     # nixpkgs
     # renovate: datasource=git-refs depName=https://github.com/NixOS/nixpkgs
-    nixpkgs.url = "github:NixOS/nixpkgs/74435dcdae840e9770652a7bf7754c2ef7b257e1"; # nixpkgs-unstable
+    nixpkgs.url = "github:NixOS/nixpkgs/c9fe7d12cd78d1adcd12dd15e24432dde5b155a0"; # nixpkgs-unstable
 
     # nix-darwin
     nix-darwin = {
