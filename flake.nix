@@ -20,7 +20,7 @@
     # home-manager
     home-manager = {
       # renovate: datasource=git-refs depName=https://github.com/nix-community/home-manager
-      url = "github:nix-community/home-manager/7b4c5ec4bedaf1e062bbc1bcaeddbc6bd242aa1b"; # master
+      url = "github:nix-community/home-manager/acd21c5a3420a9d5fd0ed06299b10828267ef9ba"; # master
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
