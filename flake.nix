@@ -137,7 +137,7 @@
     herdr-command-palette.url = "github:JanTvrdik/herdr-command-palette/eab940018c2135ac23718efa11e23e9dddcd2a75"; # main
     herdr-command-palette.flake = false;
     # renovate: datasource=github-releases depName=qu8n/herdr-automatic-rename
-    herdr-automatic-rename.url = "github:qu8n/herdr-automatic-rename/467d87af3113554073a9dec98064e74dfae3d809"; # v0.12.0
+    herdr-automatic-rename.url = "github:qu8n/herdr-automatic-rename/37e0b70b8b4beff1ed30c4e74262756a15547447"; # v0.12.0
     herdr-automatic-rename.flake = false;
     # renovate: datasource=github-releases depName=smarzban/herdr-file-viewer
     herdr-file-viewer.url = "github:smarzban/herdr-file-viewer/c237626260478d5f2d788149fc741ddf3c3588ba"; # v1.17.0
