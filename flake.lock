@@ -1163,17 +1163,17 @@
     "tinted-schemes_2": {
       "flake": false,
       "locked": {
-        "lastModified": 1790150065,
-        "narHash": "sha256-pMnbUcpKwLRTJfyXeNC6goNJfz82dmJzKELokG0ajBc=",
+        "lastModified": 1790998275,
+        "narHash": "sha256-vjDM7GtittcsULah9K/r+YXwfkMkQjLO6cGvDrJHgMM=",
         "owner": "tinted-theming",
         "repo": "schemes",
-        "rev": "50f6e3b93a8f62db9d839f8b79a709c1bbdaac53",
+        "rev": "a70da1dab18008023cfd55a94053f3b6cab4f86e",
         "type": "github"
       },
       "original": {
         "owner": "tinted-theming",
         "repo": "schemes",
-        "rev": "50f6e3b93a8f62db9d839f8b79a709c1bbdaac53",
+        "rev": "a70da1dab18008023cfd55a94053f3b6cab4f86e",
         "type": "github"
       }
     },
