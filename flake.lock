@@ -409,17 +409,17 @@
     "herdr-automatic-rename": {
       "flake": false,
       "locked": {
-        "lastModified": 1790345866,
-        "narHash": "sha256-I6Wol3qTRyC2GEBC84qYVS0KdcBgvRNVH340TIUEnzU=",
+        "lastModified": 1790711412,
+        "narHash": "sha256-7lUdVEzgnnUBQ7K1TIEzaWFz45x7zRJxfzrakkRaSDs=",
         "owner": "qu8n",
         "repo": "herdr-automatic-rename",
-        "rev": "467d87af3113554073a9dec98064e74dfae3d809",
+        "rev": "819a46ca0c3ba7e5fa15a3c9ea0250377891b448",
         "type": "github"
       },
       "original": {
         "owner": "qu8n",
         "repo": "herdr-automatic-rename",
-        "rev": "467d87af3113554073a9dec98064e74dfae3d809",
+        "rev": "819a46ca0c3ba7e5fa15a3c9ea0250377891b448",
         "type": "github"
       }
     },
