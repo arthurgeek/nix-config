@@ -47,7 +47,7 @@
 
     # NixOS profiles to optimize settings for different hardware
     # renovate: datasource=git-refs depName=https://github.com/nixos/nixos-hardware
-    hardware.url = "github:nixos/nixos-hardware/30d48a0ec6035f8140d0125af274f0de95f1e9b5"; # master
+    hardware.url = "github:nixos/nixos-hardware/4bc63156b109ee7b4103e3ec30565c8c92bde435"; # master
 
     # Secure Boot for NixOS: signs the boot chain with keys enrolled in firmware
     lanzaboote = {
