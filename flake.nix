@@ -131,7 +131,7 @@
     # Herdr plugins. These are source-only inputs; Nix builds and registers
     # adapted manifests without invoking upstream installers or updaters.
     # renovate: datasource=github-releases depName=jeffarese/herdr-bar
-    herdr-bar.url = "github:jeffarese/herdr-bar/473105bed95e2e739e6bfb7442155a304dbe3c24"; # v0.5.0
+    herdr-bar.url = "github:jeffarese/herdr-bar/e22455068e26340b6be02cec8a07707fc1f11ae1"; # v0.7.3
     herdr-bar.flake = false;
     # renovate: datasource=git-refs depName=https://github.com/JanTvrdik/herdr-command-palette
     herdr-command-palette.url = "github:JanTvrdik/herdr-command-palette/eab940018c2135ac23718efa11e23e9dddcd2a75"; # main
