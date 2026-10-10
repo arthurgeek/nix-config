@@ -72,7 +72,7 @@
 
     # Colour schemes for stylix, in base16 and base24 (modules/common/theme.nix)
     # renovate: datasource=git-refs depName=https://github.com/tinted-theming/schemes
-    tinted-schemes.url = "github:tinted-theming/schemes/50f6e3b93a8f62db9d839f8b79a709c1bbdaac53"; # spec-0.11
+    tinted-schemes.url = "github:tinted-theming/schemes/3ac91137e879502c442ab89ba0f1a98077d0da9d"; # spec-0.11
     tinted-schemes.flake = false;
 
     # noctalia shell
