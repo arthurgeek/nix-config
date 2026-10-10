@@ -460,17 +460,17 @@
     "herdr-file-viewer": {
       "flake": false,
       "locked": {
-        "lastModified": 1789558359,
-        "narHash": "sha256-warJjHWUZnboze2LgbfM7ZH5SiYen9L2aSBn60iBK3A=",
+        "lastModified": 1791496048,
+        "narHash": "sha256-rG15Aq6QVPqE5ndlQwUjMUVlbtdTKKSHdzpOPskd+ss=",
         "owner": "smarzban",
         "repo": "herdr-file-viewer",
-        "rev": "c237626260478d5f2d788149fc741ddf3c3588ba",
+        "rev": "4c2add6d952e81abc9ba4bbb9ff90107a626098c",
         "type": "github"
       },
       "original": {
         "owner": "smarzban",
         "repo": "herdr-file-viewer",
-        "rev": "c237626260478d5f2d788149fc741ddf3c3588ba",
+        "rev": "4c2add6d952e81abc9ba4bbb9ff90107a626098c",
         "type": "github"
       }
     },
