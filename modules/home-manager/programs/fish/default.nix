@@ -8,11 +8,6 @@
     functions.fish_greeting = "";
 
     interactiveShellInit = ''
-      # FZF plugin config
-      set fzf_preview_dir_cmd eza --group --git --header --group-directories-first --icons --all --oneline --color=always
-      set fzf_diff_highlighter delta --features="default decorations" --paging=never
-      set fzf_directory_opts --bind "ctrl-o:execute($EDITOR {} &> /dev/tty)"
-
       # OSC 133 semantic prompt marks (FinalTerm) — lets terminals like Rio
       # identify prompt/command/output boundaries for jump-to-prompt and
       # similar features.
@@ -39,10 +34,6 @@
     };
 
     plugins = [
-      {
-        name = "fzf-fish";
-        src = pkgs.fishPlugins.fzf-fish.src;
-      }
       {
         name = "colored-man-pages";
         src = pkgs.fishPlugins.colored-man-pages.src;

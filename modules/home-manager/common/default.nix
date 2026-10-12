@@ -8,6 +8,7 @@
 }:
 {
   imports = [
+    ../programs/atuin
     ../programs/git
     ../programs/jujutsu
     ../programs/bat

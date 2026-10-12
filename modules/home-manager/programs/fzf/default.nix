@@ -2,7 +2,7 @@
 {
   programs.fzf = {
     enable = true;
-    # Fish integration handled by fzf-fish plugin
+    # Shell history is handled by Atuin; keep fzf integration disabled to prevent keybinding conflicts
     enableFishIntegration = false;
   };
 }

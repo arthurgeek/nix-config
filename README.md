@@ -46,3 +46,14 @@ Update flake inputs:
 ```sh
 make flake-update
 ```
+
+### 1Password Setup
+
+Several components depend on 1Password (SSH agent authentication, Git commit signing with `op-ssh-sign`, and secret injection like Atuin sync address via `op inject`):
+
+1. Sign into the 1Password app.
+2. In **Settings → Developer**:
+   - Enable **Integrate with 1Password CLI**
+   - Enable **Use the SSH agent**
+3. Ensure necessary secrets exist in your `Secrets` vault (e.g. `op://Secrets/atuin/sync_address`).
+4. Re-run `make darwin-rebuild` (or `make nixos-rebuild`) to apply secret-dependent configurations.
