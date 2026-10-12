@@ -31,10 +31,6 @@ let
         dark = "Papirus-Dark";
         light = "Papirus-Light";
       };
-      herdr = {
-        name = "catppuccin";
-        light = "catppuccin-latte";
-      };
       caelestia = {
         scheme = "catppuccin";
         flavour = "macchiato";
@@ -52,10 +48,6 @@ let
         package = pkgs.papirus-nord;
         dark = "Papirus-Dark";
         light = "Papirus-Light";
-      };
-      herdr = {
-        name = "nord";
-        light = null;
       };
       caelestia = {
         scheme = "nord";

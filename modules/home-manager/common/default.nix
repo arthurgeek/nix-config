@@ -10,7 +10,6 @@
   imports = [
     ../programs/git
     ../programs/jujutsu
-    ../programs/herdr
     ../programs/bat
     ../programs/btop
     ../programs/fish
@@ -33,7 +32,6 @@
     ../programs/claude-code
     ../programs/codex
     ../programs/opencode
-    ../programs/pi
     ../programs/gh
     ../programs/glow
     ../programs/spotify-player

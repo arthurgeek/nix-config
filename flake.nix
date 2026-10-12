@@ -128,24 +128,6 @@
     lazyjj-config.url = "github:LazyJJ-dev/LazyJJ/0acb115dbb66821995ba04bc1b3854aa52d00dde"; # main
     lazyjj-config.flake = false;
 
-    # Herdr plugins. These are source-only inputs; Nix builds and registers
-    # adapted manifests without invoking upstream installers or updaters.
-    # renovate: datasource=github-releases depName=jeffarese/herdr-bar
-    herdr-bar.url = "github:jeffarese/herdr-bar/473105bed95e2e739e6bfb7442155a304dbe3c24"; # v0.5.0
-    herdr-bar.flake = false;
-    # renovate: datasource=git-refs depName=https://github.com/JanTvrdik/herdr-command-palette
-    herdr-command-palette.url = "github:JanTvrdik/herdr-command-palette/eab940018c2135ac23718efa11e23e9dddcd2a75"; # main
-    herdr-command-palette.flake = false;
-    # renovate: datasource=github-releases depName=qu8n/herdr-automatic-rename
-    herdr-automatic-rename.url = "github:qu8n/herdr-automatic-rename/467d87af3113554073a9dec98064e74dfae3d809"; # v0.12.0
-    herdr-automatic-rename.flake = false;
-    # renovate: datasource=github-releases depName=smarzban/herdr-file-viewer
-    herdr-file-viewer.url = "github:smarzban/herdr-file-viewer/c237626260478d5f2d788149fc741ddf3c3588ba"; # v1.17.0
-    herdr-file-viewer.flake = false;
-    # renovate: datasource=git-refs depName=https://github.com/kwanwooi25/herdr-plugin-agent-quota
-    herdr-plugin-agent-quota.url = "github:kwanwooi25/herdr-plugin-agent-quota/6d1149887deb24ad250f13633465dfc1a2e49363"; # main
-    herdr-plugin-agent-quota.flake = false;
-
     # Helix AI completion language server
     # renovate: datasource=github-releases depName=leona/helix-assist
     helix-assist.url = "github:leona/helix-assist/a4796433ae6d3c3b5da9484967fb209a9caea159"; # v1.0.12
@@ -285,7 +267,7 @@
       ];
     in
     {
-      # For modules that build a source input themselves (e.g. herdr plugins).
+      # For modules that build a source input themselves (e.g. cli-proxy-api).
       lib = { inherit inputVersion; };
 
       # Packages we build from a source input or patch on top of nixpkgs.
@@ -297,7 +279,6 @@
           src = inputs.cli-proxy-api;
           version = inputVersion "cli-proxy-api";
         };
-        herdr = nixpkgs.legacyPackages.${system}.callPackage ./pkgs/herdr { };
       });
 
       nixosConfigurations = {

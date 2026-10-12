@@ -45,7 +45,6 @@ in
   ];
 
   xdg.configFile = lib.listToAttrs (map lazyjjConfigFile lazyjjConfigFiles) // {
-    "jj/conf.d/zzz-lazyjj-herdr.toml".source = ./lazyjj-herdr.toml;
     "jj/conf.d/zzz-lazyjj-nix.toml".text = ''
       [aliases]
       lazyjj-update = ["util", "exec", "--", "sh", "-c", "echo 'LazyJJ is managed by Nix; update the lazyjj-config flake input instead.'"]
