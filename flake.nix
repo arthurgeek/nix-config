@@ -78,7 +78,7 @@
     # noctalia shell
     noctalia = {
       # renovate: datasource=github-releases depName=noctalia-dev/noctalia-shell
-      url = "github:noctalia-dev/noctalia-shell/c7b9197af77ff22bfb9a83c52a95643a1d90ca86"; # v5.1.0
+      url = "github:noctalia-dev/noctalia-shell/6ef43e2bf2f3d5b4205ec72a72e34a2ab76ce3b4"; # v5.2.1
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
