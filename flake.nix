@@ -8,7 +8,7 @@
   inputs = {
     # nixpkgs
     # renovate: datasource=git-refs depName=https://github.com/NixOS/nixpkgs
-    nixpkgs.url = "github:NixOS/nixpkgs/74435dcdae840e9770652a7bf7754c2ef7b257e1"; # nixpkgs-unstable
+    nixpkgs.url = "github:NixOS/nixpkgs/8edc0c72e3a38faf5434e40d1f19431125fe4b30"; # nixpkgs-unstable
 
     # nix-darwin
     nix-darwin = {
@@ -31,12 +31,12 @@
     };
     homebrew-core = {
       # renovate: datasource=git-refs depName=https://github.com/homebrew/homebrew-core
-      url = "github:homebrew/homebrew-core/88af0a661f9bbc6818895339b9c6d36ed9beb32d"; # main
+      url = "github:homebrew/homebrew-core/5ae87c5ca2f69f6f9d4a096465f5a28dfafe637f"; # main
       flake = false;
     };
     homebrew-cask = {
       # renovate: datasource=git-refs depName=https://github.com/homebrew/homebrew-cask
-      url = "github:homebrew/homebrew-cask/f373be9edef93b6abceb1f397f5af56f4319e53e"; # main
+      url = "github:homebrew/homebrew-cask/e2681c2424a1ccb8c2728860b997fdaa40dd9f26"; # main
       flake = false;
     };
     homebrew-barutsrb-tap = {
