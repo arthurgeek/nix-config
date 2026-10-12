@@ -20,10 +20,14 @@ let
     "post-rewrite"
   ];
 
+  # `force` because tools that install hooks (`lefthook install`, husky) write
+  # into core.hooksPath and replace these symlinks with real files, which would
+  # otherwise fail the next activation.
   passthroughHook = name: {
     name = ".config/git/hooks/${name}";
     value = {
       executable = true;
+      force = true;
       text = ''
         #!/bin/sh
         repo_hook="$(git rev-parse --git-dir)/hooks/${name}"
@@ -42,6 +46,7 @@ in
 
     ".config/git/hooks/prepare-commit-msg" = {
       executable = true;
+      force = true;
       text = ''
         #!/bin/sh
         git interpret-trailers --if-exists doNothing \
