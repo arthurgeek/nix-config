@@ -1,5 +1,4 @@
 {
-  config,
   inputs,
   osConfig,
   outputs,
@@ -21,7 +20,6 @@ let
   fileViewerConfig = toml.generate "herdr-file-viewer-config.toml" {
     update_check = false;
   };
-  agentQuotaStateDir = "${config.xdg.stateHome}/herdr/plugins/herdr-agent-quota";
   claudeStatusline = pkgs.writeShellApplication {
     name = "claude-statusline";
     runtimeInputs = [
@@ -32,9 +30,6 @@ let
       input="$(mktemp)"
       trap 'rm -f "$input"' EXIT
       cat > "$input"
-
-      export HERDR_PLUGIN_STATE_DIR=${lib.escapeShellArg agentQuotaStateDir}
-      ${lib.getExe plugins.agentQuota} claude-statusline < "$input" >/dev/null 2>&1 || true
 
       now="''${CLAUDE_STATUSLINE_NOW:-$(date +%s)}"
       jq -Rrs --argjson now "$now" '
@@ -103,11 +98,13 @@ let
     bold = false;
     dim = false;
   };
+  # One of the four is filled per window slot, by consumption: under 50%,
+  # under 80%, from 80%, and an elapsed window with no fresh sample.
   windowTokens = name: [
-    (token "${"$"}${name}_normal" colors.green)
-    (token "${"$"}${name}_warning" colors.yellow)
-    (token "${"$"}${name}_danger" colors.red)
-    (token "${"$"}${name}_unknown" colors.muted)
+    (token "${"$"}${name}_ok" colors.green)
+    (token "${"$"}${name}_warn" colors.yellow)
+    (token "${"$"}${name}_bad" colors.red)
+    (token "${"$"}${name}_na" colors.muted)
   ];
 in
 
@@ -127,7 +124,7 @@ in
 
   programs.claude-code.settings.statusLine = {
     type = "command";
-    command = "HERDR_PLUGIN_STATE_DIR=${lib.escapeShellArg agentQuotaStateDir} ${lib.escapeShellArg (lib.getExe claudeStatusline)}";
+    command = lib.getExe claudeStatusline;
     refreshInterval = 60;
   };
 
@@ -182,21 +179,17 @@ in
                 bold = true;
                 dim = false;
               }
+            ]
+            [
+              "agent"
               {
-                token = "$quota_provider_model";
-                bold = true;
-                dim = false;
+                token = "$umodel";
+                dim = true;
               }
             ]
-            [ (token "$quota_topic" colors.text) ]
-            [
-              (token "$quota_cache" colors.muted)
-              (token "$quota_cache_ttl" colors.muted)
-              (token "$quota_cache_state" colors.yellow)
-              (token "$quota_error" colors.yellow)
-            ]
-            ([ (token "$quota_context" colors.muted) ] ++ windowTokens "quota_week_inline")
-            (windowTokens "quota_5h" ++ windowTokens "quota_week")
+            ([ (token "$upfx" colors.muted) ] ++ windowTokens "u1")
+            (windowTokens "u2")
+            (windowTokens "u3")
           ];
         };
       };
@@ -252,10 +245,10 @@ in
             description = "Open file viewer in a tab";
           }
           {
-            key = "prefix+shift+r";
+            key = "prefix+u";
             type = "plugin_action";
-            command = "herdr-agent-quota.refresh";
-            description = "Refresh agent quotas";
+            command = "herdr-plugin-agent-quota.open";
+            description = "Open agent usage dashboard";
           }
         ];
       };

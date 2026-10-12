@@ -389,23 +389,6 @@
         "type": "github"
       }
     },
-    "herdr-agent-quota": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1789875987,
-        "narHash": "sha256-RvbfJIVcxGCpsQMUqRkHKbUGyGu8VXanBmY5LyHnbjU=",
-        "owner": "levi-qiao",
-        "repo": "herdr-agent-quota",
-        "rev": "a3ceca48281b73d6e118c11cbcfbdf4c613fcb28",
-        "type": "github"
-      },
-      "original": {
-        "owner": "levi-qiao",
-        "repo": "herdr-agent-quota",
-        "rev": "a3ceca48281b73d6e118c11cbcfbdf4c613fcb28",
-        "type": "github"
-      }
-    },
     "herdr-automatic-rename": {
       "flake": false,
       "locked": {
@@ -471,6 +454,23 @@
         "owner": "smarzban",
         "repo": "herdr-file-viewer",
         "rev": "c237626260478d5f2d788149fc741ddf3c3588ba",
+        "type": "github"
+      }
+    },
+    "herdr-plugin-agent-quota": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788090157,
+        "narHash": "sha256-4OlhFqTw28r8B2F5pKqkw+C9n4KKPtAd/AN07oFkfFs=",
+        "owner": "kwanwooi25",
+        "repo": "herdr-plugin-agent-quota",
+        "rev": "6d1149887deb24ad250f13633465dfc1a2e49363",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kwanwooi25",
+        "repo": "herdr-plugin-agent-quota",
+        "rev": "6d1149887deb24ad250f13633465dfc1a2e49363",
         "type": "github"
       }
     },
@@ -962,11 +962,11 @@
         "codex-cli-nix": "codex-cli-nix",
         "hardware": "hardware",
         "helix-assist": "helix-assist",
-        "herdr-agent-quota": "herdr-agent-quota",
         "herdr-automatic-rename": "herdr-automatic-rename",
         "herdr-bar": "herdr-bar",
         "herdr-command-palette": "herdr-command-palette",
         "herdr-file-viewer": "herdr-file-viewer",
+        "herdr-plugin-agent-quota": "herdr-plugin-agent-quota",
         "home-manager": "home-manager",
         "homebrew-barutsrb-tap": "homebrew-barutsrb-tap",
         "homebrew-cask": "homebrew-cask",

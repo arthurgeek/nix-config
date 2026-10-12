@@ -7,6 +7,7 @@
 }:
 let
   toml = pkgs.formats.toml { };
+  node = lib.getExe pkgs.nodejs;
   manifest = name: value: toml.generate "${name}-manifest.toml" value;
 
   herdrBarManifest = manifest "herdr-bar" {
@@ -338,96 +339,97 @@ let
     '';
   };
 
-  agentQuotaManifest = manifest "herdr-agent-quota" {
-    id = "herdr-agent-quota";
-    name = "Herdr Agent Quota";
-    version = inputVersion "herdr-agent-quota";
+  agentQuotaManifest = manifest "herdr-plugin-agent-quota" {
+    id = "herdr-plugin-agent-quota";
+    name = "Agent Quota";
+    version = inputVersion "herdr-plugin-agent-quota";
     min_herdr_version = "0.8.0";
-    description = "Credential-scoped AI quota and context for supported agent CLIs.";
+    description = "Token and cost usage dashboard for Claude Code, Codex, and Grok";
     platforms = [
       "linux"
       "macos"
     ];
+    actions = [
+      {
+        id = "open";
+        title = "Open agent usage dashboard";
+        contexts = [ "workspace" ];
+        command = [
+          node
+          "scripts/open-pane.js"
+        ];
+      }
+      {
+        id = "statusbar";
+        title = "Toggle usage statusbar";
+        contexts = [ "workspace" ];
+        command = [
+          node
+          "scripts/dock-statusbar.js"
+        ];
+      }
+      {
+        id = "sidebar";
+        title = "Toggle sidebar usage tokens";
+        contexts = [ "workspace" ];
+        command = [
+          node
+          "scripts/sidebar-reporter.js"
+          "--toggle"
+        ];
+      }
+    ];
     startup = [
       {
         command = [
-          "./bin/herdr-agent-quota"
-          "refresh"
-          "--provider"
-          "all"
-        ];
-      }
-    ];
-    actions = [
-      {
-        id = "refresh";
-        title = "Refresh agent quota";
-        command = [
-          "./bin/herdr-agent-quota"
-          "refresh"
-          "--provider"
-          "all"
-          "--force"
-        ];
-      }
-    ];
-    events = [
-      {
-        id = "agent-quota-refresh";
-        on = "pane.agent_detected";
-        command = [
-          "./bin/herdr-agent-quota"
-          "event"
-        ];
-      }
-      {
-        id = "agent-quota-status-refresh";
-        on = "pane.agent_status_changed";
-        command = [
-          "./bin/herdr-agent-quota"
-          "event"
-        ];
-      }
-      {
-        id = "focused-agent-quota-refresh";
-        on = "pane.focused";
-        command = [
-          "./bin/herdr-agent-quota"
-          "focus"
+          node
+          "scripts/sidebar-reporter.js"
+          "--resume"
         ];
       }
     ];
     panes = [
       {
         id = "dashboard";
-        title = "Agent quota";
+        title = "Agent Quota";
         placement = "popup";
+        width = "85%";
+        height = "85%";
         command = [
-          "./bin/herdr-agent-quota"
-          "dashboard"
+          node
+          "index.js"
+        ];
+      }
+      {
+        id = "statusbar";
+        title = "Agent Quota Bar";
+        placement = "split";
+        command = [
+          node
+          "index.js"
+          "--statusbar"
         ];
       }
     ];
   };
 
-  agentQuota = pkgs.rustPlatform.buildRustPackage {
-    pname = "herdr-agent-quota";
-    version = inputVersion "herdr-agent-quota";
-    src = inputs.herdr-agent-quota;
-    cargoLock.lockFile = "${inputs.herdr-agent-quota}/Cargo.lock";
-    nativeBuildInputs = [ pkgs.makeWrapper ];
-    nativeCheckInputs = [ pkgs.perl ];
+  # Dependency-free Node (>= 18), so there is nothing to build. The manifest
+  # runs it by store path rather than trusting `node` to be on herdr's PATH.
+  agentQuota = pkgs.stdenvNoCC.mkDerivation {
+    pname = "herdr-plugin-agent-quota";
+    version = inputVersion "herdr-plugin-agent-quota";
+    src = inputs.herdr-plugin-agent-quota;
+    dontBuild = true;
 
-    postInstall = ''
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out"
+      cp -R index.js lib scripts "$out/"
       install -Dm444 ${agentQuotaManifest} "$out/herdr-plugin.toml"
-    '';
 
-    postFixup = ''
-      wrapProgram "$out/bin/herdr-agent-quota" \
-        --prefix PATH : ${lib.makeBinPath [ herdr ]}
+      runHook postInstall
     '';
-
-    meta.mainProgram = "herdr-agent-quota";
   };
 
   roots = [
@@ -448,7 +450,7 @@ let
       package = fileViewer;
     }
     {
-      id = "herdr-agent-quota";
+      id = "herdr-plugin-agent-quota";
       package = agentQuota;
     }
   ];
