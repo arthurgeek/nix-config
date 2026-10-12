@@ -36,7 +36,7 @@
     };
     homebrew-cask = {
       # renovate: datasource=git-refs depName=https://github.com/homebrew/homebrew-cask
-      url = "github:homebrew/homebrew-cask/f373be9edef93b6abceb1f397f5af56f4319e53e"; # main
+      url = "github:homebrew/homebrew-cask/e2681c2424a1ccb8c2728860b997fdaa40dd9f26"; # main
       flake = false;
     };
     homebrew-barutsrb-tap = {
