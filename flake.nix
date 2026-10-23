@@ -135,7 +135,7 @@
 
     # Local API bridge for Codex subscription OAuth
     # renovate: datasource=github-releases depName=router-for-me/CLIProxyAPI
-    cli-proxy-api.url = "github:router-for-me/CLIProxyAPI/091ff27f31285ec4fd1dd5823b44f7f51fb8f48b"; # v8.0.24
+    cli-proxy-api.url = "github:router-for-me/CLIProxyAPI/8289ec4c71ad914d0612c2776352b76ba3d355a6"; # v8.0.41
     cli-proxy-api.flake = false;
 
     # claude-code plugins
