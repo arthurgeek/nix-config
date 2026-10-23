@@ -160,7 +160,7 @@
       flake = false;
     };
     # renovate: datasource=github-releases depName=oraios/serena
-    serena.url = "github:oraios/serena/949a27ef1e5fda1a6e7b561e777bcece345c6ffd"; # v1.7.0
+    serena.url = "github:oraios/serena/5e4f5cd173c7ff3eed37ee3f1de6c266b937c5dc"; # v2.1.0
   };
 
   outputs =
