@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -46,6 +47,16 @@ in
 {
   programs.opencode = {
     enable = true;
+
+    # stylix's opencode target still selects its theme through `tui`, which
+    # OpenCode 2 ignores (terminal settings moved to cli.json) and home-manager
+    # warns about. Drop that layer and select the same generated
+    # themes/stylix.json through the OpenCode 2 client settings instead.
+    tui = lib.mkForce { };
+    cli.theme = {
+      name = "stylix";
+      mode = if config.stylix.polarity == "either" then "system" else config.stylix.polarity;
+    };
 
     settings = {
       model = "openai/gpt-6-astra";
