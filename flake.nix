@@ -13,7 +13,7 @@
     # nix-darwin
     nix-darwin = {
       # renovate: datasource=git-refs depName=https://github.com/nix-darwin/nix-darwin
-      url = "github:nix-darwin/nix-darwin/bb0b90dbd54e207100de72b5dcbe3188c98a4b69"; # master
+      url = "github:nix-darwin/nix-darwin/ff0e21a414d4547183396da1b44a66f2577b65e9"; # master
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
