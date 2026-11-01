@@ -59,7 +59,7 @@
     # Prebuilt nix-index database, for command-not-found hints and comma
     nix-index-database = {
       # renovate: datasource=git-refs depName=https://github.com/nix-community/nix-index-database
-      url = "github:nix-community/nix-index-database/93696586f3463024cceb089353539be95a38ae2b"; # main
+      url = "github:nix-community/nix-index-database/cee0f879d338cf08f814210fa6c2b280594ade0a"; # main
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
