@@ -722,17 +722,17 @@
     "openai-plugins": {
       "flake": false,
       "locked": {
-        "lastModified": 1791436892,
-        "narHash": "sha256-0HXOrcWKpNexof5Y7iDOy7wixwvCjF1FoN1M95P+n74=",
+        "lastModified": 1793992114,
+        "narHash": "sha256-Gb72AnSak96WweSyh2fJ0G3EkQBcUhey84Xzq5yJ8Xo=",
         "owner": "openai",
         "repo": "plugins",
-        "rev": "0722921d5542fc593105c27bd52630babd8b8c2a",
+        "rev": "d420d13051bffe4543ed39e30fa46b87148e47dd",
         "type": "github"
       },
       "original": {
         "owner": "openai",
         "repo": "plugins",
-        "rev": "0722921d5542fc593105c27bd52630babd8b8c2a",
+        "rev": "d420d13051bffe4543ed39e30fa46b87148e47dd",
         "type": "github"
       }
     },
