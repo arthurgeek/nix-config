@@ -179,17 +179,17 @@
     "cli-proxy-api": {
       "flake": false,
       "locked": {
-        "lastModified": 1793228601,
-        "narHash": "sha256-g1vdQRdKxuFELaOaA0uw2KzzeX4eI9H2W+b8sZDG0Fw=",
+        "lastModified": 1794645228,
+        "narHash": "sha256-r5d8O7UkiRLOTDRmnRW8L2ggI3CChqc44EZfjmPL74k=",
         "owner": "router-for-me",
         "repo": "CLIProxyAPI",
-        "rev": "90c447d3a8727d115aa7552ec93ce023736ed492",
+        "rev": "905e70c48b47b7a1cb4a27dd3abc901e2cdd1e4a",
         "type": "github"
       },
       "original": {
         "owner": "router-for-me",
         "repo": "CLIProxyAPI",
-        "rev": "90c447d3a8727d115aa7552ec93ce023736ed492",
+        "rev": "905e70c48b47b7a1cb4a27dd3abc901e2cdd1e4a",
         "type": "github"
       }
     },
