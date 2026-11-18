@@ -151,7 +151,7 @@
     };
     openai-plugins = {
       # renovate: datasource=git-refs depName=https://github.com/openai/plugins
-      url = "github:openai/plugins/0722921d5542fc593105c27bd52630babd8b8c2a"; # main
+      url = "github:openai/plugins/981b02c0c44058b595f3b4180002c3ae3c806d40"; # main
       flake = false;
     };
     openai-skills = {
