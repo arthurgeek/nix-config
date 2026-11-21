@@ -66,7 +66,7 @@
     # stylix: one base16/base24 palette themes every supported program
     stylix = {
       # renovate: datasource=git-refs depName=https://github.com/nix-community/stylix
-      url = "github:nix-community/stylix/3e27b6c499e507df6e3bb8eca3614f5c95e28140"; # master
+      url = "github:nix-community/stylix/44aafe27b8b3427201dd53c6a464c196b6a956dd"; # master
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
