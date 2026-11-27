@@ -27,7 +27,7 @@
     # nix-homebrew
     nix-homebrew = {
       # renovate: datasource=git-refs depName=https://github.com/zhaofengli/nix-homebrew
-      url = "github:zhaofengli/nix-homebrew/c11cccfdd36dd69b5323d70d354b2853379c2426"; # main
+      url = "github:zhaofengli/nix-homebrew/b279e781fbfede43b2b20e7278cf3c5312ca3301"; # main
     };
     homebrew-core = {
       # renovate: datasource=git-refs depName=https://github.com/homebrew/homebrew-core
