@@ -15,7 +15,7 @@
 buildGoLatestModule {
   pname = "cli-proxy-api";
   inherit version src;
-  vendorHash = "sha256-yMO0DdE0pjtFxWaQXV17enV8u0KA5fIUbE8Gui/RvWU=";
+  vendorHash = "sha256-WUbMD30d1CU1KWFey8dIG0K/lO4TCObiuDJowITRwk8=";
   subPackages = [ "cmd/server" ];
   ldflags = [
     "-s"
